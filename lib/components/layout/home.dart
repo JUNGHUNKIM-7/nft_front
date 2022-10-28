@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_layout/extensions.dart';
 import 'package:flutter_layout/providers.dart';
 import 'package:flutter_layout/repository.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../style.dart';
@@ -33,36 +34,77 @@ class HomeBody extends ConsumerWidget with Widgets {
   Widget build(BuildContext context, WidgetRef ref) {
     final bottomNav$ =
         ref.watch(catchIntFamilyProvider(CatchIntEvent.setBottomNav));
-    final Repository repository = ref.watch(repositoryProvider);
-    final Interactor interactor = ref.watch(interactorProvider);
 
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        floatingActionButton: CustomFloatingActionBtn(),
+        backgroundColor: Colors.grey[300],
         body: bottomNav$.when(
-          data: (int val) => bodys.elementAt(val),
+          data: (int index$) => bodys.elementAt(index$),
           error: (err, stk) => Text('$err: $stk'),
           loading: () => const CircularProgressIndicator(),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
-          onTap: (int val) {
-            log('$val', name: 'BottomNavigation');
-            repository.setIntEvt.setState = CatchIntEvent.setBottomNav;
-            interactor.setBottomNav = val;
-          },
-          items: [
-            BottomNavigationBarItem(
-                label: "main".toTitleCase(), icon: const Icon(Icons.abc)),
-            BottomNavigationBarItem(
-                label: "abc".toTitleCase(), icon: const Icon(Icons.abc)),
-            BottomNavigationBarItem(
-                label: "abc".toTitleCase(), icon: const Icon(Icons.abc)),
-          ],
+        bottomNavigationBar: bottomNav$.when(
+          data: (int index$) => MainBottomNav(index: index$),
+          error: (err, stk) => Text('$err: $stk'),
+          loading: () => const CircularProgressIndicator(),
         ),
       ),
+    );
+  }
+}
+
+class CustomFloatingActionBtn extends ConsumerWidget {
+  const CustomFloatingActionBtn({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FloatingActionButton(
+      onPressed: () {},
+      backgroundColor: Colors.amber,
+      child: Icon(Icons.search),
+    );
+  }
+}
+
+class MainBottomNav extends ConsumerWidget {
+  const MainBottomNav({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Repository repository = ref.watch(repositoryProvider);
+    final Interactor interactor = ref.watch(interactorProvider);
+
+    return BottomNavigationBar(
+      backgroundColor: Colors.black,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.grey,
+      currentIndex: index,
+      showUnselectedLabels: false,
+      onTap: (int val) {
+        repository.setIntEvt.setState = CatchIntEvent.setBottomNav;
+        interactor.setBottomNav = val;
+      },
+      selectedLabelStyle: GoogleFonts.orbitron(fontWeight: FontWeight.bold),
+      selectedFontSize: 16,
+      unselectedLabelStyle: GoogleFonts.orbitron(fontWeight: FontWeight.bold),
+      items: [
+        BottomNavigationBarItem(
+            label: "home".toTitleCase(), icon: const Icon(Icons.home)),
+        BottomNavigationBarItem(
+            label: "favorite".toTitleCase(), icon: const Icon(Icons.favorite)),
+        BottomNavigationBarItem(
+            label: "settings".toTitleCase(), icon: const Icon(Icons.settings)),
+      ],
     );
   }
 }
@@ -84,16 +126,13 @@ class BodyMain extends StatelessWidget with Widgets {
       child: CustomScrollView(
         slivers: [
           CustomSliverAppBar(height: height),
-          SliverPadding(padding: kAll8),
-          Inputs(height: height),
-          SliverPadding(padding: kAll8),
+          // Inputs(height: height),
           Coins(height: height),
-          SliverPadding(padding: kAll8),
           Categories(height: height),
           SliverPadding(padding: kAll8),
           const GridItems(),
           SliverPadding(padding: kAll8),
-          const InfiniteScroll(),
+          // const InfiniteScroll(),
         ],
       ),
     );
@@ -105,9 +144,7 @@ class BodyDemo1 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      child: Center(child: Text("body2")),
-    );
+    return const Center(child: Text("body2"));
   }
 }
 
@@ -116,8 +153,6 @@ class BodyDemo2 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      child: Center(child: Text("body3")),
-    );
+    return const Center(child: Text("body3"));
   }
 }

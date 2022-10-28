@@ -12,6 +12,9 @@ class Repository {
   final gridItemSelector = BaseController(0);
   final bottonNavSelector = BaseController(0);
 
+  final setListEvent = BaseController<CatchSetEvent?>(null);
+  final favoriteSelector = BaseController<Set<int>>(<int>{});
+
   final setStringEvt = BaseController<CatchStringEvent?>(null);
   final searchValue = BaseController("");
 }
@@ -22,6 +25,7 @@ class Interactor {
   int coinsIdx;
   int gridItem;
   int bottomNav;
+  Set<int> favorite;
 
   Interactor._({
     required this.searchValue,
@@ -29,6 +33,7 @@ class Interactor {
     required this.coinsIdx,
     required this.gridItem,
     required this.bottomNav,
+    required this.favorite,
   });
 
   factory Interactor.getInstance() => Interactor._(
@@ -37,6 +42,7 @@ class Interactor {
         coinsIdx: 0,
         gridItem: 0,
         bottomNav: 0,
+        favorite: <int>{},
       );
 
   set setSearchValue(String value) => searchValue = value;
@@ -44,4 +50,6 @@ class Interactor {
   set setCoin(int index) => coinsIdx = index;
   set setGridItem(int index) => gridItem = index;
   set setBottomNav(int index) => bottomNav = index;
+  set setFavorite(int index) => favorite.add(index);
+  set unsetFavorite(int index) => favorite.remove(index);
 }

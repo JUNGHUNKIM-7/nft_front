@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 mixin Widgets {
   SizedBox get kWidth60 => const SizedBox(width: 60);
@@ -8,7 +9,7 @@ mixin Widgets {
   SizedBox get kWidth15 => const SizedBox(width: 15);
   SizedBox get kCoinsGap => const SizedBox(width: 25);
 
-  EdgeInsets get kAll8 => const EdgeInsets.all(8.0);
+  EdgeInsets get kAll8 => const EdgeInsets.all(8);
   EdgeInsets get kHorizontal8 => const EdgeInsets.symmetric(horizontal: 8.0);
   EdgeInsets get kVertical8 => const EdgeInsets.symmetric(vertical: 8.0);
 
@@ -17,14 +18,21 @@ mixin Widgets {
 }
 
 mixin StyleSeed {
-  TextStyle get kHeadline1 =>
-      const TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
-  TextStyle get kHeadline2 =>
-      const TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
-  TextStyle get kBodyText1 =>
-      const TextStyle(fontSize: 18, fontWeight: FontWeight.normal);
-  TextStyle get kBodyText2 =>
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.normal);
+  final _kHeadline1 =
+      GoogleFonts.orbitron(fontSize: 24, fontWeight: FontWeight.bold);
+  final _kHeadline2 = GoogleFonts.orbitron(
+    fontSize: 20,
+  );
+  final _kBodyText1 = GoogleFonts.lato(
+    fontSize: 18,
+  );
+  final _kBodyText2 = GoogleFonts.lato(
+    fontSize: 16,
+  );
+  TextStyle get kHeadline1 => _kHeadline1;
+  TextStyle get kHeadline2 => _kHeadline2;
+  TextStyle get kBodyText1 => _kBodyText1;
+  TextStyle get kBodyText2 => _kBodyText2;
 }
 
 class Styles with StyleSeed {

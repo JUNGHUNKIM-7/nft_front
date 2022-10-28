@@ -1,9 +1,16 @@
 import 'package:flutter_layout/repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-enum CatchIntEvent { setCategoreis, setCoins, setGridItem, setBottomNav }
+enum CatchIntEvent {
+  setCategoreis,
+  setCoins,
+  setGridItem,
+  setBottomNav,
+}
 
 enum CatchStringEvent { setSearch }
+
+enum CatchSetEvent { setFavorite, unsetFavorite }
 
 final repositoryProvider = Provider<Repository>((ref) {
   return Repository.getInstance();
@@ -83,3 +90,33 @@ final catchIntFamilyProvider = StreamProvider.family<int, CatchIntEvent>(
     }
   },
 );
+
+final favoriteProvider =
+    StreamProvider.family<Set<int>, CatchSetEvent>((ref, evt) async* {
+  final Repository repository = ref.watch(repositoryProvider);
+  final Interactor interactor = ref.watch(interactorProvider);
+
+  repository.setListEvent.bSubject.listen((CatchSetEvent? evt) {
+    switch (evt) {
+      case CatchSetEvent.setFavorite:
+        repository.favoriteSelector.setState = interactor.favorite;
+        break;
+      case CatchSetEvent.unsetFavorite:
+        repository.favoriteSelector.setState = interactor.favorite;
+        break;
+      default:
+        break;
+    }
+  });
+
+  switch (evt) {
+    case CatchSetEvent.setFavorite:
+      yield* repository.favoriteSelector.bStream;
+      break;
+    case CatchSetEvent.unsetFavorite:
+      yield* repository.favoriteSelector.bStream;
+      break;
+    default:
+      break;
+  }
+});
