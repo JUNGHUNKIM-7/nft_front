@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/style.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'components/layout/elems/grid_item.dart';
-import 'components/layout/home.dart';
+import 'components/layout.dart';
+import 'utils/style.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: Styles.getInstance(true).themeDark,
       theme: Styles.getInstance(false).themeLight,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       routerConfig: _router,
     );
   }
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
           GoRoute(
             path: PathVar.gridItem.path,
             builder: (BuildContext context, GoRouterState state) {
-              return GridItem(id: state.params['id']!);
+              return DetailsPage(id: state.params['id']!);
             },
           ),
         ],
@@ -45,7 +44,9 @@ class MyApp extends StatelessWidget {
 
 enum PathVar {
   home(path: "/", caller: "/"),
-  gridItem(path: "tokens/:id", caller: "/tokens"); // Must add prefix: "/dynamicValue"
+  gridItem(
+      path: "tokens/:id",
+      caller: "/tokens"); // Must add prefix: "/dynamicValue"
 
   final String path;
   final String caller;

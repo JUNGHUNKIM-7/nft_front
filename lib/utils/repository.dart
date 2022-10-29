@@ -1,6 +1,5 @@
-import 'package:flutter_layout/providers.dart';
-
-import 'base.dart';
+import '../base.dart';
+import 'providers.dart';
 
 class Repository {
   Repository._();
@@ -12,8 +11,9 @@ class Repository {
   final gridItemSelector = BaseController(0);
   final bottonNavSelector = BaseController(0);
 
-  final setListEvent = BaseController<CatchSetEvent?>(null);
-  final favoriteSelector = BaseController<Set<int>>(<int>{});
+  final setSetEvent = BaseController<CatchSetEvent?>(null);
+  final favoriteSelector = BaseController(<int>{});
+  final bookMarkSelector = BaseController(<int>{});
 
   final setStringEvt = BaseController<CatchStringEvent?>(null);
   final searchValue = BaseController("");
@@ -25,7 +25,8 @@ class Interactor {
   int coinsIdx;
   int gridItem;
   int bottomNav;
-  Set<int> favorite;
+  Set<int> favorites;
+  Set<int> bookMarks;
 
   Interactor._({
     required this.searchValue,
@@ -33,7 +34,8 @@ class Interactor {
     required this.coinsIdx,
     required this.gridItem,
     required this.bottomNav,
-    required this.favorite,
+    required this.favorites,
+    required this.bookMarks,
   });
 
   factory Interactor.getInstance() => Interactor._(
@@ -42,7 +44,8 @@ class Interactor {
         coinsIdx: 0,
         gridItem: 0,
         bottomNav: 0,
-        favorite: <int>{},
+        favorites: <int>{},
+        bookMarks: <int>{},
       );
 
   set setSearchValue(String value) => searchValue = value;
@@ -50,6 +53,8 @@ class Interactor {
   set setCoin(int index) => coinsIdx = index;
   set setGridItem(int index) => gridItem = index;
   set setBottomNav(int index) => bottomNav = index;
-  set setFavorite(int index) => favorite.add(index);
-  set unsetFavorite(int index) => favorite.remove(index);
+  set setFavorite(int index) => favorites.add(index);
+  set unsetFavorite(int index) => favorites.remove(index);
+  set setBookMark(int index) => bookMarks.add(index);
+  set unsetBookMark(int index) => bookMarks.remove(index);
 }

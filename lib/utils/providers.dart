@@ -1,5 +1,6 @@
-import 'package:flutter_layout/repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'repository.dart';
 
 enum CatchIntEvent {
   setCategoreis,
@@ -10,7 +11,7 @@ enum CatchIntEvent {
 
 enum CatchStringEvent { setSearch }
 
-enum CatchSetEvent { setFavorite, unsetFavorite }
+enum CatchSetEvent { setFavorite, unsetFavorite, setBookMark, unsetBookMark }
 
 final repositoryProvider = Provider<Repository>((ref) {
   return Repository.getInstance();
@@ -91,18 +92,24 @@ final catchIntFamilyProvider = StreamProvider.family<int, CatchIntEvent>(
   },
 );
 
-final favoriteProvider =
+final catchSetProvider =
     StreamProvider.family<Set<int>, CatchSetEvent>((ref, evt) async* {
   final Repository repository = ref.watch(repositoryProvider);
   final Interactor interactor = ref.watch(interactorProvider);
 
-  repository.setListEvent.bSubject.listen((CatchSetEvent? evt) {
+  repository.setSetEvent.bSubject.listen((CatchSetEvent? evt) {
     switch (evt) {
       case CatchSetEvent.setFavorite:
-        repository.favoriteSelector.setState = interactor.favorite;
+        repository.favoriteSelector.setState = interactor.favorites;
         break;
       case CatchSetEvent.unsetFavorite:
-        repository.favoriteSelector.setState = interactor.favorite;
+        repository.favoriteSelector.setState = interactor.favorites;
+        break;
+      case CatchSetEvent.setBookMark:
+        repository.bookMarkSelector.setState = interactor.bookMarks;
+        break;
+      case CatchSetEvent.unsetBookMark:
+        repository.bookMarkSelector.setState = interactor.bookMarks;
         break;
       default:
         break;
@@ -115,6 +122,12 @@ final favoriteProvider =
       break;
     case CatchSetEvent.unsetFavorite:
       yield* repository.favoriteSelector.bStream;
+      break;
+    case CatchSetEvent.setBookMark:
+      yield* repository.bookMarkSelector.bStream;
+      break;
+    case CatchSetEvent.unsetBookMark:
+      yield* repository.bookMarkSelector.bStream;
       break;
     default:
       break;
