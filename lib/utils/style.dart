@@ -10,6 +10,7 @@ mixin Widgets {
   SizedBox get kCoinsGap => const SizedBox(width: 25);
 
   double get kLetterSpacing => 0.2;
+  Color get kBoxColor => Colors.white70;
 
   EdgeInsets get kAll8 => const EdgeInsets.all(8);
   EdgeInsets get kHorizontal8 => const EdgeInsets.symmetric(horizontal: 8.0);
@@ -66,7 +67,7 @@ class Styles with StyleSeed {
       );
 }
 
-Color getColor(Set<MaterialState> states) {
+Color? getColor(Set<MaterialState> states) {
   const Set<MaterialState> interactiveStates = <MaterialState>{
     MaterialState.pressed,
     MaterialState.hovered,
@@ -74,7 +75,7 @@ Color getColor(Set<MaterialState> states) {
   };
 
   if (states.any(interactiveStates.contains)) {
-    return Colors.amber;
+    return Colors.white;
   }
-  return Colors.white;
+  return Colors.white10;
 }

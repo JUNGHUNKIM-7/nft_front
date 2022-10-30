@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/utils/extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../utils/providers.dart';
@@ -79,7 +78,6 @@ class ItemAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final groups = getInstances(ref);
-    final paresedId = int.parse(id);
     final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
 
     return SliverAppBar(
@@ -98,8 +96,11 @@ class ItemAppBar extends ConsumerWidget {
       ),
       actions: [
         b$.when(
-          data: (Set<int> bookMark$) =>
-              ToggleBookMark(b$: bookMark$, groups: groups, index: paresedId),
+          data: (Set<int> bookMark$) => ToggleBookMark(
+            b$: bookMark$,
+            groups: groups,
+            index: int.parse(id),
+          ),
           error: (err, stk) => Text('$err: $stk'),
           loading: () => const CircularProgressIndicator(),
         ),
@@ -111,25 +112,13 @@ class ItemAppBar extends ConsumerWidget {
           ),
         ),
       ],
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(60),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Align(
             alignment: Alignment.bottomRight,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith(getColor),
-              ),
-              onPressed: () {},
-              child: Text(
-                "shop now".toTitleCase(),
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    ?.copyWith(fontSize: 22),
-              ),
-            ),
+            child: ShopNowBtn(),
           ),
         ),
       ),
@@ -164,21 +153,17 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
                   error: (err, stk) => const Text(''),
                   loading: () => const CircularProgressIndicator(),
                 ),
-                const Spacer(),
-                Text(
-                  "monkey #338".toTitleCase(),
-                  style: Theme.of(context).textTheme.headline2?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                const SizedBox(
+                  width: 4,
                 ),
+                const ItemNameWithTag(),
                 const Spacer(),
                 Text(
                   "0.25 ETH",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
-                      ?.copyWith(fontWeight: FontWeight.w500),
+                      .bodyText1
+                      ?.copyWith(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 Padding(padding: kAll8.copyWith(left: 5)),
               ],

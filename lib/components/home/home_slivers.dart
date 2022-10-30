@@ -8,10 +8,9 @@ import '../../utils/providers.dart';
 import '../../utils/repository.dart';
 import '../../utils/style.dart';
 import '../global.dart';
-import 'category_tiles.dart';
+import 'categories_tabs.dart';
 
 //slivers(just ui)
-
 class HomeBody extends ConsumerWidget with Widgets {
   const HomeBody({
     Key? key,
@@ -87,7 +86,7 @@ class Categories extends ConsumerWidget with Widgets {
                         child: Row(
                           children: [
                             Padding(
-                              padding: kHorizontal8.copyWith(left: 20),
+                              padding: kHorizontal8.copyWith(left: 25),
                               child: Text(
                                 menus.elementAt(i).toTitleCase(),
                                 style: Theme.of(context)

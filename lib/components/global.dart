@@ -154,10 +154,10 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
-      child: Align(
-        alignment: Alignment.bottomLeft,
+    return Align(
+      alignment: Alignment.center,
+      child: Padding(
+        padding: kAll8,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: BackdropFilter(
@@ -166,46 +166,53 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
               child: FittedBox(
                 child: Padding(
                   padding: kAll8,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                  child: Row(
                     children: [
-                      Text(
-                        "monkey #338".toUpperCase(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline1
-                            ?.copyWith(fontSize: 24),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            "0.25",
+                            "monkey #338".toUpperCase(),
                             style: Theme.of(context)
                                 .textTheme
-                                .headline2
-                                ?.copyWith(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                .headline1
+                                ?.copyWith(fontSize: 24),
                           ),
-                          kWidth15,
-                          Padding(
-                            padding: const EdgeInsets.only(right: 4.0),
-                            child: Text(
-                              "ETH",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline2
-                                  ?.copyWith(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "0.25",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline2
+                                    ?.copyWith(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                              kWidth15,
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: Text(
+                                  "ETH",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      ?.copyWith(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                      kWidth30,
+                      const ShopNowBtn(),
                     ],
                   ),
                 ),
@@ -350,7 +357,7 @@ class ToggleFavorite extends StatelessWidget {
         if (f$.contains(index)) {
           (groups.first as Repository).setSetEvent.setState =
               CatchSetEvent.unsetFavorite;
-          ((groups.last as Interactor)).unsetFavorite = index;
+          (groups.last as Interactor).unsetFavorite = index;
         } else {
           (groups.first as Repository).setSetEvent.setState =
               CatchSetEvent.setFavorite;
@@ -360,6 +367,94 @@ class ToggleFavorite extends StatelessWidget {
       icon: Icon(
         Icons.favorite,
         color: f$.contains(index) ? Colors.redAccent : Colors.black,
+      ),
+    );
+  }
+}
+
+class ShopNowBtn extends StatelessWidget {
+  const ShopNowBtn({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.green[500],
+        elevation: 10,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+      onPressed: () {},
+      child: Text(
+        "shop now".toUpperCase(),
+        style: Theme.of(context).textTheme.headline1?.copyWith(
+              fontSize: 22,
+              color: Colors.white,
+            ),
+      ),
+    );
+  }
+}
+
+class ItemNameWithTag extends StatelessWidget {
+  const ItemNameWithTag({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        text: "monkey".toTitleCase(),
+        style: Theme.of(context).textTheme.headline2?.copyWith(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+        children: [
+          TextSpan(
+            text: "#338",
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CustomChip extends StatelessWidget with Widgets {
+  const CustomChip({
+    super.key,
+    this.label,
+    this.labels,
+  });
+  final Align? label;
+  final Row? labels;
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      backgroundColor: Colors.transparent,
+      visualDensity: VisualDensity.compact,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: getBorderRadius(10),
+      ),
+      labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
+      label: SizedBox(
+        height: 40,
+        child: label != null
+            ? label ?? const Text("")
+            : labels ?? Row(children: const []),
       ),
     );
   }
