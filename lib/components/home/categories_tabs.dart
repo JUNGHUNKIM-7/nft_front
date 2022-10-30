@@ -10,9 +10,10 @@ import '../../utils/providers.dart';
 import '../../utils/repository.dart';
 import '../../utils/style.dart';
 import '../global.dart';
+import '../global_component.dart';
 
-class TopItems extends ConsumerWidget with Widgets {
-  const TopItems({
+class TopCategories extends ConsumerWidget with Widgets {
+  const TopCategories({
     Key? key,
   }) : super(key: key);
 
@@ -129,8 +130,8 @@ class TopItems extends ConsumerWidget with Widgets {
   }
 }
 
-class TrendingItems extends ConsumerWidget with Widgets {
-  const TrendingItems({super.key});
+class TrendingCategories extends ConsumerWidget with Widgets {
+  const TrendingCategories({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -177,8 +178,8 @@ class TrendingItems extends ConsumerWidget with Widgets {
   }
 }
 
-class CollectionItems extends ConsumerWidget with Widgets {
-  const CollectionItems({super.key});
+class ColletionCategories extends ConsumerWidget with Widgets {
+  const ColletionCategories({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -225,10 +226,11 @@ class CollectionItems extends ConsumerWidget with Widgets {
                     ],
                   ),
                 ),
-                SingleChildScrollView(
-                  primary: false,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .23,
+                  child: ListView(
+                    primary: false,
+                    scrollDirection: Axis.horizontal,
                     children: [
                       ...List.generate(
                         20,
@@ -266,10 +268,10 @@ class CollectionItems extends ConsumerWidget with Widgets {
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           );

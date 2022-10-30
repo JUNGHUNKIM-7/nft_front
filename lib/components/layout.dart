@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/utils/extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../utils/providers.dart';
 import '../utils/style.dart';
 import 'details_page/detail_page_slivers.dart';
-import 'favorites/favorites.dart';
+import 'favorites/bookmarks_slivers.dart';
 import 'global.dart';
 import 'home/home_slivers.dart';
 import 'settings/settings.dart';
@@ -19,7 +18,7 @@ class Home extends ConsumerWidget with Widgets {
 
   static final bodys = [
     const HomeBody(),
-    const Favorites(),
+    const BookMarks(),
     const Settings(),
   ];
 
@@ -33,9 +32,9 @@ class Home extends ConsumerWidget with Widgets {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        drawer: MainDrawer(kHeight30: kHeight30, kHorizontal8: kHorizontal8),
-        floatingActionButton: const MainFloatingActionBtn(),
         backgroundColor: Colors.grey[300],
+        drawer: const MainDrawer(),
+        floatingActionButton: const MainFloatingActionBtn(),
         body: bottomNav$.when(
           data: (int index$) => bodys.elementAt(index$),
           error: (err, stk) => Text('$err: $stk'),
@@ -51,81 +50,13 @@ class Home extends ConsumerWidget with Widgets {
   }
 }
 
-class MainDrawer extends StatelessWidget {
-  const MainDrawer({
-    Key? key,
-    required this.kHeight30,
-    required this.kHorizontal8,
-  }) : super(key: key);
-
-  final SizedBox kHeight30;
-  final EdgeInsets kHorizontal8;
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      backgroundColor: Colors.amber,
-      child: Column(
-        children: [
-          kHeight30,
-          const SizedBox(
-            height: 100,
-            width: 100,
-            child: CircleAvatar(
-              child: FlutterLogo(),
-            ),
-          ),
-          const Spacer(),
-          Column(
-            children: [
-              ...List.generate(
-                5,
-                (index) => ListTile(
-                  leading: const Icon(Icons.abc),
-                  title: Text(
-                    "drawer1: $index".toTitleCase(),
-                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          fontSize: 18,
-                        ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          const Spacer(),
-          Padding(
-            padding: kHorizontal8,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ...List.generate(
-                  3,
-                  (index) => Column(
-                    children: [
-                      const Icon(
-                        Icons.abc,
-                        size: 40,
-                      ),
-                      Text("$index")
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
 //for making id page
 class DetailsPageNavBodies {
   DetailsPageNavBodies({
     required this.id,
   }) : _bodies = [
           DetailsPageHome(id: id),
-          const Favorites(),
+          const BookMarks(),
           const Settings(),
         ];
 
@@ -162,11 +93,12 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      bottomNavigationBar: bottomNav$.when(
-        data: (int $index) => MainBottomNav(index: $index),
-        error: (err, stk) => Text('$err: $stk'),
-        loading: () => const CircularProgressIndicator(),
-      ),
+
+      // bottomNavigationBar: bottomNav$.when(
+      //   data: (int $index) => MainBottomNav(index: $index),
+      //   error: (err, stk) => Text('$err: $stk'),
+      //   loading: () => const CircularProgressIndicator(),
+      // ),
       body: bottomNav$.when(
         data: (int $index) => bodies.bodies[$index],
         error: (err, stk) => Text('$err: $stk'),

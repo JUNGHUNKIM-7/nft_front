@@ -17,9 +17,9 @@ class HomeBody extends ConsumerWidget with Widgets {
   }) : super(key: key);
 
   static final categorieBodies = [
-    const TopItems(),
-    const TrendingItems(),
-    const CollectionItems()
+    const TopCategories(),
+    const TrendingCategories(),
+    const ColletionCategories()
   ];
 
   @override
@@ -37,8 +37,8 @@ class HomeBody extends ConsumerWidget with Widgets {
         data: (int $index) => CustomScrollView(
           slivers: [
             HomeAppBar(height: height),
-            Coins(height: height),
-            Categories(height: height),
+            HomeCoins(height: height),
+            HomeCategories(height: height),
             categorieBodies.elementAt($index),
           ],
         ),
@@ -49,8 +49,8 @@ class HomeBody extends ConsumerWidget with Widgets {
   }
 }
 
-class Categories extends ConsumerWidget with Widgets {
-  Categories({
+class HomeCategories extends ConsumerWidget with Widgets {
+  HomeCategories({
     Key? key,
     required this.height,
   }) : super(key: key);
@@ -69,48 +69,50 @@ class Categories extends ConsumerWidget with Widgets {
         height: height * .06,
         child: Container(
           color: Colors.amber,
-          child: SingleChildScrollView(
+          child: ListView(
             scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: kAll8,
-              child: categories$.when(
-                data: (int index$) => Row(
-                  children: [
-                    for (var i = 0; i < menus.length; i++)
-                      GestureDetector(
-                        onTap: () {
-                          (groups.first as Repository).setIntEvt.setState =
-                              CatchIntEvent.setCategoreis;
-                          (groups.last as Interactor).setCategories = i;
-                        },
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: kHorizontal8.copyWith(left: 25),
-                              child: Text(
-                                menus.elementAt(i).toTitleCase(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline2!
-                                    .copyWith(
-                                      letterSpacing: kLetterSpacing,
-                                      fontWeight: FontWeight.bold,
-                                      color: index$ == i
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
+            children: [
+              Padding(
+                padding: kHorizontal8.copyWith(left: 16),
+                child: categories$.when(
+                  data: (int index$) => Row(
+                    children: [
+                      for (var i = 0; i < menus.length; i++)
+                        GestureDetector(
+                          onTap: () {
+                            (groups.first as Repository).setIntEvt.setState =
+                                CatchIntEvent.setCategoreis;
+                            (groups.last as Interactor).setCategories = i;
+                          },
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: kHorizontal8.copyWith(left: 25),
+                                child: Text(
+                                  menus.elementAt(i).toTitleCase(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2!
+                                      .copyWith(
+                                        letterSpacing: kLetterSpacing,
+                                        fontWeight: FontWeight.bold,
+                                        color: index$ == i
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                ),
                               ),
-                            ),
-                            kWidth30,
-                          ],
-                        ),
-                      )
-                  ],
+                              kWidth30,
+                            ],
+                          ),
+                        )
+                    ],
+                  ),
+                  error: (err, stk) => Text('$err: $stk'),
+                  loading: () => const CircularProgressIndicator(),
                 ),
-                error: (err, stk) => Text('$err: $stk'),
-                loading: () => const CircularProgressIndicator(),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -128,56 +130,19 @@ class HomeAppBar extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: height * .45,
-      centerTitle: true,
-      pinned: true,
-      bottom: const PreferredSize(
+    return const MainAppBar(
+      imagePath: "assets/images/1.jpg",
+      type: AppbarType.home,
+      bottom: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: MainSliverAppBarBottom(),
       ),
-      flexibleSpace: FlexibleSpaceBar.createSettings(
-        currentExtent: height * .45,
-        maxExtent: height * .45,
-        child: FlexibleSpaceBar(
-          background: Image.asset(
-            "assets/images/1.jpg",
-            fit: BoxFit.fill,
-          ),
-        ),
-      ),
-      title: const FlutterLogo(),
-      leading: IconButton(
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
-        icon: const Icon(
-          Icons.menu,
-          color: Colors.black,
-        ),
-      ),
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.shopping_cart,
-            color: Colors.black,
-          ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.person,
-            color: Colors.black,
-          ),
-        ),
-      ],
     );
   }
 }
 
-class Coins extends ConsumerWidget with Widgets {
-  const Coins({
+class HomeCoins extends ConsumerWidget with Widgets {
+  const HomeCoins({
     Key? key,
     required this.height,
   }) : super(key: key);

@@ -8,76 +8,71 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../utils/providers.dart';
 import '../utils/style.dart';
+import 'global_component.dart';
 
 List getInstances(WidgetRef ref) =>
     [ref.watch(repositoryProvider), ref.watch(interactorProvider)];
 
-class Inputs extends ConsumerStatefulWidget with Widgets {
-  const Inputs({
+enum AppbarType { home, bookmarks }
+
+class MainAppBar extends StatelessWidget {
+  const MainAppBar({
     super.key,
-    required this.height,
+    required this.imagePath,
+    required this.type,
+    required this.bottom,
   });
-  final double height;
 
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _InputsState();
-}
-
-class _InputsState extends ConsumerState<Inputs> {
-  late TextEditingController _textEditingController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textEditingController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _textEditingController.dispose();
-    super.dispose();
-  }
+  final String imagePath;
+  final AppbarType type;
+  final PreferredSizeWidget? bottom;
 
   @override
   Widget build(BuildContext context) {
-    final groups = getInstances(ref);
+    final height = MediaQuery.of(context).size.height;
 
-    return SizedBox(
-      height: widget.height * .1,
-      child: Align(
-        alignment: Alignment.center,
-        child: Padding(
-          padding: widget.kHorizontal8.copyWith(left: 20, right: 20),
-          child: TextField(
-            onSubmitted: (value) {
-              (groups.first as Repository).setStringEvt.setState =
-                  CatchStringEvent.setSearch;
-              (groups.last as Interactor).searchValue = value;
-            },
-            cursorColor: Colors.amber,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search, color: Colors.amber),
-              labelText: "search items, collections.. ".toTitleCase(),
-              labelStyle: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  ?.copyWith(fontWeight: FontWeight.bold),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black),
-                borderRadius: widget.getBorderRadius(20),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black),
-                borderRadius: widget.getBorderRadius(20),
-              ),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black),
-                borderRadius: widget.getBorderRadius(20),
-              ),
-            ),
+    return SliverAppBar(
+      expandedHeight: height * .45,
+      centerTitle: true,
+      pinned: true,
+      bottom: bottom,
+      flexibleSpace: FlexibleSpaceBar.createSettings(
+        currentExtent: height * .45,
+        maxExtent: height * .45,
+        child: FlexibleSpaceBar(
+          background: Image.asset(
+            imagePath,
+            fit: BoxFit.fill,
           ),
         ),
       ),
+      title: type == AppbarType.home ? const FlutterLogo() : null,
+      leading: IconButton(
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+        icon: const Icon(
+          Icons.menu,
+          color: Colors.black,
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.shopping_cart,
+            color: Colors.black,
+          ),
+        ),
+        if (type == AppbarType.home)
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.person,
+              color: Colors.black,
+            ),
+          ),
+      ],
     );
   }
 }
@@ -262,199 +257,64 @@ class MainBottomNav extends ConsumerWidget {
   }
 }
 
-class GlassCard extends StatelessWidget with Widgets {
-  const GlassCard({
-    super.key,
-    required this.child,
-  });
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: getBorderRadius(20),
-        border: Border.all(width: 2, color: Colors.white30),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomCenter,
-          colors: [Colors.white60, Colors.white10],
-        ),
-      ),
-      child: child,
-    );
-  }
-}
-
-class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey[300],
-      margin: const EdgeInsets.all(0),
-      elevation: 0,
-      shape: const Border(
-        bottom: BorderSide(color: Colors.black),
-      ),
-      child: child,
-    );
-  }
-}
-
-class ToggleBookMark extends StatelessWidget {
-  const ToggleBookMark({
-    super.key,
-    required this.b$,
-    required this.groups,
-    required this.index,
-  });
-
-  final Set<int> b$;
-  final List groups;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        if (b$.contains(index)) {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.unsetBookMark;
-          (groups.last as Interactor).unsetBookMark = index;
-        } else {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.setBookMark;
-          (groups.last as Interactor).setBookMark = index;
-        }
-      },
-      icon: Icon(
-        Icons.bookmark,
-        color: b$.contains(index) ? Colors.redAccent : Colors.black,
-      ),
-    );
-  }
-}
-
-class ToggleFavorite extends StatelessWidget {
-  const ToggleFavorite({
-    Key? key,
-    required this.f$,
-    required this.groups,
-    required this.index,
-  }) : super(key: key);
-
-  final Set<int> f$;
-  final List groups;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        if (f$.contains(index)) {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.unsetFavorite;
-          (groups.last as Interactor).unsetFavorite = index;
-        } else {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.setFavorite;
-          (groups.last as Interactor).setFavorite = index;
-        }
-      },
-      icon: Icon(
-        Icons.favorite,
-        color: f$.contains(index) ? Colors.redAccent : Colors.black,
-      ),
-    );
-  }
-}
-
-class ShopNowBtn extends StatelessWidget {
-  const ShopNowBtn({
+class MainDrawer extends StatelessWidget with Widgets {
+  const MainDrawer({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green[500],
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-      ),
-      onPressed: () {},
-      child: Text(
-        "shop now".toUpperCase(),
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 22,
-              color: Colors.white,
-            ),
-      ),
-    );
-  }
-}
-
-class ItemNameWithTag extends StatelessWidget {
-  const ItemNameWithTag({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        text: "monkey".toTitleCase(),
-        style: Theme.of(context).textTheme.headline2?.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+    return Drawer(
+      backgroundColor: Colors.amber,
+      child: Column(
         children: [
-          TextSpan(
-            text: "#338",
-            style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+          kHeight30,
+          const SizedBox(
+            height: 100,
+            width: 100,
+            child: CircleAvatar(
+              child: FlutterLogo(),
+            ),
+          ),
+          const Spacer(),
+          Column(
+            children: [
+              ...List.generate(
+                5,
+                (index) => ListTile(
+                  leading: const Icon(Icons.abc),
+                  title: Text(
+                    "drawer1: $index".toTitleCase(),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                          fontSize: 18,
+                        ),
+                  ),
                 ),
+              )
+            ],
+          ),
+          const Spacer(),
+          Padding(
+            padding: kHorizontal8,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ...List.generate(
+                  3,
+                  (index) => Column(
+                    children: [
+                      const Icon(
+                        Icons.abc,
+                        size: 40,
+                      ),
+                      Text("$index")
+                    ],
+                  ),
+                )
+              ],
+            ),
           )
         ],
-      ),
-    );
-  }
-}
-
-class CustomChip extends StatelessWidget with Widgets {
-  const CustomChip({
-    super.key,
-    this.label,
-    this.labels,
-  });
-  final Align? label;
-  final Row? labels;
-
-  @override
-  Widget build(BuildContext context) {
-    return Chip(
-      backgroundColor: Colors.transparent,
-      visualDensity: VisualDensity.compact,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: getBorderRadius(10),
-      ),
-      labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
-      label: SizedBox(
-        height: 40,
-        child: label != null
-            ? label ?? const Text("")
-            : labels ?? Row(children: const []),
       ),
     );
   }
