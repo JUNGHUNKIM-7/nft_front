@@ -107,8 +107,8 @@ class GlassCard extends StatelessWidget with Widgets {
   }
 }
 
-class TilesForSliver extends StatelessWidget {
-  const TilesForSliver({super.key, required this.child});
+class SliverTiles extends StatelessWidget {
+  const SliverTiles({super.key, required this.child});
   final Widget child;
 
   @override
@@ -225,10 +225,7 @@ class ShopNowBtn extends StatelessWidget {
 class ItemNameWithTag extends StatelessWidget {
   const ItemNameWithTag({
     Key? key,
-    required this.type,
   }) : super(key: key);
-
-  final AppbarType type;
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +274,72 @@ class CustomChip extends StatelessWidget with Widgets {
         label: label != null
             ? Align(child: label ?? const Text(""))
             : labels ?? Row(children: const []),
+      ),
+    );
+  }
+}
+
+class SingleViewAppBar extends ConsumerWidget {
+  const SingleViewAppBar({
+    Key? key,
+    required this.height,
+    required this.id,
+    required this.type,
+  }) : super(key: key);
+
+  final double height;
+  final String id;
+  final SinglePageType type;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groups = getInstances(ref);
+    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
+
+    return SliverAppBar(
+      pinned: true,
+      expandedHeight: height * .4,
+      flexibleSpace: FlexibleSpaceBar.createSettings(
+        currentExtent: height * .3,
+        minExtent: 0,
+        maxExtent: height * .6,
+        child: FlexibleSpaceBar(
+          background: Image.asset(
+            "assets/images/2.jpg",
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+      ),
+      actions: [
+        if (type == SinglePageType.trending ||
+            type == SinglePageType.top ||
+            type == SinglePageType.collection)
+          b$.when(
+            data: (Set<int> bookMark$) => ToggleBookMark(
+              b$: bookMark$,
+              groups: groups,
+              index: int.parse(id),
+            ),
+            error: (err, stk) => Text('$err: $stk'),
+            loading: () => const CircularProgressIndicator(),
+          ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.shopping_cart,
+            color: Colors.black,
+          ),
+        ),
+      ],
+      bottom: const PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: ShopNowBtn(),
+          ),
+        ),
       ),
     );
   }

@@ -82,7 +82,7 @@ class BookMarkCards extends StatelessWidget with Widgets {
       onTap: () {
         context.go("${PathVar.bookmark.caller}/$index");
       },
-      child: TilesForSliver(
+      child: SliverTiles(
         child: Row(
           children: [
             SizedBox(
@@ -95,9 +95,7 @@ class BookMarkCards extends StatelessWidget with Widgets {
               icon: const Icon(Icons.shopping_cart),
             ),
             const Spacer(),
-            const ItemNameWithTag(
-              type: AppbarType.bookmarks,
-            ),
+            const ItemNameWithTag(),
             const Spacer(),
             Text("${b$[index]}"),
             Padding(padding: kHorizontal8),

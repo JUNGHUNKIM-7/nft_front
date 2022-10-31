@@ -13,6 +13,10 @@ List getInstances(WidgetRef ref) =>
 
 enum AppbarType { home, bookmarks }
 
+enum SinglePageType { top, trending, collection, bookmark }
+
+enum InfinitePageType { top, trending, artistCollection }
+
 class MainAppBar extends StatelessWidget {
   const MainAppBar({
     super.key,
@@ -188,8 +192,6 @@ class MainBottomNav extends ConsumerWidget {
             label: "home".toTitleCase(), icon: const Icon(Icons.home)),
         BottomNavigationBarItem(
             label: "favorites".toTitleCase(), icon: const Icon(Icons.bookmark)),
-        // BottomNavigationBarItem(
-        //     label: "settings".toTitleCase(), icon: const Icon(Icons.settings)),
       ],
     );
   }
@@ -259,9 +261,11 @@ class MainDrawer extends StatelessWidget with Widgets {
 }
 
 class MainSliverAppBarBottom extends StatelessWidget with Widgets {
-  const MainSliverAppBarBottom(
-      {super.key, required this.type, this.bookMarks$});
-
+  const MainSliverAppBarBottom({
+    super.key,
+    required this.type,
+    this.bookMarks$,
+  });
   final AppbarType type;
   final List<int>? bookMarks$;
 

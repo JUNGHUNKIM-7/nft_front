@@ -130,7 +130,7 @@ class TrendingCategories extends ConsumerWidget with Widgets {
         (context, index) {
           return GestureDetector(
             onTap: () => context.go("${PathVar.trendingDetails.caller}/$index"),
-            child: TilesForSliver(
+            child: SliverTiles(
               child: Row(
                 children: [
                   const SizedBox(
@@ -150,9 +150,7 @@ class TrendingCategories extends ConsumerWidget with Widgets {
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
-                  const ItemNameWithTag(
-                    type: AppbarType.home,
-                  ),
+                  const ItemNameWithTag(),
                   const Spacer(),
                   Text(
                     "0.25 ETH",
@@ -181,7 +179,7 @@ class ColletionCategories extends ConsumerWidget with Widgets {
       delegate: SliverChildBuilderDelegate(
         childCount: 10,
         (context, index) {
-          return TilesForSliver(
+          return SliverTiles(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -215,7 +213,9 @@ class ColletionCategories extends ConsumerWidget with Widgets {
                             color: Colors.black54,
                           ),
                           onPressed: () {
-                            //move to artist's collecion(grid)
+                            context.go(
+                              "${PathVar.collectionArtistDetails.caller}/$index",
+                            );
                           },
                         ),
                       )
@@ -235,7 +235,8 @@ class ColletionCategories extends ConsumerWidget with Widgets {
                           child: GestureDetector(
                             onTap: () {
                               context.go(
-                                  "${PathVar.collectionDetails.caller}/$index");
+                                "${PathVar.collectionSingle.caller}/$index",
+                              );
                             },
                             child: Stack(
                               alignment: Alignment.bottomCenter,
@@ -250,24 +251,6 @@ class ColletionCategories extends ConsumerWidget with Widgets {
                                     ),
                                   ),
                                 ),
-                                // Positioned(
-                                //   bottom: 10,
-                                //   child: GlassCard(
-                                //     child: Align(
-                                //       alignment: Alignment.center,
-                                //       child: Padding(
-                                //         padding: const EdgeInsets.all(8.0),
-                                //         child: Text(
-                                //           "Name#333".toTitleCase(),
-                                //           style: Theme.of(context)
-                                //               .textTheme
-                                //               .headline1
-                                //               ?.copyWith(fontSize: 18),
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // )
                               ],
                             ),
                           ),
