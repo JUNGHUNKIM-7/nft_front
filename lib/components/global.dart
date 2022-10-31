@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_layout/utils/extensions.dart';
 import 'package:flutter_layout/utils/repository.dart';
@@ -40,13 +38,26 @@ class MainAppBar extends StatelessWidget {
         currentExtent: height * .45,
         maxExtent: height * .45,
         child: FlexibleSpaceBar(
-          background: Image.asset(
-            imagePath,
-            fit: BoxFit.fill,
+          background: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(imagePath),
+                fit: BoxFit.fill,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2),
+                  BlendMode.darken,
+                ),
+              ),
+            ),
           ),
         ),
       ),
-      title: type == AppbarType.home ? const FlutterLogo() : null,
+      title: type == AppbarType.home
+          ? const FlutterLogo()
+          : Text(
+              "bookmarks".toTitleCase(),
+              style: Theme.of(context).textTheme.headline1,
+            ),
       leading: IconButton(
         onPressed: () {
           Scaffold.of(context).openDrawer();
@@ -85,14 +96,17 @@ class MainFloatingActionBtn extends ConsumerWidget with Widgets {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return FloatingActionButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: getBorderRadius(60),
+      ),
       elevation: 10,
       onPressed: () {
         _showInputs(context);
       },
-      backgroundColor: Colors.amber,
+      backgroundColor: Colors.black54,
       child: const Icon(
         Icons.search,
-        color: Colors.black,
+        color: Colors.white,
       ),
     );
   }
@@ -144,82 +158,6 @@ class MainFloatingActionBtn extends ConsumerWidget with Widgets {
   }
 }
 
-class MainSliverAppBarBottom extends StatelessWidget with Widgets {
-  const MainSliverAppBarBottom({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      child: Padding(
-        padding: kAll8,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-            child: GlassCard(
-              child: FittedBox(
-                child: Padding(
-                  padding: kAll8,
-                  child: Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "monkey #338".toUpperCase(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline1
-                                ?.copyWith(fontSize: 24),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "0.25",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline2
-                                    ?.copyWith(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                              ),
-                              kWidth15,
-                              Padding(
-                                padding: const EdgeInsets.only(right: 4.0),
-                                child: Text(
-                                  "ETH",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      ?.copyWith(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      kWidth30,
-                      const ShopNowBtn(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class MainBottomNav extends ConsumerWidget {
   const MainBottomNav({
     Key? key,
@@ -250,8 +188,8 @@ class MainBottomNav extends ConsumerWidget {
             label: "home".toTitleCase(), icon: const Icon(Icons.home)),
         BottomNavigationBarItem(
             label: "favorites".toTitleCase(), icon: const Icon(Icons.bookmark)),
-        BottomNavigationBarItem(
-            label: "settings".toTitleCase(), icon: const Icon(Icons.settings)),
+        // BottomNavigationBarItem(
+        //     label: "settings".toTitleCase(), icon: const Icon(Icons.settings)),
       ],
     );
   }
@@ -316,6 +254,79 @@ class MainDrawer extends StatelessWidget with Widgets {
           )
         ],
       ),
+    );
+  }
+}
+
+class MainSliverAppBarBottom extends StatelessWidget with Widgets {
+  const MainSliverAppBarBottom(
+      {super.key, required this.type, this.bookMarks$});
+
+  final AppbarType type;
+  final List<int>? bookMarks$;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: Padding(
+        padding: kAll8,
+        child: GlassCard(
+          child: FittedBox(
+            child: Padding(
+              padding: kAll8,
+              child: type == AppbarType.home
+                  ? _bottomGlass(context)
+                  : _bottomGlass(context),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row _bottomGlass(BuildContext context) {
+    return Row(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              "monkey #338".toUpperCase(),
+              style:
+                  Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                Text(
+                  "0.25",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline2
+                      ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                kWidth15,
+                Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: Text(
+                    "ETH",
+                    style: Theme.of(context).textTheme.headline2?.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        kWidth30,
+        const ShopNowBtn(),
+      ],
     );
   }
 }

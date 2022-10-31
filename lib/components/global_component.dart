@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_layout/utils/extensions.dart';
 import 'package:flutter_layout/utils/repository.dart';
@@ -84,23 +86,29 @@ class GlassCard extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: getBorderRadius(20),
-        border: Border.all(width: 2, color: Colors.white30),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomCenter,
-          colors: [Colors.white60, Colors.white10],
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: getBorderRadius(20),
+            border: Border.all(width: 2, color: Colors.white30),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
+              colors: [Colors.white, Colors.white10],
+            ),
+          ),
+          child: child,
         ),
       ),
-      child: child,
     );
   }
 }
 
-class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.child});
+class TilesForSliver extends StatelessWidget {
+  const TilesForSliver({super.key, required this.child});
   final Widget child;
 
   @override
@@ -217,7 +225,10 @@ class ShopNowBtn extends StatelessWidget {
 class ItemNameWithTag extends StatelessWidget {
   const ItemNameWithTag({
     Key? key,
+    required this.type,
   }) : super(key: key);
+
+  final AppbarType type;
 
   @override
   Widget build(BuildContext context) {
@@ -253,20 +264,18 @@ class CustomChip extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      backgroundColor: Colors.transparent,
-      visualDensity: VisualDensity.compact,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: getBorderRadius(10),
-      ),
-      labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-            fontWeight: FontWeight.w500,
-          ),
-      label: SizedBox(
-        height: 40,
-        child: label != null
-            ? label ?? const Text("")
+    return FittedBox(
+      child: Chip(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: getBorderRadius(10),
+        ),
+        labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+              fontWeight: FontWeight.w500,
+            ),
+        label: label != null
+            ? Align(child: label ?? const Text(""))
             : labels ?? Row(children: const []),
       ),
     );

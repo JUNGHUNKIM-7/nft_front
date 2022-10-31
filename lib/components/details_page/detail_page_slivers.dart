@@ -141,7 +141,7 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
       itemExtent: 100.0,
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          return CustomCard(
+          return TilesForSliver(
             child: Row(
               children: [
                 Image.asset(
@@ -157,7 +157,9 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
                 const SizedBox(
                   width: 4,
                 ),
-                const ItemNameWithTag(),
+                const ItemNameWithTag(
+                  type: AppbarType.home,
+                ),
                 const Spacer(),
                 Text(
                   "0.25 ETH",

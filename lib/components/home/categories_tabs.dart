@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_layout/utils/extensions.dart';
 import 'package:go_router/go_router.dart';
@@ -37,90 +35,81 @@ class TopCategories extends ConsumerWidget with Widgets {
               (groups.first as Repository).setIntEvt.setState =
                   CatchIntEvent.setGridItem;
               (groups.last as Interactor).setGridItem = index;
-              context.go("${PathVar.gridItem.caller}/$index");
+              context.go("${PathVar.topDetails.caller}/$index");
             },
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: getBorderRadius(20),
-              ),
-              child: ClipRRect(
-                borderRadius: getBorderRadius(20),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/2.jpg",
-                      fit: BoxFit.contain,
-                    ),
-                    Padding(
-                      padding: kAll8,
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: FittedBox(
-                          child: CustomChip(
-                            labels: Row(
-                              children: [
-                                Text(
-                                  "0.25",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "ETH",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ],
+            child: ClipRRect(
+              borderRadius: getBorderRadius(20),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/3.jpg",
+                    fit: BoxFit.contain,
+                  ),
+                  Positioned(
+                    top: 5,
+                    right: 5,
+                    child: GlassCard(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "0.25",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "ETH",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: FittedBox(
-                        child: Padding(
-                          padding: kAll8,
-                          child: CustomChip(
-                            labels: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                f$.when(
-                                  data: (Set<int> fav$) => ToggleFavorite(
-                                    f$: fav$,
-                                    groups: groups,
-                                    index: index,
+                  ),
+                  Positioned(
+                    bottom: 5,
+                    right: 5,
+                    child: GlassCard(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          children: [
+                            f$.when(
+                              data: (Set<int> fav$) => ToggleFavorite(
+                                f$: fav$,
+                                groups: groups,
+                                index: index,
+                              ),
+                              error: (err, stk) => const Text(''),
+                              loading: () => const CircularProgressIndicator(),
+                            ),
+                            Text(
+                              "${index + 100}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  ?.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  error: (err, stk) => const Text(''),
-                                  loading: () =>
-                                      const CircularProgressIndicator(),
-                                ),
-                                Text(
-                                  "${index + 100}",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      ?.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                              ],
                             ),
-                          ),
+                            const Padding(
+                              padding: EdgeInsets.only(right: 12),
+                            )
+                          ],
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             ),
           );
@@ -139,37 +128,42 @@ class TrendingCategories extends ConsumerWidget with Widgets {
       delegate: SliverChildBuilderDelegate(
         childCount: 10,
         (context, index) {
-          return CustomCard(
-            child: Row(
-              children: [
-                const SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: Image(
-                    image: AssetImage("assets/images/3.jpg"),
-                    fit: BoxFit.contain,
+          return GestureDetector(
+            onTap: () => context.go("${PathVar.trendingDetails.caller}/$index"),
+            child: TilesForSliver(
+              child: Row(
+                children: [
+                  const SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Image(
+                      image: AssetImage("assets/images/3.jpg"),
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  "${index + 1}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                const ItemNameWithTag(),
-                const Spacer(),
-                Text(
-                  "0.25 ETH",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.copyWith(fontWeight: FontWeight.w500),
-                ),
-                Padding(padding: kAll8.copyWith(left: 5)),
-              ],
+                  const SizedBox(width: 12),
+                  Text(
+                    "${index + 1}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  const ItemNameWithTag(
+                    type: AppbarType.home,
+                  ),
+                  const Spacer(),
+                  Text(
+                    "0.25 ETH",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        ?.copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  Padding(padding: kAll8.copyWith(left: 5)),
+                ],
+              ),
             ),
           );
         },
@@ -187,7 +181,7 @@ class ColletionCategories extends ConsumerWidget with Widgets {
       delegate: SliverChildBuilderDelegate(
         childCount: 10,
         (context, index) {
-          return CustomCard(
+          return TilesForSliver(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -220,7 +214,9 @@ class ColletionCategories extends ConsumerWidget with Widgets {
                             size: 40,
                             color: Colors.black54,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            //move to artist's collecion(grid)
+                          },
                         ),
                       )
                     ],
@@ -238,7 +234,8 @@ class ColletionCategories extends ConsumerWidget with Widgets {
                           padding: kAll8,
                           child: GestureDetector(
                             onTap: () {
-                              log('collection $index', name: 'Collection');
+                              context.go(
+                                  "${PathVar.collectionDetails.caller}/$index");
                             },
                             child: Stack(
                               alignment: Alignment.bottomCenter,
@@ -253,17 +250,24 @@ class ColletionCategories extends ConsumerWidget with Widgets {
                                     ),
                                   ),
                                 ),
-                                Positioned(
-                                  bottom: 10,
-                                  child: CustomChip(
-                                    label: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        "Name#333".toTitleCase(),
-                                      ),
-                                    ),
-                                  ),
-                                )
+                                // Positioned(
+                                //   bottom: 10,
+                                //   child: GlassCard(
+                                //     child: Align(
+                                //       alignment: Alignment.center,
+                                //       child: Padding(
+                                //         padding: const EdgeInsets.all(8.0),
+                                //         child: Text(
+                                //           "Name#333".toTitleCase(),
+                                //           style: Theme.of(context)
+                                //               .textTheme
+                                //               .headline1
+                                //               ?.copyWith(fontSize: 18),
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // )
                               ],
                             ),
                           ),

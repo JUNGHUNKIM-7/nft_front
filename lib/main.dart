@@ -25,16 +25,36 @@ class MyApp extends StatelessWidget {
   }
 
   final GoRouter _router = GoRouter(
+    initialLocation: PathVar.home.path,
     routes: <GoRoute>[
       GoRoute(
         path: PathVar.home.path,
         builder: (BuildContext context, GoRouterState state) => const Home(),
         routes: [
           GoRoute(
-            path: PathVar.gridItem.path,
-            builder: (BuildContext context, GoRouterState state) {
-              return DetailsPage(id: state.params['id']!);
-            },
+            path: PathVar.topDetails.path,
+            builder: (BuildContext context, GoRouterState state) =>
+                DetailsPage(id: state.params['id']!),
+          ),
+          GoRoute(
+            path: PathVar.trendingDetails.path,
+            builder: (BuildContext context, GoRouterState state) =>
+                DetailsPage(id: state.params['id']!),
+          ),
+          GoRoute(
+            path: PathVar.collectionDetails.path,
+            builder: (BuildContext context, GoRouterState state) =>
+                DetailsPage(id: state.params['id']!),
+          ),
+          GoRoute(
+            path: PathVar.collectionArtistDetails.path,
+            builder: (BuildContext context, GoRouterState state) =>
+                DetailsPage(id: state.params['name']!),
+          ),
+          GoRoute(
+            path: PathVar.bookmark.path,
+            builder: (BuildContext context, GoRouterState state) =>
+                DetailsPage(id: state.params['id']!),
           ),
         ],
       ),
@@ -44,9 +64,26 @@ class MyApp extends StatelessWidget {
 
 enum PathVar {
   home(path: "/", caller: "/"),
-  gridItem(
-      path: "tokens/:id",
-      caller: "/tokens"); // Must add prefix: "/dynamicValue"
+  topDetails(
+    path: "top/:id",
+    caller: "/top",
+  ),
+  trendingDetails(
+    path: "trending/:id",
+    caller: "/trending",
+  ),
+  collectionDetails(
+    path: "collection/:id",
+    caller: "/collection",
+  ),
+  collectionArtistDetails(
+    path: "collection/:artist",
+    caller: "/collection",
+  ),
+  bookmark(
+    path: "bookmark/:id",
+    caller: "/bookmark",
+  );
 
   final String path;
   final String caller;

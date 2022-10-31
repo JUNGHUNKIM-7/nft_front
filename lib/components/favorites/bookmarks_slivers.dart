@@ -2,12 +2,16 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_layout/components/global.dart';
-import 'package:flutter_layout/utils/extensions.dart';
 import 'package:flutter_layout/utils/style.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../main.dart';
 import '../../utils/providers.dart';
 import '../global_component.dart';
+
+//appbar => bookMarks.first
+//tiles => bookMarks.range(1)
 
 class BookMarks extends ConsumerWidget {
   const BookMarks({super.key});
@@ -25,7 +29,7 @@ class BookMarks extends ConsumerWidget {
         data: (Set<int> bookMark$) => CustomScrollView(
           slivers: [
             BookMarkAppBar(
-              bookMark$: bookMark$.toList(),
+              bookMarks$: bookMark$.toList(),
             ),
             BookMarkList(
               bookMark$: bookMark$.toList(),
@@ -74,38 +78,31 @@ class BookMarkCards extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return CustomCard(
-      child: Row(
-        children: [
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: Image.asset("assets/images/1.jpg"),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.shopping_cart),
-          ),
-          const Spacer(),
-          RichText(
-            text: TextSpan(
-              text: "titles".toTitleCase(),
-              style: Theme.of(context).textTheme.headline1,
-              children: [
-                TextSpan(
-                  text: "#338",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      ?.copyWith(fontSize: 16),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        context.go("${PathVar.bookmark.caller}/$index");
+      },
+      child: TilesForSliver(
+        child: Row(
+          children: [
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset("assets/images/1.jpg"),
             ),
-          ),
-          const Spacer(),
-          Text("${b$[index]}"),
-          Padding(padding: kHorizontal8),
-        ],
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.shopping_cart),
+            ),
+            const Spacer(),
+            const ItemNameWithTag(
+              type: AppbarType.bookmarks,
+            ),
+            const Spacer(),
+            Text("${b$[index]}"),
+            Padding(padding: kHorizontal8),
+          ],
+        ),
       ),
     );
   }
@@ -114,37 +111,27 @@ class BookMarkCards extends StatelessWidget with Widgets {
 class BookMarkAppBar extends StatelessWidget with Widgets {
   const BookMarkAppBar({
     Key? key,
-    required this.bookMark$,
+    required this.bookMarks$,
   }) : super(key: key);
-  final List<int> bookMark$;
+  final List<int> bookMarks$;
 
   @override
   Widget build(BuildContext context) {
     return MainAppBar(
-      imagePath: "assets/images/3.jpg",
+      imagePath: "assets/images/3.jpg", //bookmark$.first["image path"]
       type: AppbarType.bookmarks,
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BookMarkHeaders(
-                  texts: ["bookmarks".toTitleCase(), "${bookMark$.length}"],
-                )
-              ],
-            ),
-          ),
+        preferredSize: const Size.fromHeight(100),
+        child: MainSliverAppBarBottom(
+          type: AppbarType.bookmarks,
+          bookMarks$: bookMarks$,
         ),
       ),
     );
   }
 }
 
-class BookMarkHeaders extends StatelessWidget {
+class BookMarkHeaders extends StatelessWidget with Widgets {
   const BookMarkHeaders({
     Key? key,
     required this.texts,
@@ -155,18 +142,29 @@ class BookMarkHeaders extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: Row(
-        children: [
-          Text(
-            texts.first,
-            style: Theme.of(context).textTheme.bodyText2,
-          ),
-          const Spacer(),
-          Text(
-            texts.last,
-            style: Theme.of(context).textTheme.bodyText2,
-          )
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              texts.first,
+              style: Theme.of(context).textTheme.headline2?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    letterSpacing: kLetterSpacing,
+                  ),
+            ),
+            // const Spacer(),
+            Text(
+              texts.last,
+              style: Theme.of(context).textTheme.headline2?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    letterSpacing: kLetterSpacing,
+                  ),
+            )
+          ],
+        ),
       ),
     );
   }

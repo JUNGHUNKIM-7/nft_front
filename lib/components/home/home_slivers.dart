@@ -39,7 +39,9 @@ class HomeBody extends ConsumerWidget with Widgets {
             HomeAppBar(height: height),
             HomeCoins(height: height),
             HomeCategories(height: height),
+            const SliverPadding(padding: EdgeInsets.only(top: 4)),
             categorieBodies.elementAt($index),
+            const SliverPadding(padding: EdgeInsets.only(bottom: 4)),
           ],
         ),
         error: (err, stk) => Text('$err: $stk'),
@@ -135,7 +137,9 @@ class HomeAppBar extends StatelessWidget with Widgets {
       type: AppbarType.home,
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(80),
-        child: MainSliverAppBarBottom(),
+        child: MainSliverAppBarBottom(
+          type: AppbarType.home,
+        ),
       ),
     );
   }

@@ -11,7 +11,12 @@ enum CatchIntEvent {
 
 enum CatchStringEvent { setSearch }
 
-enum CatchSetEvent { setFavorite, unsetFavorite, setBookMark, unsetBookMark }
+enum CatchSetEvent {
+  setFavorite,
+  unsetFavorite,
+  setBookMark,
+  unsetBookMark,
+}
 
 final repositoryProvider = Provider<Repository>((ref) {
   return Repository.getInstance();

@@ -7,7 +7,6 @@ import 'details_page/detail_page_slivers.dart';
 import 'favorites/bookmarks_slivers.dart';
 import 'global.dart';
 import 'home/home_slivers.dart';
-import 'settings/settings.dart';
 
 //scaffold + stream lev
 
@@ -19,7 +18,7 @@ class Home extends ConsumerWidget with Widgets {
   static final bodys = [
     const HomeBody(),
     const BookMarks(),
-    const Settings(),
+    // const Settings(),
   ];
 
   @override
@@ -34,6 +33,7 @@ class Home extends ConsumerWidget with Widgets {
       child: Scaffold(
         backgroundColor: Colors.grey[300],
         drawer: const MainDrawer(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: const MainFloatingActionBtn(),
         body: bottomNav$.when(
           data: (int index$) => bodys.elementAt(index$),
@@ -57,7 +57,7 @@ class DetailsPageNavBodies {
   }) : _bodies = [
           DetailsPageHome(id: id),
           const BookMarks(),
-          const Settings(),
+          // const Settings(),
         ];
 
   final String id;
@@ -93,12 +93,6 @@ class _DetailsPageState extends ConsumerState<DetailsPage> {
 
     return Scaffold(
       backgroundColor: Colors.grey[300],
-
-      // bottomNavigationBar: bottomNav$.when(
-      //   data: (int $index) => MainBottomNav(index: $index),
-      //   error: (err, stk) => Text('$err: $stk'),
-      //   loading: () => const CircularProgressIndicator(),
-      // ),
       body: bottomNav$.when(
         data: (int $index) => bodies.bodies[$index],
         error: (err, stk) => Text('$err: $stk'),
