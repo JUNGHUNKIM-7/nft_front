@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/utils/extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../main.dart';
+import '../../utils/extensions.dart';
 import '../../utils/providers.dart';
 import '../../utils/repository.dart';
 import '../../utils/style.dart';
@@ -179,87 +179,112 @@ class ColletionCategories extends ConsumerWidget with Widgets {
       delegate: SliverChildBuilderDelegate(
         childCount: 10,
         (context, index) {
-          return SliverTiles(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, top: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 60,
-                        width: 60,
-                        child: ClipRRect(
-                          borderRadius: getBorderRadius(60),
-                          child: Image.asset("assets/images/2.jpg"),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Text(
-                        "nakayama teru".toTitleCase(),
-                        style: Theme.of(context).textTheme.headline1,
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.arrow_forward,
-                            size: 40,
-                            color: Colors.black54,
+          return GestureDetector(
+            onTap: () => context.go(
+              "${PathVar.collectionArtistDetails.caller}/$index",
+            ),
+            child: SliverTiles(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 4.0,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 60,
+                          width: 60,
+                          child: ClipRRect(
+                            borderRadius: getBorderRadius(60),
+                            child: Image.asset("assets/images/2.jpg"),
                           ),
-                          onPressed: () {
-                            context.go(
-                              "${PathVar.collectionArtistDetails.caller}/$index",
-                            );
-                          },
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .23,
-                  child: ListView(
-                    primary: false,
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      ...List.generate(
-                        20,
-                        (index) => Padding(
-                          padding: kAll8,
-                          child: GestureDetector(
-                            onTap: () {
-                              context.go(
-                                "${PathVar.collectionSingle.caller}/$index",
-                              );
-                            },
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                SizedBox(
-                                  height: 150,
-                                  width: 150,
-                                  child: ClipRRect(
-                                    borderRadius: getBorderRadius(20),
-                                    child: Card(
-                                      child: Image.asset("assets/images/3.jpg"),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "nakayama teru".toTitleCase(),
+                                style: Theme.of(context).textTheme.headline1,
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.favorite,
+                                        size: 24,
+                                        color: Colors.black54,
+                                      ),
+                                      onPressed: () {},
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    "${index + 100}",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        ?.copyWith(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .23,
+                    child: ListView(
+                      primary: false,
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        ...List.generate(
+                          20,
+                          (index) => Padding(
+                            padding: kAll8,
+                            child: GestureDetector(
+                              onTap: () {
+                                context.go(
+                                  "${PathVar.collectionSingle.caller}/$index",
+                                );
+                              },
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
+                                children: [
+                                  SizedBox(
+                                    height: 150,
+                                    width: 150,
+                                    child: ClipRRect(
+                                      borderRadius: getBorderRadius(20),
+                                      child: Card(
+                                        child:
+                                            Image.asset("assets/images/3.jpg"),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

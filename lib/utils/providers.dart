@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'repository.dart';
+import './stream_combiner.dart';
 
 enum CatchIntEvent {
   setCategoreis,
@@ -20,6 +21,10 @@ enum CatchSetEvent {
 
 final repositoryProvider = Provider<Repository>((ref) {
   return Repository.getInstance();
+});
+
+final combinerProvider = Provider<Combiner>((ref) {
+  return Combiner.getInstance(ref.watch(repositoryProvider));
 });
 
 final interactorProvider = Provider<Interactor>((ref) {

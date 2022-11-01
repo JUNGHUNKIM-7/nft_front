@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/utils/extensions.dart';
-import 'package:flutter_layout/utils/repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../utils/extensions.dart';
 import '../utils/providers.dart';
+import '../utils/repository.dart';
 import '../utils/style.dart';
 import 'global.dart';
 
@@ -250,34 +250,34 @@ class ItemNameWithTag extends StatelessWidget {
   }
 }
 
-class CustomChip extends StatelessWidget with Widgets {
-  const CustomChip({
-    super.key,
-    this.label,
-    this.labels,
-  });
-  final Align? label;
-  final Row? labels;
+// class CustomChip extends StatelessWidget with Widgets {
+//   const CustomChip({
+//     super.key,
+//     this.label,
+//     this.labels,
+//   });
+//   final Text? label;
+//   final Row? labels;
 
-  @override
-  Widget build(BuildContext context) {
-    return FittedBox(
-      child: Chip(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: getBorderRadius(10),
-        ),
-        labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-        label: label != null
-            ? Align(child: label ?? const Text(""))
-            : labels ?? Row(children: const []),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return FittedBox(
+//       child: Chip(
+//         backgroundColor: Colors.white,
+//         elevation: 0,
+//         shape: RoundedRectangleBorder(
+//           borderRadius: getBorderRadius(10),
+//         ),
+//         labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
+//               fontWeight: FontWeight.w500,
+//             ),
+//         label: label != null
+//             ? label ?? const Text("")
+//             : labels ?? Row(children: const []),
+//       ),
+//     );
+//   }
+// }
 
 class SingleViewAppBar extends ConsumerWidget {
   const SingleViewAppBar({

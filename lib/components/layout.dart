@@ -7,8 +7,6 @@ import 'favorites/bookmarks_slivers.dart';
 import 'global.dart';
 import 'home/home_slivers.dart';
 
-//scaffold + stream lev
-
 class Home extends ConsumerWidget with Widgets {
   const Home({
     Key? key,
@@ -17,7 +15,6 @@ class Home extends ConsumerWidget with Widgets {
   static final bodys = [
     const HomeBody(),
     const BookMarks(),
-    // const Settings(),
   ];
 
   @override

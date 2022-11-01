@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/components/global.dart';
-import 'package:flutter_layout/utils/style.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../components/global.dart';
 import '../../main.dart';
 import '../../utils/providers.dart';
+import '../../utils/style.dart';
 import '../global_component.dart';
 
 //appbar => bookMarks.first
@@ -115,55 +115,52 @@ class BookMarkAppBar extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return MainAppBar(
+    return const MainAppBar(
       imagePath: "assets/images/3.jpg", //bookmark$.first["image path"]
       type: AppbarType.bookmarks,
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: MainSliverAppBarBottom(
-          type: AppbarType.bookmarks,
-          bookMarks$: bookMarks$,
-        ),
+        preferredSize: Size.fromHeight(100),
+        child: MainSliverAppBarBottom(type: AppbarType.bookmarks),
       ),
     );
   }
 }
 
-class BookMarkHeaders extends StatelessWidget with Widgets {
-  const BookMarkHeaders({
-    Key? key,
-    required this.texts,
-  }) : super(key: key);
-  final List<String> texts;
+// class BookMarkHeaders extends StatelessWidget with Widgets {
+//   const BookMarkHeaders({
+//     Key? key,
+//     required this.texts,
+//   }) : super(key: key);
+//   final List<String> texts;
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              texts.first,
-              style: Theme.of(context).textTheme.headline2?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    letterSpacing: kLetterSpacing,
-                  ),
-            ),
-            // const Spacer(),
-            Text(
-              texts.last,
-              style: Theme.of(context).textTheme.headline2?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    letterSpacing: kLetterSpacing,
-                  ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+//       child: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           children: [
+//             Text(
+//               texts.first,
+//               style: Theme.of(context).textTheme.headline2?.copyWith(
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 24,
+//                     letterSpacing: kLetterSpacing,
+//                   ),
+//             ),
+//             // const Spacer(),
+//             Text(
+//               texts.last,
+//               style: Theme.of(context).textTheme.headline2?.copyWith(
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 16,
+//                     letterSpacing: kLetterSpacing,
+//                   ),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/utils/extensions.dart';
-import 'package:flutter_layout/utils/repository.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../utils/extensions.dart';
+import '../../utils/repository.dart';
 import '../utils/providers.dart';
 import '../utils/style.dart';
 import 'global_component.dart';
@@ -11,11 +11,24 @@ import 'global_component.dart';
 List getInstances(WidgetRef ref) =>
     [ref.watch(repositoryProvider), ref.watch(interactorProvider)];
 
-enum AppbarType { home, bookmarks }
+enum AppbarType {
+  home,
+  artistCollection,
+  bookmarks,
+}
 
-enum SinglePageType { top, trending, collection, bookmark }
+enum SinglePageType {
+  top,
+  trending,
+  collection,
+  bookmark,
+}
 
-enum InfinitePageType { top, trending, artistCollection }
+enum InfinitePageType {
+  top,
+  trending,
+  artistCollection,
+}
 
 class MainAppBar extends StatelessWidget {
   const MainAppBar({
@@ -58,19 +71,26 @@ class MainAppBar extends StatelessWidget {
       ),
       title: type == AppbarType.home
           ? const FlutterLogo()
-          : Text(
-              "bookmarks".toTitleCase(),
-              style: Theme.of(context).textTheme.headline1,
-            ),
-      leading: IconButton(
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
-        icon: const Icon(
-          Icons.menu,
-          color: Colors.black,
-        ),
-      ),
+          : type == AppbarType.bookmarks
+              ? Text(
+                  "bookmarks".toTitleCase(),
+                  style: Theme.of(context).textTheme.headline1,
+                )
+              : Text(
+                  "collection".toTitleCase(),
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+      leading: type == AppbarType.home
+          ? IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: const Icon(
+                Icons.menu,
+                color: Colors.black,
+              ),
+            )
+          : null,
       actions: [
         IconButton(
           onPressed: () {},
@@ -89,6 +109,109 @@ class MainAppBar extends StatelessWidget {
           ),
       ],
     );
+  }
+}
+
+class MainSliverAppBarBottom extends StatelessWidget with Widgets {
+  const MainSliverAppBarBottom({
+    super.key,
+    required this.type,
+  });
+  final AppbarType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: Padding(
+        padding: kAll8,
+        child: GlassCard(
+          child: FittedBox(
+            child: Padding(
+              padding: kAll8,
+              child: _bottomGlass(context, type: type),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row _bottomGlass(
+    BuildContext context, {
+    required AppbarType type,
+  }) {
+    switch (type) {
+      case AppbarType.home:
+        return Row(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: _getChildren(context, type: type),
+            ),
+            kWidth30,
+            const ShopNowBtn(),
+          ],
+        );
+      case AppbarType.artistCollection:
+        return Row(
+          children: const [
+            Text('artistcoll'),
+          ],
+        );
+      case AppbarType.bookmarks:
+        return Row(
+          children: const [
+            Text("bookmarks"),
+          ],
+        );
+    }
+  }
+
+  List<Widget> _getChildren(
+    BuildContext context, {
+    required AppbarType type,
+  }) {
+    switch (type) {
+      case AppbarType.home:
+        return [
+          Text(
+            "monkey #338".toUpperCase(),
+            style:
+                Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Row(
+            children: [
+              Text(
+                "0.25",
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2
+                    ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              kWidth15,
+              Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: Text(
+                  "ETH",
+                  style: Theme.of(context).textTheme.headline2?.copyWith(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+            ],
+          ),
+        ];
+      case AppbarType.artistCollection:
+        return [];
+      case AppbarType.bookmarks:
+        return [];
+    }
   }
 }
 
@@ -256,81 +379,6 @@ class MainDrawer extends StatelessWidget with Widgets {
           )
         ],
       ),
-    );
-  }
-}
-
-class MainSliverAppBarBottom extends StatelessWidget with Widgets {
-  const MainSliverAppBarBottom({
-    super.key,
-    required this.type,
-    this.bookMarks$,
-  });
-  final AppbarType type;
-  final List<int>? bookMarks$;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      child: Padding(
-        padding: kAll8,
-        child: GlassCard(
-          child: FittedBox(
-            child: Padding(
-              padding: kAll8,
-              child: type == AppbarType.home
-                  ? _bottomGlass(context)
-                  : _bottomGlass(context),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Row _bottomGlass(BuildContext context) {
-    return Row(
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              "monkey #338".toUpperCase(),
-              style:
-                  Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              children: [
-                Text(
-                  "0.25",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline2
-                      ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                kWidth15,
-                Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
-                  child: Text(
-                    "ETH",
-                    style: Theme.of(context).textTheme.headline2?.copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        kWidth30,
-        const ShopNowBtn(),
-      ],
     );
   }
 }

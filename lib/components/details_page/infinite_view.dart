@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../main.dart';
 import '../../utils/providers.dart';
 import '../../utils/style.dart';
 import '../global.dart';

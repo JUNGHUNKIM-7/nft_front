@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/utils/extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../utils/extensions.dart';
 import '../../utils/providers.dart';
 import '../../utils/repository.dart';
 import '../../utils/style.dart';
@@ -137,9 +137,7 @@ class HomeAppBar extends StatelessWidget with Widgets {
       type: AppbarType.home,
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(80),
-        child: MainSliverAppBarBottom(
-          type: AppbarType.home,
-        ),
+        child: MainSliverAppBarBottom(type: AppbarType.home),
       ),
     );
   }

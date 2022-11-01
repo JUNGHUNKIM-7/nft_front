@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/components/details_page/artist_collections.dart';
-import 'package:flutter_layout/components/details_page/infinite_view.dart';
-import 'package:flutter_layout/components/details_page/single_details.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'components/details_page/artist_collections.dart';
+import 'components/details_page/infinite_view.dart';
+import 'components/details_page/single_details.dart';
 import 'components/global.dart';
 import 'components/layout.dart';
 import 'utils/style.dart';

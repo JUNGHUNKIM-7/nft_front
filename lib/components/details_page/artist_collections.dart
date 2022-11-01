@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/components/details_page/infinite_view.dart';
-import 'package:flutter_layout/components/global.dart';
+import 'package:flutter_layout/utils/style.dart';
 
-class AritstCollections extends StatelessWidget {
+import '../../components/details_page/infinite_view.dart';
+import '../../components/global.dart';
+
+class AritstCollections extends StatelessWidget with Widgets {
   const AritstCollections({
     super.key,
     required this.name,
@@ -14,7 +16,16 @@ class AritstCollections extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(),
+          const MainAppBar(
+            type: AppbarType.artistCollection,
+            imagePath: "assets/images/3.jpg",
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(40),
+              child: MainSliverAppBarBottom(
+                type: AppbarType.artistCollection,
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: Text(name),
           ),
