@@ -8,9 +8,11 @@ class SinglePage extends StatelessWidget {
     super.key,
     required this.id,
     required this.type,
+    this.name,
   });
   final SinglePageType type;
   final String id;
+  final String? name;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +28,14 @@ class SinglePage extends StatelessWidget {
           SliverToBoxAdapter(
             child: Text(
               type == SinglePageType.bookmark
-                  ? "bookmark"
+                  ? "bookMark: $id"
                   : type == SinglePageType.top
-                      ? "top"
+                      ? "top: $id"
                       : type == SinglePageType.trending
-                          ? "trending"
-                          : "collecitons",
+                          ? "trending: $id"
+                          : name != null
+                              ? "collection: $id / artistName: $name"
+                              : "collection: $id",
             ),
           ),
           const SliverFillRemaining()

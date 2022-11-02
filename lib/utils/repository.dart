@@ -1,9 +1,9 @@
 import '../base.dart';
 import 'providers.dart';
 
-class Repository {
-  Repository._();
-  factory Repository.getInstance() => Repository._();
+class ControllerBase {
+  ControllerBase._();
+  factory ControllerBase.getInstance() => ControllerBase._();
 
   final setIntEvt = BaseController<CatchIntEvent?>(null);
   final coinsSelector = BaseController(0);
@@ -14,6 +14,7 @@ class Repository {
   final setSetEvent = BaseController<CatchSetEvent?>(null);
   final favoriteSelector = BaseController(<int>{});
   final bookMarkSelector = BaseController(<int>{});
+  final cartSelector = BaseController(<int>{});
 
   final setStringEvt = BaseController<CatchStringEvent?>(null);
   final searchValue = BaseController("");
@@ -27,6 +28,7 @@ class Interactor {
   int bottomNav;
   Set<int> favorites;
   Set<int> bookMarks;
+  Set<int> cart;
 
   Interactor._({
     required this.searchValue,
@@ -36,6 +38,7 @@ class Interactor {
     required this.bottomNav,
     required this.favorites,
     required this.bookMarks,
+    required this.cart,
   });
 
   factory Interactor.getInstance() => Interactor._(
@@ -46,6 +49,7 @@ class Interactor {
         bottomNav: 0,
         favorites: <int>{},
         bookMarks: <int>{},
+        cart: <int>{},
       );
 
   set setSearchValue(String value) => searchValue = value;
@@ -57,4 +61,11 @@ class Interactor {
   set unsetFavorite(int index) => favorites.remove(index);
   set setBookMark(int index) => bookMarks.add(index);
   set unsetBookMark(int index) => bookMarks.remove(index);
+  set setCart(int index) => cart.add(index);
+  set unsetCart(int index) => cart.remove(index);
+}
+
+class ServerRepository {
+  ServerRepository._();
+  factory ServerRepository.getInstance() => ServerRepository._();
 }

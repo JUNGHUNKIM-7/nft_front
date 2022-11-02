@@ -26,7 +26,7 @@ class HomeBody extends ConsumerWidget with Widgets {
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
     final categories$ =
-        ref.watch(catchIntFamilyProvider(CatchIntEvent.setCategoreis));
+        ref.watch(catchIntProvider(CatchIntEvent.setCategoreis));
 
     return RefreshIndicator(
       onRefresh: () => Future.delayed(
@@ -63,7 +63,7 @@ class HomeCategories extends ConsumerWidget with Widgets {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categories$ =
-        ref.watch(catchIntFamilyProvider(CatchIntEvent.setCategoreis));
+        ref.watch(catchIntProvider(CatchIntEvent.setCategoreis));
     final groups = getInstances(ref);
 
     return SliverToBoxAdapter(
@@ -82,8 +82,9 @@ class HomeCategories extends ConsumerWidget with Widgets {
                       for (var i = 0; i < menus.length; i++)
                         GestureDetector(
                           onTap: () {
-                            (groups.first as Repository).setIntEvt.setState =
-                                CatchIntEvent.setCategoreis;
+                            (groups.first as ControllerBase)
+                                .setIntEvt
+                                .setState = CatchIntEvent.setCategoreis;
                             (groups.last as Interactor).setCategories = i;
                           },
                           child: Row(
@@ -163,7 +164,7 @@ class HomeCoins extends ConsumerWidget with Widgets {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final coins$ = ref.watch(catchIntFamilyProvider(CatchIntEvent.setCoins));
+    final coins$ = ref.watch(catchIntProvider(CatchIntEvent.setCoins));
 
     return SliverToBoxAdapter(
       child: coins$.when(
@@ -211,7 +212,7 @@ class HomeCoins extends ConsumerWidget with Widgets {
       children: [
         GestureDetector(
           onTap: () {
-            (groups.first as Repository).setIntEvt.setState =
+            (groups.first as ControllerBase).setIntEvt.setState =
                 CatchIntEvent.setCoins;
             (groups.last as Interactor).setCoin = index;
           },

@@ -47,7 +47,7 @@ class _InputsState extends ConsumerState<Inputs> {
           padding: widget.kHorizontal8.copyWith(left: 20, right: 20),
           child: TextField(
             onSubmitted: (value) {
-              (groups.first as Repository).setStringEvt.setState =
+              (groups.first as ControllerBase).setStringEvt.setState =
                   CatchStringEvent.setSearch;
               (groups.last as Interactor).searchValue = value;
             },
@@ -125,70 +125,109 @@ class SliverTiles extends StatelessWidget {
   }
 }
 
-class ToggleBookMark extends StatelessWidget {
+class ToggleBookMark extends ConsumerWidget {
   const ToggleBookMark({
     super.key,
-    required this.b$,
-    required this.groups,
     required this.index,
   });
 
-  final Set<int> b$;
-  final List groups;
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        if (b$.contains(index)) {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.unsetBookMark;
-          (groups.last as Interactor).unsetBookMark = index;
-        } else {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.setBookMark;
-          (groups.last as Interactor).setBookMark = index;
-        }
-      },
-      icon: Icon(
-        Icons.bookmark,
-        color: b$.contains(index) ? Colors.redAccent : Colors.black,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
+    final groups = getInstances(ref);
+
+    return b$.when(
+      data: (Set<int> bookMark$) => IconButton(
+        onPressed: () {
+          if (bookMark$.contains(index)) {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.unsetBookMark;
+            (groups.last as Interactor).unsetBookMark = index;
+          } else {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.setBookMark;
+            (groups.last as Interactor).setBookMark = index;
+          }
+        },
+        icon: Icon(
+          Icons.bookmark,
+          color: bookMark$.contains(index) ? Colors.redAccent : Colors.black,
+        ),
       ),
+      error: (err, stk) => const Text(''),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }
 
-class ToggleFavorite extends StatelessWidget {
+class ToggleFavorite extends ConsumerWidget {
   const ToggleFavorite({
     Key? key,
-    required this.f$,
-    required this.groups,
     required this.index,
   }) : super(key: key);
 
-  final Set<int> f$;
-  final List groups;
   final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        if (f$.contains(index)) {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.unsetFavorite;
-          (groups.last as Interactor).unsetFavorite = index;
-        } else {
-          (groups.first as Repository).setSetEvent.setState =
-              CatchSetEvent.setFavorite;
-          (groups.last as Interactor).setFavorite = index;
-        }
-      },
-      icon: Icon(
-        Icons.favorite,
-        color: f$.contains(index) ? Colors.redAccent : Colors.black,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final f$ = ref.watch(catchSetProvider(CatchSetEvent.setFavorite));
+    final groups = getInstances(ref);
+
+    return f$.when(
+      data: (Set<int> fav$) => IconButton(
+        onPressed: () {
+          if (fav$.contains(index)) {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.unsetFavorite;
+            (groups.last as Interactor).unsetFavorite = index;
+          } else {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.setFavorite;
+            (groups.last as Interactor).setFavorite = index;
+          }
+        },
+        icon: Icon(
+          Icons.favorite,
+          color: fav$.contains(index) ? Colors.redAccent : Colors.black,
+        ),
       ),
+      error: (err, stk) => const Text(''),
+      loading: () => const CircularProgressIndicator(),
+    );
+  }
+}
+
+class ToggleCart extends ConsumerWidget {
+  const ToggleCart(this.index, {super.key});
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cart$ = ref.watch(catchSetProvider(CatchSetEvent.setCart));
+    final groups = getInstances(ref);
+
+    return cart$.when(
+      data: (Set<int> c$) => IconButton(
+        onPressed: () {
+          if (c$.contains(index)) {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.unsetCart;
+            (groups.last as Interactor).unsetCart = index;
+          } else {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.setCart;
+            (groups.last as Interactor).setCart = index;
+          }
+        },
+        icon: Icon(
+          Icons.shopping_cart,
+          color: c$.contains(index) ? Colors.redAccent : Colors.black,
+        ),
+      ),
+      error: (err, stk) => Text('$err: $stk'),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }
@@ -293,9 +332,6 @@ class SingleViewAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final groups = getInstances(ref);
-    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
-
     return SliverAppBar(
       pinned: true,
       expandedHeight: height * .4,
@@ -314,22 +350,9 @@ class SingleViewAppBar extends ConsumerWidget {
         if (type == SinglePageType.trending ||
             type == SinglePageType.top ||
             type == SinglePageType.collection)
-          b$.when(
-            data: (Set<int> bookMark$) => ToggleBookMark(
-              b$: bookMark$,
-              groups: groups,
-              index: int.parse(id),
-            ),
-            error: (err, stk) => Text('$err: $stk'),
-            loading: () => const CircularProgressIndicator(),
-          ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.shopping_cart,
-            color: Colors.black,
-          ),
-        ),
+          ToggleBookMark(
+            index: int.parse(id),
+          )
       ],
       bottom: const PreferredSize(
         preferredSize: Size.fromHeight(60),
@@ -338,6 +361,27 @@ class SingleViewAppBar extends ConsumerWidget {
           child: Align(
             alignment: Alignment.bottomRight,
             child: ShopNowBtn(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DarkenImage extends StatelessWidget {
+  const DarkenImage({super.key, required this.image});
+  final AssetImage image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: image,
+          fit: BoxFit.fill,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.5),
+            BlendMode.darken,
           ),
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'repository.dart';
 import './stream_combiner.dart';
+import 'repository.dart';
 
 enum CatchIntEvent {
   setCategoreis,
@@ -17,23 +17,16 @@ enum CatchSetEvent {
   unsetFavorite,
   setBookMark,
   unsetBookMark,
+  setCart,
+  unsetCart,
 }
 
-final repositoryProvider = Provider<Repository>((ref) {
-  return Repository.getInstance();
-});
+// interactor <- hold client's data
+// repostiory(stream) <- hold interactor's data
 
-final combinerProvider = Provider<Combiner>((ref) {
-  return Combiner.getInstance(ref.watch(repositoryProvider));
-});
-
-final interactorProvider = Provider<Interactor>((ref) {
-  return Interactor.getInstance();
-});
-
-final catchStreamProvider = StreamProvider.autoDispose
+final catchStringProvider = StreamProvider.autoDispose
     .family<String, CatchStringEvent>((ref, evt) async* {
-  final Repository repository = ref.watch(repositoryProvider);
+  final ControllerBase repository = ref.watch(repositoryProvider);
   final Interactor interactor = ref.watch(interactorProvider);
 
   ref.onDispose(() {
@@ -59,9 +52,9 @@ final catchStreamProvider = StreamProvider.autoDispose
   }
 });
 
-final catchIntFamilyProvider = StreamProvider.family<int, CatchIntEvent>(
+final catchIntProvider = StreamProvider.family<int, CatchIntEvent>(
   (ref, evt) async* {
-    final Repository repository = ref.watch(repositoryProvider);
+    final ControllerBase repository = ref.watch(repositoryProvider);
     final Interactor interactor = ref.watch(interactorProvider);
 
     repository.setIntEvt.bSubject.listen((CatchIntEvent? evt) {
@@ -104,7 +97,7 @@ final catchIntFamilyProvider = StreamProvider.family<int, CatchIntEvent>(
 
 final catchSetProvider =
     StreamProvider.family<Set<int>, CatchSetEvent>((ref, evt) async* {
-  final Repository repository = ref.watch(repositoryProvider);
+  final ControllerBase repository = ref.watch(repositoryProvider);
   final Interactor interactor = ref.watch(interactorProvider);
 
   repository.setSetEvent.bSubject.listen((CatchSetEvent? evt) {
@@ -120,6 +113,12 @@ final catchSetProvider =
         break;
       case CatchSetEvent.unsetBookMark:
         repository.bookMarkSelector.setState = interactor.bookMarks;
+        break;
+      case CatchSetEvent.setCart:
+        repository.cartSelector.setState = interactor.cart;
+        break;
+      case CatchSetEvent.unsetCart:
+        repository.cartSelector.setState = interactor.cart;
         break;
       default:
         break;
@@ -139,7 +138,30 @@ final catchSetProvider =
     case CatchSetEvent.unsetBookMark:
       yield* repository.bookMarkSelector.bStream;
       break;
+    case CatchSetEvent.setCart:
+      yield* repository.cartSelector.bStream;
+      break;
+    case CatchSetEvent.unsetCart:
+      yield* repository.cartSelector.bStream;
+      break;
     default:
       break;
   }
+});
+
+final serverProvider = Provider<ServerRepository>((ref) {
+  return ServerRepository.getInstance();
+});
+
+final repositoryProvider = Provider<ControllerBase>((ref) {
+  return ControllerBase.getInstance();
+});
+
+final interactorProvider = Provider<Interactor>((ref) {
+  return Interactor.getInstance();
+});
+
+final combinerProvider = Provider<Combiner>((ref) {
+  return Combiner.getInstance(
+      ref.watch(repositoryProvider), ref.watch(serverProvider));
 });

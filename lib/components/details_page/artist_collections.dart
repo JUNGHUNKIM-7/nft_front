@@ -18,7 +18,7 @@ class AritstCollections extends StatelessWidget with Widgets {
         slivers: [
           const MainAppBar(
             type: AppbarType.artistCollection,
-            imagePath: "assets/images/3.jpg",
+            imagePath: "assets/images/collections.jpg",
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(40),
               child: MainSliverAppBarBottom(
@@ -27,7 +27,7 @@ class AritstCollections extends StatelessWidget with Widgets {
             ),
           ),
           SliverToBoxAdapter(
-            child: Text(name),
+            child: Text("artistName: $name"),
           ),
           const InfiniteScroll(type: InfinitePageType.artistCollection)
         ],

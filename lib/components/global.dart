@@ -30,7 +30,7 @@ enum InfinitePageType {
   artistCollection,
 }
 
-class MainAppBar extends StatelessWidget {
+class MainAppBar extends ConsumerWidget {
   const MainAppBar({
     super.key,
     required this.imagePath,
@@ -43,7 +43,7 @@ class MainAppBar extends StatelessWidget {
   final PreferredSizeWidget? bottom;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
 
     return SliverAppBar(
@@ -55,22 +55,19 @@ class MainAppBar extends StatelessWidget {
         currentExtent: height * .45,
         maxExtent: height * .45,
         child: FlexibleSpaceBar(
-          background: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(imagePath),
-                fit: BoxFit.fill,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2),
-                  BlendMode.darken,
-                ),
-              ),
-            ),
+          background: DarkenImage(
+            image: AssetImage(imagePath),
           ),
         ),
       ),
       title: type == AppbarType.home
-          ? const FlutterLogo()
+          ? SizedBox(
+              width: 150,
+              height: 80,
+              child: Image.asset(
+                "assets/images/logo.png",
+              ),
+            )
           : type == AppbarType.bookmarks
               ? Text(
                   "bookmarks".toTitleCase(),
@@ -92,13 +89,6 @@ class MainAppBar extends StatelessWidget {
             )
           : null,
       actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.shopping_cart,
-            color: Colors.black,
-          ),
-        ),
         if (type == AppbarType.home)
           IconButton(
             onPressed: () {},
@@ -141,29 +131,30 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
     BuildContext context, {
     required AppbarType type,
   }) {
+    Column col() => Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: _getChildren(context, type: type),
+        );
     switch (type) {
       case AppbarType.home:
         return Row(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: _getChildren(context, type: type),
-            ),
+            col(),
             kWidth30,
             const ShopNowBtn(),
           ],
         );
       case AppbarType.artistCollection:
         return Row(
-          children: const [
-            Text('artistcoll'),
+          children: [
+            col(),
           ],
         );
       case AppbarType.bookmarks:
         return Row(
-          children: const [
-            Text("bookmarks"),
+          children: [
+            col(),
           ],
         );
     }
@@ -208,9 +199,21 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
           ),
         ];
       case AppbarType.artistCollection:
-        return [];
+        return [
+          Text(
+            "monkey #338".toUpperCase(),
+            style:
+                Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
+          ),
+        ];
       case AppbarType.bookmarks:
-        return [];
+        return [
+          Text(
+            "monkey #338".toUpperCase(),
+            style:
+                Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
+          ),
+        ];
     }
   }
 }
@@ -303,7 +306,7 @@ class MainBottomNav extends ConsumerWidget {
       currentIndex: index,
       showUnselectedLabels: false,
       onTap: (int val) {
-        (groups.first as Repository).setIntEvt.setState =
+        (groups.first as ControllerBase).setIntEvt.setState =
             CatchIntEvent.setBottomNav;
         (groups.last as Interactor).setBottomNav = val;
       },
@@ -315,6 +318,8 @@ class MainBottomNav extends ConsumerWidget {
             label: "home".toTitleCase(), icon: const Icon(Icons.home)),
         BottomNavigationBarItem(
             label: "favorites".toTitleCase(), icon: const Icon(Icons.bookmark)),
+        BottomNavigationBarItem(
+            label: "cart".toTitleCase(), icon: const Icon(Icons.shopping_cart)),
       ],
     );
   }
@@ -332,12 +337,10 @@ class MainDrawer extends StatelessWidget with Widgets {
       child: Column(
         children: [
           kHeight30,
-          const SizedBox(
+          SizedBox(
             height: 100,
             width: 100,
-            child: CircleAvatar(
-              child: FlutterLogo(),
-            ),
+            child: Image.asset("assets/images/logo.png"),
           ),
           const Spacer(),
           Column(

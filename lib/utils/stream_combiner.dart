@@ -1,11 +1,24 @@
 import '../utils/repository.dart';
 
-class Combiner {
-  final Repository _repository;
-  Combiner._({
-    required Repository repository,
-  }) : _repository = repository;
+//repository,interactor <- combiner -> server
+//repository -> client side
 
-  factory Combiner.getInstance(Repository repository) =>
-      Combiner._(repository: repository);
+class Combiner {
+  final ControllerBase _repository;
+  final ServerRepository _serverReposity;
+
+  Combiner._({
+    required ControllerBase repository,
+    required ServerRepository serverReposity,
+  })  : _repository = repository,
+        _serverReposity = serverReposity;
+
+  factory Combiner.getInstance(
+    ControllerBase repository,
+    ServerRepository serverReposity,
+  ) =>
+      Combiner._(
+        repository: repository,
+        serverReposity: serverReposity,
+      );
 }

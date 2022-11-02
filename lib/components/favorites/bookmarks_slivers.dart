@@ -67,7 +67,9 @@ class BookMarkList extends StatelessWidget {
   }
 }
 
-class BookMarkCards extends StatelessWidget with Widgets {
+
+
+class BookMarkCards extends ConsumerWidget with Widgets {
   const BookMarkCards({
     Key? key,
     required this.b$,
@@ -77,7 +79,7 @@ class BookMarkCards extends StatelessWidget with Widgets {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () {
         context.go("${PathVar.bookmark.caller}/$index");
@@ -90,14 +92,11 @@ class BookMarkCards extends StatelessWidget with Widgets {
               height: 100,
               child: Image.asset("assets/images/1.jpg"),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.shopping_cart),
-            ),
+            ToggleCart(index),
             const Spacer(),
             const ItemNameWithTag(),
             const Spacer(),
-            Text("${b$[index]}"),
+            const Text("0.33ETH"),
             Padding(padding: kHorizontal8),
           ],
         ),
@@ -116,7 +115,7 @@ class BookMarkAppBar extends StatelessWidget with Widgets {
   @override
   Widget build(BuildContext context) {
     return const MainAppBar(
-      imagePath: "assets/images/3.jpg", //bookmark$.first["image path"]
+      imagePath: "assets/images/bookmarks.jpg",
       type: AppbarType.bookmarks,
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(100),

@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../main.dart';
-import '../../utils/providers.dart';
 import '../../utils/style.dart';
 import '../global.dart';
 import '../global_component.dart';
@@ -31,8 +30,10 @@ class InfiniteView extends ConsumerWidget with Widgets {
                 ? SinglePageType.top
                 : SinglePageType.trending,
           ),
+          //debug
           SliverToBoxAdapter(
-            child: Text(type == InfinitePageType.top ? "top" : "trending"),
+            child:
+                Text(type == InfinitePageType.top ? "top $id" : "trending $id"),
           ),
           InfiniteViewBar(
             height: height,
@@ -91,21 +92,25 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final groups = getInstances(ref);
-    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
-
     return SliverFixedExtentList(
       itemExtent: 100.0,
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              type == InfinitePageType.top
-                  ? context.go("${PathVar.topSingle.caller}/$index/single")
-                  : type == InfinitePageType.trending
-                      ? context
-                          .go("${PathVar.trendingSingle.caller}/$index/single")
-                      : null; //artist
+              switch (type) {
+                case InfinitePageType.top:
+                  context.go("${PathVar.topSingle.caller}/$index/single");
+                  break;
+                case InfinitePageType.trending:
+                  context.go("${PathVar.trendingSingle.caller}/$index/single");
+                  break;
+                case InfinitePageType.artistCollection:
+                  context.go(
+                    "${PathVar.collectionArtistDetails.caller}/artistName/$index",
+                  ); //artist
+                  break;
+              }
             },
             child: SliverTiles(
               child: Row(
@@ -114,12 +119,7 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
                     "assets/images/3.jpg",
                     fit: BoxFit.contain,
                   ),
-                  b$.when(
-                    data: (Set<int> bookMark$) => ToggleBookMark(
-                        b$: bookMark$, groups: groups, index: index),
-                    error: (err, stk) => const Text(''),
-                    loading: () => const CircularProgressIndicator(),
-                  ),
+                  ToggleBookMark(index: index),
                   const SizedBox(
                     width: 4,
                   ),

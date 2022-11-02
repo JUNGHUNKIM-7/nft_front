@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_layout/components/cart/cart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../utils/providers.dart';
@@ -15,12 +16,12 @@ class Home extends ConsumerWidget with Widgets {
   static final bodys = [
     const HomeBody(),
     const BookMarks(),
+    const Cart(),
   ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bottomNav$ =
-        ref.watch(catchIntFamilyProvider(CatchIntEvent.setBottomNav));
+    final bottomNav$ = ref.watch(catchIntProvider(CatchIntEvent.setBottomNav));
 
     return GestureDetector(
       onTap: () {
@@ -29,8 +30,6 @@ class Home extends ConsumerWidget with Widgets {
       child: Scaffold(
         backgroundColor: Colors.grey[300],
         drawer: const MainDrawer(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: const MainFloatingActionBtn(),
         body: bottomNav$.when(
           data: (int index$) => bodys.elementAt(index$),
           error: (err, stk) => Text('$err: $stk'),
@@ -38,6 +37,13 @@ class Home extends ConsumerWidget with Widgets {
         ),
         bottomNavigationBar: bottomNav$.when(
           data: (int index$) => MainBottomNav(index: index$),
+          error: (err, stk) => Text('$err: $stk'),
+          loading: () => const CircularProgressIndicator(),
+        ),
+        floatingActionButton: bottomNav$.when(
+          data: (int index$) => index$ == 2
+              ? const CartPaymentFloatingBtn()
+              : const MainFloatingActionBtn(),
           error: (err, stk) => Text('$err: $stk'),
           loading: () => const CircularProgressIndicator(),
         ),

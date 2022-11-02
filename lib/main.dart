@@ -57,7 +57,9 @@ class MyApp extends StatelessWidget {
             path: PathVar.trendingDetails.path,
             builder: (BuildContext context, GoRouterState state) =>
                 InfiniteView(
-                    id: state.params['id']!, type: InfinitePageType.trending),
+              id: state.params['id']!,
+              type: InfinitePageType.trending,
+            ),
             routes: [
               GoRoute(
                 path: PathVar.trendingSingle.path,
@@ -70,16 +72,23 @@ class MyApp extends StatelessWidget {
             ],
           ),
           GoRoute(
-            path: PathVar.collectionSingle.path,
-            builder: (BuildContext context, GoRouterState state) => SinglePage(
-              id: state.params['id']!,
-              type: SinglePageType.collection,
+            path: PathVar.collectionArtist.path,
+            builder: (BuildContext context, GoRouterState state) =>
+                AritstCollections(
+              name: state.params['name']!,
             ),
           ),
           GoRoute(
             path: PathVar.collectionArtistDetails.path,
-            builder: (BuildContext context, GoRouterState state) =>
-                AritstCollections(name: state.params['name']!),
+            builder: (BuildContext context, GoRouterState state) {
+              final id = state.params['id'];
+              final name = state.params['name'];
+              return SinglePage(
+                id: id!,
+                name: name,
+                type: SinglePageType.collection,
+              );
+            },
           ),
           GoRoute(
             path: PathVar.bookmark.path,
@@ -88,6 +97,11 @@ class MyApp extends StatelessWidget {
               type: SinglePageType.bookmark,
             ),
           ),
+          // GoRoute(
+          //   path: PathVar.cart.path,
+          //   builder: (BuildContext context, GoRouterState state) =>
+          //       const Cart(),
+          // ),
         ],
       ),
     ],
@@ -112,12 +126,12 @@ enum PathVar {
     path: "single",
     caller: "/trending",
   ),
-  collectionSingle(
-    path: "collections/:id",
-    caller: "/collections",
+  collectionArtist(
+    path: "collections/artist/:name",
+    caller: "/collections/artist",
   ),
   collectionArtistDetails(
-    path: "collections/artist/:name",
+    path: "collections/artist/:name/:id",
     caller: "/collections/artist",
   ),
   bookmark(

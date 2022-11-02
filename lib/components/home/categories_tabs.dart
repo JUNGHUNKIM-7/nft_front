@@ -17,7 +17,6 @@ class TopCategories extends ConsumerWidget with Widgets {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final f$ = ref.watch(catchSetProvider(CatchSetEvent.setFavorite));
     final groups = getInstances(ref);
 
     return SliverGrid(
@@ -32,7 +31,7 @@ class TopCategories extends ConsumerWidget with Widgets {
         (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              (groups.first as Repository).setIntEvt.setState =
+              (groups.first as ControllerBase).setIntEvt.setState =
                   CatchIntEvent.setGridItem;
               (groups.last as Interactor).setGridItem = index;
               context.go("${PathVar.topDetails.caller}/$index");
@@ -82,15 +81,7 @@ class TopCategories extends ConsumerWidget with Widgets {
                         padding: const EdgeInsets.all(4.0),
                         child: Row(
                           children: [
-                            f$.when(
-                              data: (Set<int> fav$) => ToggleFavorite(
-                                f$: fav$,
-                                groups: groups,
-                                index: index,
-                              ),
-                              error: (err, stk) => const Text(''),
-                              loading: () => const CircularProgressIndicator(),
-                            ),
+                            ToggleFavorite(index: index),
                             Text(
                               "${index + 100}",
                               style: Theme.of(context)
@@ -181,7 +172,7 @@ class ColletionCategories extends ConsumerWidget with Widgets {
         (context, index) {
           return GestureDetector(
             onTap: () => context.go(
-              "${PathVar.collectionArtistDetails.caller}/$index",
+              "${PathVar.collectionArtist.caller}/artistName!",
             ),
             child: SliverTiles(
               child: Column(
@@ -258,7 +249,7 @@ class ColletionCategories extends ConsumerWidget with Widgets {
                             child: GestureDetector(
                               onTap: () {
                                 context.go(
-                                  "${PathVar.collectionSingle.caller}/$index",
+                                  "${PathVar.collectionArtistDetails.caller}/artistName/$index",
                                 );
                               },
                               child: Stack(
