@@ -292,35 +292,6 @@ class ItemNameWithTag extends StatelessWidget {
   }
 }
 
-// class CustomChip extends StatelessWidget with Widgets {
-//   const CustomChip({
-//     super.key,
-//     this.label,
-//     this.labels,
-//   });
-//   final Text? label;
-//   final Row? labels;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FittedBox(
-//       child: Chip(
-//         backgroundColor: Colors.white,
-//         elevation: 0,
-//         shape: RoundedRectangleBorder(
-//           borderRadius: getBorderRadius(10),
-//         ),
-//         labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-//               fontWeight: FontWeight.w500,
-//             ),
-//         label: label != null
-//             ? label ?? const Text("")
-//             : labels ?? Row(children: const []),
-//       ),
-//     );
-//   }
-// }
-
 class SingleViewAppBar extends ConsumerWidget {
   const SingleViewAppBar({
     Key? key,
@@ -387,6 +358,84 @@ class DarkenImage extends StatelessWidget {
             BlendMode.darken,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BodyTiles extends StatelessWidget {
+  const BodyTiles({
+    Key? key,
+    required this.kHorizontal8,
+    required this.idx,
+  }) : super(key: key);
+
+  final EdgeInsets kHorizontal8;
+  final int idx;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverTiles(
+      child: Row(
+        children: [
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.asset("assets/images/1.jpg"),
+          ),
+          const Spacer(),
+          const ItemNameWithTag(),
+          const Spacer(),
+          //for debug
+          Text("$idx"),
+          const SizedBox(
+            width: 10,
+          ),
+          const Text("0.33ETH"),
+          Padding(padding: kHorizontal8),
+        ],
+      ),
+    );
+  }
+}
+
+class DismissableBody extends StatelessWidget {
+  const DismissableBody({
+    Key? key,
+    required this.b$,
+    required this.groups,
+    required this.c$,
+    required this.kHorizontal8,
+    required this.idx,
+    required Function(DismissDirection direction) onDissmissed,
+  })  : _onDissmissed = onDissmissed,
+        super(key: key);
+
+  final Set<int> b$;
+  final List groups;
+  final Set<int> c$;
+  final EdgeInsets kHorizontal8;
+  final int idx;
+  final Function(DismissDirection direction) _onDissmissed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      secondaryBackground: Container(
+        alignment: Alignment.centerRight,
+        color: Colors.red,
+        child: const Icon(Icons.delete),
+      ),
+      background: Container(
+        alignment: Alignment.centerLeft,
+        color: Colors.green,
+        child: const Icon(Icons.shopping_cart),
+      ),
+      key: UniqueKey(),
+      onDismissed: _onDissmissed,
+      child: BodyTiles(
+        idx: idx,
+        kHorizontal8: kHorizontal8,
       ),
     );
   }

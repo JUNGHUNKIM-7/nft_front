@@ -34,6 +34,8 @@ enum InfinitePageType {
   artistCollection,
 }
 
+enum FloatingButtonType { search, payment }
+
 class MainAppBar extends ConsumerWidget {
   const MainAppBar({
     super.key,
@@ -158,18 +160,24 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
         return Row(
           children: [
             col(),
+            kWidth30,
+            const ShopNowBtn(),
           ],
         );
       case AppbarType.bookmarks:
         return Row(
           children: [
             col(),
+            kWidth30,
+            const ShopNowBtn(),
           ],
         );
       case AppbarType.cart:
         return Row(
           children: [
             col(),
+            kWidth30,
+            const ShopNowBtn(),
           ],
         );
     }
@@ -181,66 +189,77 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
   }) {
     switch (type) {
       case AppbarType.home:
-        return [
-          Text(
-            "monkey #338".toUpperCase(),
-            style:
-                Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-            children: [
-              Text(
-                "0.25",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline2
-                    ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              kWidth15,
-              Padding(
-                padding: const EdgeInsets.only(right: 4.0),
-                child: Text(
-                  "ETH",
-                  style: Theme.of(context).textTheme.headline2?.copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ),
-            ],
-          ),
-        ];
+        return _getText(context, "monkey#338", "0.25");
       case AppbarType.artistCollection:
-        return [];
+        return _getText(context, "monkey#338", "0.25");
       case AppbarType.bookmarks:
-        return [];
+        return _getText(context, "monkey#338", "0.25");
       case AppbarType.cart:
-        return [];
+        return _getText(context, "monkey#338", "0.25");
     }
+  }
+
+  List<Widget> _getText(BuildContext context, String header, String sub) {
+    return [
+      Text(
+        header.toUpperCase(),
+        style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      Row(
+        children: [
+          Text(
+            sub,
+            style: Theme.of(context)
+                .textTheme
+                .headline2
+                ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          kWidth15,
+          Padding(
+            padding: const EdgeInsets.only(right: 4.0),
+            child: Text(
+              "ETH",
+              style: Theme.of(context).textTheme.headline2?.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    ];
   }
 }
 
-class MainFloatingActionBtn extends ConsumerWidget with Widgets {
-  const MainFloatingActionBtn({
-    Key? key,
-  }) : super(key: key);
+class MainFloatingButton extends StatelessWidget with Widgets {
+  const MainFloatingButton({
+    super.key,
+    required FloatingButtonType type,
+  }) : _type = type;
+  final FloatingButtonType _type;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return FloatingActionButton(
       shape: RoundedRectangleBorder(
         borderRadius: getBorderRadius(60),
       ),
       elevation: 10,
       onPressed: () {
-        _showInputs(context);
+        switch (_type) {
+          case FloatingButtonType.search:
+            _showInputs(context);
+            break;
+          case FloatingButtonType.payment:
+            break;
+        }
       },
       backgroundColor: Colors.black54,
-      child: const Icon(
-        Icons.search,
+      child: Icon(
+        _type == FloatingButtonType.search ? Icons.search : Icons.payment,
         color: Colors.white,
       ),
     );
@@ -322,7 +341,7 @@ class MainBottomNav extends ConsumerWidget {
         BottomNavigationBarItem(
             label: "home".toTitleCase(), icon: const Icon(Icons.home)),
         BottomNavigationBarItem(
-            label: "favorites".toTitleCase(), icon: const Icon(Icons.bookmark)),
+            label: "bookmarks".toTitleCase(), icon: const Icon(Icons.bookmark)),
         BottomNavigationBarItem(
             label: "cart".toTitleCase(), icon: const Icon(Icons.shopping_cart)),
       ],

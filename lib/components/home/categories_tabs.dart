@@ -81,7 +81,9 @@ class TopCategories extends ConsumerWidget with Widgets {
                         padding: const EdgeInsets.all(4.0),
                         child: Row(
                           children: [
-                            ToggleFavorite(index: index),
+                            ToggleFavorite(
+                              index: index,
+                            ),
                             Text(
                               "${index + 100}",
                               style: Theme.of(context)

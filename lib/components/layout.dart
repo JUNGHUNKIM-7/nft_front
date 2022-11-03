@@ -42,8 +42,8 @@ class Home extends ConsumerWidget with Widgets {
         ),
         floatingActionButton: bottomNav$.when(
           data: (int index$) => index$ == 2
-              ? const CartPaymentFloatingBtn()
-              : const MainFloatingActionBtn(),
+              ? const MainFloatingButton(type: FloatingButtonType.payment)
+              : const MainFloatingButton(type: FloatingButtonType.search),
           error: (err, stk) => Text('$err: $stk'),
           loading: () => const CircularProgressIndicator(),
         ),

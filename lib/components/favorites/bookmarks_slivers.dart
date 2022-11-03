@@ -1,111 +1,107 @@
 import 'dart:developer';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../components/global.dart';
-import '../../main.dart';
 import '../../utils/providers.dart';
+import '../../utils/repository.dart';
 import '../../utils/style.dart';
 import '../global_component.dart';
 
-class BookMarks extends ConsumerWidget {
+class BookMarks extends ConsumerWidget with Widgets {
   const BookMarks({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
+    final bookMark$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
+    final cart$ = ref.watch(catchSetProvider(CatchSetEvent.setCart));
 
     return RefreshIndicator(
       onRefresh: () => Future.delayed(
         const Duration(seconds: 1),
         () => log('hi', name: 'Refresh:BookMark'),
       ),
-      child: b$.when(
-        data: (Set<int> bookMark$) => CustomScrollView(
-          slivers: [
-            BookMarkAppBar(
-              bookMarks$: bookMark$.toList(),
-            ),
-            BookMarkList(
-              bookMark$: bookMark$.toList(),
-            ),
-          ],
+      child: bookMark$.when(
+        data: (Set<int> b$) => cart$.when(
+          data: (Set<int> c$) => CustomScrollView(
+            slivers: [
+              const BookMarkAppBar(),
+              BookMarkBody(
+                b$: b$,
+                c$: c$,
+              ),
+            ],
+          ),
+          error: (err, stk) => Text('$err: $stk'),
+          loading: () => const CircularProgressIndicator(),
         ),
-        error: (err, stk) => const Text(''),
+        error: (err, stk) => Text('$err: $stk'),
         loading: () => const CircularProgressIndicator(),
       ),
     );
   }
 }
 
-class BookMarkList extends StatelessWidget {
-  const BookMarkList({
-    Key? key,
-    required this.bookMark$,
-  }) : super(key: key);
-
-  final List<int> bookMark$;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return BookMarkCards(
-            b$: bookMark$.toList(),
-            index: index,
-          );
-        },
-        childCount: bookMark$.toList().length,
-      ),
-    );
-  }
-}
-
-class BookMarkCards extends ConsumerWidget with Widgets {
-  const BookMarkCards({
-    Key? key,
+class BookMarkBody extends ConsumerWidget with Widgets {
+  const BookMarkBody({
+    super.key,
     required this.b$,
-    required this.index,
-  }) : super(key: key);
-  final List<int> b$;
-  final int index;
+    required this.c$,
+  });
+
+  final Set<int> b$;
+  final Set<int> c$;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: () {
-        context.go("${PathVar.bookmark.caller}/$index");
-      },
-      child: SliverTiles(
-        child: Row(
-          children: [
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: Image.asset("assets/images/1.jpg"),
-            ),
-            ToggleCart(index),
-            const Spacer(),
-            const ItemNameWithTag(),
-            const Spacer(),
-            const Text("0.33ETH"),
-            Padding(padding: kHorizontal8),
-          ],
-        ),
+    final groups = getInstances(ref);
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        childCount: b$.length,
+        (context, index) {
+          return DismissableBody(
+            idx: index,
+            b$: b$,
+            groups: groups,
+            c$: c$,
+            kHorizontal8: kHorizontal8,
+            onDissmissed: (direction) {
+              switch (direction) {
+                case DismissDirection.startToEnd:
+                  if (b$.contains(index)) {
+                    (groups.first as ControllerBase).setSetEvent.setState =
+                        CatchSetEvent.unsetBookMark;
+                    (groups.last as Interactor).unsetBookMark = index;
+                  }
+                  if (!(c$.contains(index))) {
+                    (groups.first as ControllerBase).setSetEvent.setState =
+                        CatchSetEvent.setCart;
+                    (groups.last as Interactor).setCart = index;
+                  }
+                  break;
+                case DismissDirection.endToStart:
+                  if (b$.contains(index)) {
+                    (groups.first as ControllerBase).setSetEvent.setState =
+                        CatchSetEvent.unsetBookMark;
+                    (groups.last as Interactor).unsetBookMark = index;
+                  }
+                  break;
+                default:
+                  break;
+              }
+            },
+          );
+        },
       ),
     );
   }
 }
-
 class BookMarkAppBar extends StatelessWidget with Widgets {
   const BookMarkAppBar({
     Key? key,
-    required this.bookMarks$,
   }) : super(key: key);
-  final List<int> bookMarks$;
 
   @override
   Widget build(BuildContext context) {
@@ -119,42 +115,3 @@ class BookMarkAppBar extends StatelessWidget with Widgets {
     );
   }
 }
-
-// class BookMarkHeaders extends StatelessWidget with Widgets {
-//   const BookMarkHeaders({
-//     Key? key,
-//     required this.texts,
-//   }) : super(key: key);
-//   final List<String> texts;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-//       child: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           children: [
-//             Text(
-//               texts.first,
-//               style: Theme.of(context).textTheme.headline2?.copyWith(
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 24,
-//                     letterSpacing: kLetterSpacing,
-//                   ),
-//             ),
-//             // const Spacer(),
-//             Text(
-//               texts.last,
-//               style: Theme.of(context).textTheme.headline2?.copyWith(
-//                     fontWeight: FontWeight.bold,
-//                     fontSize: 16,
-//                     letterSpacing: kLetterSpacing,
-//                   ),
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
