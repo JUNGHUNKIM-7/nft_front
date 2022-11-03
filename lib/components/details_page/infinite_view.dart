@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,10 +32,15 @@ class InfiniteView extends ConsumerWidget with Widgets {
                 ? SinglePageType.top
                 : SinglePageType.trending,
           ),
-          //debug
+          //for debug
           SliverToBoxAdapter(
-            child:
-                Text(type == InfinitePageType.top ? "top $id" : "trending $id"),
+            child: Text(
+              type == InfinitePageType.top
+                  ? "top $id"
+                  : type == InfinitePageType.trending
+                      ? "trending detail $id"
+                      : "trending single $id",
+            ),
           ),
           InfiniteViewBar(
             height: height,
@@ -68,7 +75,7 @@ class InfiniteViewBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Realated Item'.toUpperCase(),
+              'related Item'.toUpperCase(),
               style: Theme.of(context).textTheme.headline2?.copyWith(
                     letterSpacing: defaultLetterspacing,
                     color: Colors.amber,
@@ -107,8 +114,7 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
                   break;
                 case InfinitePageType.artistCollection:
                   context.go(
-                    "${PathVar.collectionArtistDetails.caller}/artistName/$index",
-                  ); //artist
+                      "${PathVar.collectionArtistDetails.caller}/artistName/$index");
                   break;
               }
             },

@@ -8,18 +8,22 @@ import '../utils/providers.dart';
 import '../utils/style.dart';
 import 'global_component.dart';
 
-List getInstances(WidgetRef ref) =>
-    [ref.watch(repositoryProvider), ref.watch(interactorProvider)];
+List getInstances(WidgetRef ref) => [
+      ref.watch(repositoryProvider),
+      ref.watch(interactorProvider),
+    ];
 
 enum AppbarType {
   home,
   artistCollection,
   bookmarks,
+  cart,
 }
 
 enum SinglePageType {
   top,
   trending,
+  trendingSingle,
   collection,
   bookmark,
 }
@@ -73,10 +77,15 @@ class MainAppBar extends ConsumerWidget {
                   "bookmarks".toTitleCase(),
                   style: Theme.of(context).textTheme.headline1,
                 )
-              : Text(
-                  "collection".toTitleCase(),
-                  style: Theme.of(context).textTheme.headline1,
-                ),
+              : type == AppbarType.artistCollection
+                  ? Text(
+                      "collection".toTitleCase(),
+                      style: Theme.of(context).textTheme.headline1,
+                    )
+                  : Text(
+                      "cart".toTitleCase(),
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
       leading: type == AppbarType.home
           ? IconButton(
               onPressed: () {
@@ -157,6 +166,12 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
             col(),
           ],
         );
+      case AppbarType.cart:
+        return Row(
+          children: [
+            col(),
+          ],
+        );
     }
   }
 
@@ -199,21 +214,11 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
           ),
         ];
       case AppbarType.artistCollection:
-        return [
-          Text(
-            "monkey #338".toUpperCase(),
-            style:
-                Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
-          ),
-        ];
+        return [];
       case AppbarType.bookmarks:
-        return [
-          Text(
-            "monkey #338".toUpperCase(),
-            style:
-                Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
-          ),
-        ];
+        return [];
+      case AppbarType.cart:
+        return [];
     }
   }
 }

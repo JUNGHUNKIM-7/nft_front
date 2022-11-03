@@ -60,16 +60,13 @@ class MyApp extends StatelessWidget {
               id: state.params['id']!,
               type: InfinitePageType.trending,
             ),
-            routes: [
-              GoRoute(
-                path: PathVar.trendingSingle.path,
-                builder: (BuildContext context, GoRouterState state) =>
-                    SinglePage(
-                  id: state.params['id']!,
-                  type: SinglePageType.trending,
-                ),
-              ),
-            ],
+          ),
+          GoRoute(
+            path: PathVar.trendingSingle.path,
+            builder: (BuildContext context, GoRouterState state) => SinglePage(
+              id: state.params['id']!,
+              type: SinglePageType.trendingSingle,
+            ),
           ),
           GoRoute(
             path: PathVar.collectionArtist.path,
@@ -97,11 +94,6 @@ class MyApp extends StatelessWidget {
               type: SinglePageType.bookmark,
             ),
           ),
-          // GoRoute(
-          //   path: PathVar.cart.path,
-          //   builder: (BuildContext context, GoRouterState state) =>
-          //       const Cart(),
-          // ),
         ],
       ),
     ],
@@ -123,7 +115,7 @@ enum PathVar {
     caller: "/trending",
   ),
   trendingSingle(
-    path: "single",
+    path: "trending/:id/single",
     caller: "/trending",
   ),
   collectionArtist(

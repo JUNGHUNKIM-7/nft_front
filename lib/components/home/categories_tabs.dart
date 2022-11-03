@@ -27,7 +27,7 @@ class TopCategories extends ConsumerWidget with Widgets {
         childAspectRatio: 1.0,
       ),
       delegate: SliverChildBuilderDelegate(
-        childCount: 10,
+        childCount: 100,
         (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
@@ -117,7 +117,7 @@ class TrendingCategories extends ConsumerWidget with Widgets {
   Widget build(BuildContext context, WidgetRef ref) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        childCount: 10,
+        childCount: 100,
         (context, index) {
           return GestureDetector(
             onTap: () => context.go("${PathVar.trendingDetails.caller}/$index"),

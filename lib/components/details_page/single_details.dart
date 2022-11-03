@@ -33,9 +33,11 @@ class SinglePage extends StatelessWidget {
                       ? "top: $id"
                       : type == SinglePageType.trending
                           ? "trending: $id"
-                          : name != null
-                              ? "collection: $id / artistName: $name"
-                              : "collection: $id",
+                          : type == SinglePageType.trendingSingle
+                              ? "trending single: $id"
+                              : name != null
+                                  ? "collection: $id / artistName: $name"
+                                  : "collection: $id",
             ),
           ),
           const SliverFillRemaining()

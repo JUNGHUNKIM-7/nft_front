@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/utils/extensions.dart';
+import 'package:flutter_layout/components/global.dart';
 import 'package:flutter_layout/utils/providers.dart';
 import 'package:flutter_layout/utils/style.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,18 +11,33 @@ class Cart extends ConsumerWidget with Widgets {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CustomScrollView(
+    return const CustomScrollView(
       slivers: [
-        SliverAppBar(
-          title: Text(
-            "x items in cart".toTitleCase(),
-            style: Theme.of(context).textTheme.headline1,
-          ),
-        ),
-        const SliverFillRemaining(
+        CartAppBar(),
+        SliverFillRemaining(
           child: CartBody(),
         )
       ],
+    );
+  }
+}
+
+class CartAppBar extends StatelessWidget {
+  const CartAppBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MainAppBar(
+      imagePath: "assets/images/bookmarks.jpg",
+      type: AppbarType.cart,
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: MainSliverAppBarBottom(
+          type: AppbarType.cart,
+        ),
+      ),
     );
   }
 }
@@ -38,25 +53,22 @@ class CartBody extends ConsumerWidget with Widgets {
       child: cart$.when(
         data: (Set<int> c$) {
           final carts = c$.toList();
+
           return ListView.builder(
             itemCount: carts.length,
-            itemBuilder: (context, index) {
-              final elem = carts[index];
-
-              return Dismissible(
-                onDismissed: (direction) {
-                  if (direction == DismissDirection.endToStart) {
-                    log('delete', name: 'dismissible btn');
-                  } else if (direction == DismissDirection.startToEnd) {
-                    log('add to bookMark', name: 'dismissable btn');
-                  } else {
-                    log('nothing to do', name: 'dismissable btn');
-                  }
-                },
-                key: ValueKey("$index"),
-                child: CartCard(id: elem),
-              );
-            },
+            itemBuilder: (context, index) => Dismissible(
+              onDismissed: (direction) {
+                if (direction == DismissDirection.endToStart) {
+                  log('delete', name: 'dismissible btn');
+                } else if (direction == DismissDirection.startToEnd) {
+                  log('add to bookMark', name: 'dismissable btn');
+                } else {
+                  log('nothing to do', name: 'dismissable btn');
+                }
+              },
+              key: ValueKey("$index"),
+              child: CartCard(id: carts[index]),
+            ),
           );
         },
         error: (err, stk) => Text('$err: $stk'),
@@ -100,30 +112,7 @@ class CartPaymentFloatingBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       child: const Icon(Icons.payment),
-      onPressed: () {
-        showModalBottomSheet<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return Container(
-              height: 200,
-              color: Colors.amber,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    const Text('Modal BottomSheet'),
-                    ElevatedButton(
-                      child: const Text('Close BottomSheet'),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+      onPressed: () {},
     );
   }
 }

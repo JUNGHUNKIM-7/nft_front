@@ -10,9 +10,6 @@ import '../../utils/providers.dart';
 import '../../utils/style.dart';
 import '../global_component.dart';
 
-//appbar => bookMarks.first
-//tiles => bookMarks.range(1)
-
 class BookMarks extends ConsumerWidget {
   const BookMarks({super.key});
 
@@ -66,8 +63,6 @@ class BookMarkList extends StatelessWidget {
     );
   }
 }
-
-
 
 class BookMarkCards extends ConsumerWidget with Widgets {
   const BookMarkCards({

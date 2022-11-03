@@ -97,7 +97,10 @@ class GlassCard extends StatelessWidget with Widgets {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomCenter,
-              colors: [Colors.white, Colors.white10],
+              colors: [
+                Colors.white,
+                Colors.white10,
+              ],
             ),
           ),
           child: child,
