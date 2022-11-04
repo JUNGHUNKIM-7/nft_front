@@ -26,8 +26,8 @@ class Cart extends ConsumerWidget with Widgets {
         data: (Set<int> b$) => cart$.when(
           data: (Set<int> c$) => CustomScrollView(
             slivers: [
-              const CartAppBar(),
-              CartBody(
+              const _CartAppBar(),
+              _CartBody(
                 b$: b$,
                 c$: c$,
               )
@@ -43,9 +43,8 @@ class Cart extends ConsumerWidget with Widgets {
   }
 }
 
-class CartBody extends ConsumerWidget with Widgets {
-  const CartBody({
-    super.key,
+class _CartBody extends ConsumerWidget with Widgets {
+  const _CartBody({
     required this.b$,
     required this.c$,
   });
@@ -70,21 +69,27 @@ class CartBody extends ConsumerWidget with Widgets {
               switch (direction) {
                 case DismissDirection.startToEnd:
                   if (c$.contains(index)) {
+                    log('before ${c$} ', name: 'cart');
                     (groups.first as ControllerBase).setSetEvent.setState =
                         CatchSetEvent.unsetCart;
                     (groups.last as Interactor).unsetCart = index;
+                    log('after ${c$} ', name: 'cart');
                   }
                   if (!(b$.contains(index))) {
+                    log('before ${b$} ', name: 'bookMark');
                     (groups.first as ControllerBase).setSetEvent.setState =
                         CatchSetEvent.setBookMark;
                     (groups.last as Interactor).setBookMark = index;
+                    log('before ${b$} ', name: 'bookMark');
                   }
                   break;
                 case DismissDirection.endToStart:
+                  log('before ${c$} ', name: 'cart');
                   if (c$.contains(index)) {
                     (groups.first as ControllerBase).setSetEvent.setState =
                         CatchSetEvent.unsetCart;
                     (groups.last as Interactor).unsetCart = index;
+                    log('before ${c$} ', name: 'cart');
                   }
                   break;
                 default:
@@ -98,21 +103,18 @@ class CartBody extends ConsumerWidget with Widgets {
   }
 }
 
-class CartAppBar extends StatelessWidget {
-  const CartAppBar({
+class _CartAppBar extends StatelessWidget {
+  const _CartAppBar({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MainAppBar(
-      imagePath: "assets/images/bookmarks.jpg",
+      imagePath: "assets/images/cart.jpg",
       type: AppbarType.cart,
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: MainSliverAppBarBottom(
-          type: AppbarType.cart,
-        ),
+      bottom: MainSliverAppBarBottom(
+        type: AppbarType.cart,
       ),
     );
   }

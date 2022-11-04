@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
                 builder: (BuildContext context, GoRouterState state) =>
                     SinglePage(
                   id: state.params['id']!,
-                  type: SinglePageType.top,
+                  type: SinglePageType.topSingle,
                 ),
               ),
             ],

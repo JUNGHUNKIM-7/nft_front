@@ -1,13 +1,12 @@
 import 'dart:developer';
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../components/global.dart';
 import '../../utils/providers.dart';
 import '../../utils/repository.dart';
 import '../../utils/style.dart';
+import '../global.dart';
 import '../global_component.dart';
 
 class BookMarks extends ConsumerWidget with Widgets {
@@ -27,8 +26,8 @@ class BookMarks extends ConsumerWidget with Widgets {
         data: (Set<int> b$) => cart$.when(
           data: (Set<int> c$) => CustomScrollView(
             slivers: [
-              const BookMarkAppBar(),
-              BookMarkBody(
+              const _BookMarkAppBar(),
+              _BookMarkBody(
                 b$: b$,
                 c$: c$,
               ),
@@ -44,9 +43,8 @@ class BookMarks extends ConsumerWidget with Widgets {
   }
 }
 
-class BookMarkBody extends ConsumerWidget with Widgets {
-  const BookMarkBody({
-    super.key,
+class _BookMarkBody extends ConsumerWidget with Widgets {
+  const _BookMarkBody({
     required this.b$,
     required this.c$,
   });
@@ -57,15 +55,16 @@ class BookMarkBody extends ConsumerWidget with Widgets {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final groups = getInstances(ref);
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         childCount: b$.length,
         (context, index) {
           return DismissableBody(
-            idx: index,
             b$: b$,
-            groups: groups,
             c$: c$,
+            groups: groups,
+            idx: index,
             kHorizontal8: kHorizontal8,
             onDissmissed: (direction) {
               switch (direction) {
@@ -81,6 +80,7 @@ class BookMarkBody extends ConsumerWidget with Widgets {
                     (groups.last as Interactor).setCart = index;
                   }
                   break;
+
                 case DismissDirection.endToStart:
                   if (b$.contains(index)) {
                     (groups.first as ControllerBase).setSetEvent.setState =
@@ -98,8 +98,9 @@ class BookMarkBody extends ConsumerWidget with Widgets {
     );
   }
 }
-class BookMarkAppBar extends StatelessWidget with Widgets {
-  const BookMarkAppBar({
+
+class _BookMarkAppBar extends StatelessWidget with Widgets {
+  const _BookMarkAppBar({
     Key? key,
   }) : super(key: key);
 
@@ -108,10 +109,7 @@ class BookMarkAppBar extends StatelessWidget with Widgets {
     return const MainAppBar(
       imagePath: "assets/images/bookmarks.jpg",
       type: AppbarType.bookmarks,
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: MainSliverAppBarBottom(type: AppbarType.bookmarks),
-      ),
+      bottom: MainSliverAppBarBottom(type: AppbarType.bookmarks),
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../utils/providers.dart';
 import '../utils/style.dart';
-import 'favorites/bookmarks_slivers.dart';
+import 'bookmark/bookmarks_slivers.dart';
 import 'global.dart';
 import 'home/home_slivers.dart';
 

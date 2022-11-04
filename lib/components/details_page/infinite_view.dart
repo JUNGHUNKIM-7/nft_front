@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,12 +23,18 @@ class InfiniteView extends ConsumerWidget with Widgets {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SingleViewAppBar(
-            height: height,
-            id: id,
+          MainAppBar(
+            bottom: MainSliverAppBarBottom(
+              type: type == InfinitePageType.top
+                  ? AppbarType.top
+                  : AppbarType.trending,
+            ),
+            imagePath: type == InfinitePageType.top
+                ? 'assets/images/top.jpg'
+                : 'assets/images/trending.jpg',
             type: type == InfinitePageType.top
-                ? SinglePageType.top
-                : SinglePageType.trending,
+                ? AppbarType.top
+                : AppbarType.trending,
           ),
           //for debug
           SliverToBoxAdapter(
@@ -38,8 +42,8 @@ class InfiniteView extends ConsumerWidget with Widgets {
               type == InfinitePageType.top
                   ? "top $id"
                   : type == InfinitePageType.trending
-                      ? "trending detail $id"
-                      : "trending single $id",
+                      ? "trending $id"
+                      : "",
             ),
           ),
           InfiniteViewBar(
@@ -118,7 +122,7 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
                   break;
               }
             },
-            child: SliverTiles(
+            child: CustomCard(
               child: Row(
                 children: [
                   Image.asset(

@@ -134,10 +134,7 @@ class HomeAppBar extends StatelessWidget with Widgets {
     return const MainAppBar(
       imagePath: "assets/images/1.jpg",
       type: AppbarType.home,
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: MainSliverAppBarBottom(type: AppbarType.home),
-      ),
+      bottom: MainSliverAppBarBottom(type: AppbarType.home),
     );
   }
 }
@@ -227,6 +224,7 @@ class HomeCoins extends ConsumerWidget with Widgets {
                 "${coins.elementAt(index).elementAt(1)}".toUpperCase(),
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(
                       color: index$ == index ? Colors.white : Colors.amber,
+                      fontWeight: FontWeight.bold
                     ),
               ),
             ],

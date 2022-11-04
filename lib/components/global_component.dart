@@ -9,74 +9,6 @@ import '../utils/repository.dart';
 import '../utils/style.dart';
 import 'global.dart';
 
-class Inputs extends ConsumerStatefulWidget with Widgets {
-  const Inputs({
-    super.key,
-    required this.height,
-  });
-  final double height;
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _InputsState();
-}
-
-class _InputsState extends ConsumerState<Inputs> {
-  late TextEditingController _textEditingController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textEditingController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _textEditingController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final groups = getInstances(ref);
-
-    return SizedBox(
-      height: widget.height * .1,
-      child: Align(
-        alignment: Alignment.center,
-        child: Padding(
-          padding: widget.kHorizontal8.copyWith(left: 20, right: 20),
-          child: TextField(
-            onSubmitted: (value) {
-              (groups.first as ControllerBase).setStringEvt.setState =
-                  CatchStringEvent.setSearch;
-              (groups.last as Interactor).searchValue = value;
-            },
-            cursorColor: Colors.amber,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search, color: Colors.amber),
-              labelText: "search items, collections.. ".toTitleCase(),
-              labelStyle: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  ?.copyWith(fontWeight: FontWeight.bold),
-              enabledBorder: _border(),
-              focusedBorder: _border(),
-              border: _border(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  OutlineInputBorder _border() {
-    return OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.black),
-      borderRadius: widget.getBorderRadius(20),
-    );
-  }
-}
-
 class GlassCard extends StatelessWidget with Widgets {
   const GlassCard({
     super.key,
@@ -110,8 +42,8 @@ class GlassCard extends StatelessWidget with Widgets {
   }
 }
 
-class SliverTiles extends StatelessWidget {
-  const SliverTiles({super.key, required this.child});
+class CustomCard extends StatelessWidget {
+  const CustomCard({super.key, required this.child});
   final Widget child;
 
   @override
@@ -124,43 +56,6 @@ class SliverTiles extends StatelessWidget {
         bottom: BorderSide(color: Colors.black),
       ),
       child: child,
-    );
-  }
-}
-
-class ToggleBookMark extends ConsumerWidget {
-  const ToggleBookMark({
-    super.key,
-    required this.index,
-  });
-
-  final int index;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
-    final groups = getInstances(ref);
-
-    return b$.when(
-      data: (Set<int> bookMark$) => IconButton(
-        onPressed: () {
-          if (bookMark$.contains(index)) {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.unsetBookMark;
-            (groups.last as Interactor).unsetBookMark = index;
-          } else {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.setBookMark;
-            (groups.last as Interactor).setBookMark = index;
-          }
-        },
-        icon: Icon(
-          Icons.bookmark,
-          color: bookMark$.contains(index) ? Colors.redAccent : Colors.black,
-        ),
-      ),
-      error: (err, stk) => const Text(''),
-      loading: () => const CircularProgressIndicator(),
     );
   }
 }
@@ -235,31 +130,39 @@ class ToggleCart extends ConsumerWidget {
   }
 }
 
-class ShopNowBtn extends StatelessWidget {
-  const ShopNowBtn({
-    Key? key,
-  }) : super(key: key);
+class ToggleBookMark extends ConsumerWidget {
+  const ToggleBookMark({
+    super.key,
+    required this.index,
+  });
+
+  final int index;
 
   @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green[500],
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
+    final groups = getInstances(ref);
+
+    return b$.when(
+      data: (Set<int> bookMark$) => IconButton(
+        onPressed: () {
+          if (bookMark$.contains(index)) {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.unsetBookMark;
+            (groups.last as Interactor).unsetBookMark = index;
+          } else {
+            (groups.first as ControllerBase).setSetEvent.setState =
+                CatchSetEvent.setBookMark;
+            (groups.last as Interactor).setBookMark = index;
+          }
+        },
+        icon: Icon(
+          Icons.bookmark,
+          color: bookMark$.contains(index) ? Colors.redAccent : Colors.black,
         ),
       ),
-      onPressed: () {},
-      child: Text(
-        "shop now".toUpperCase(),
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 22,
-              color: Colors.white,
-            ),
-      ),
+      error: (err, stk) => const Text(''),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }
@@ -286,113 +189,6 @@ class ItemNameWithTag extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
           )
-        ],
-      ),
-    );
-  }
-}
-
-class SingleViewAppBar extends ConsumerWidget {
-  const SingleViewAppBar({
-    Key? key,
-    required this.height,
-    required this.id,
-    required this.type,
-  }) : super(key: key);
-
-  final double height;
-  final String id;
-  final SinglePageType type;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return SliverAppBar(
-      pinned: true,
-      expandedHeight: height * .4,
-      flexibleSpace: FlexibleSpaceBar.createSettings(
-        currentExtent: height * .3,
-        minExtent: 0,
-        maxExtent: height * .6,
-        child: FlexibleSpaceBar(
-          background: Image.asset(
-            "assets/images/2.jpg",
-            fit: BoxFit.fitHeight,
-          ),
-        ),
-      ),
-      actions: [
-        if (type == SinglePageType.trending ||
-            type == SinglePageType.top ||
-            type == SinglePageType.collection)
-          ToggleBookMark(
-            index: int.parse(id),
-          )
-      ],
-      bottom: const PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Align(
-            alignment: Alignment.bottomRight,
-            child: ShopNowBtn(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DarkenImage extends StatelessWidget {
-  const DarkenImage({super.key, required this.image});
-  final AssetImage image;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: image,
-          fit: BoxFit.fill,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.5),
-            BlendMode.darken,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class BodyTiles extends StatelessWidget {
-  const BodyTiles({
-    Key? key,
-    required this.kHorizontal8,
-    required this.idx,
-  }) : super(key: key);
-
-  final EdgeInsets kHorizontal8;
-  final int idx;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverTiles(
-      child: Row(
-        children: [
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: Image.asset("assets/images/1.jpg"),
-          ),
-          const Spacer(),
-          const ItemNameWithTag(),
-          const Spacer(),
-          //for debug
-          Text("$idx"),
-          const SizedBox(
-            width: 10,
-          ),
-          const Text("0.33ETH"),
-          Padding(padding: kHorizontal8),
         ],
       ),
     );
@@ -436,6 +232,42 @@ class DismissableBody extends StatelessWidget {
       child: BodyTiles(
         idx: idx,
         kHorizontal8: kHorizontal8,
+      ),
+    );
+  }
+}
+
+class BodyTiles extends StatelessWidget {
+  const BodyTiles({
+    Key? key,
+    required this.kHorizontal8,
+    required this.idx,
+  }) : super(key: key);
+
+  final EdgeInsets kHorizontal8;
+  final int idx;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomCard(
+      child: Row(
+        children: [
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.asset("assets/images/1.jpg"),
+          ),
+          const Spacer(),
+          const ItemNameWithTag(),
+          const Spacer(),
+          //for debug
+          Text("$idx"),
+          const SizedBox(
+            width: 10,
+          ),
+          const Text("0.33ETH"),
+          Padding(padding: kHorizontal8),
+        ],
       ),
     );
   }

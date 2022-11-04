@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -15,14 +16,15 @@ List getInstances(WidgetRef ref) => [
 
 enum AppbarType {
   home,
+  trending,
+  top,
   artistCollection,
   bookmarks,
   cart,
 }
 
 enum SinglePageType {
-  top,
-  trending,
+  topSingle,
   trendingSingle,
   collection,
   bookmark,
@@ -46,7 +48,7 @@ class MainAppBar extends ConsumerWidget {
 
   final String imagePath;
   final AppbarType type;
-  final PreferredSizeWidget? bottom;
+  final Widget bottom;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,7 +58,10 @@ class MainAppBar extends ConsumerWidget {
       expandedHeight: height * .45,
       centerTitle: true,
       pinned: true,
-      bottom: bottom,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: bottom,
+      ),
       flexibleSpace: FlexibleSpaceBar.createSettings(
         currentExtent: height * .45,
         maxExtent: height * .45,
@@ -66,39 +71,7 @@ class MainAppBar extends ConsumerWidget {
           ),
         ),
       ),
-      title: type == AppbarType.home
-          ? SizedBox(
-              width: 150,
-              height: 80,
-              child: Image.asset(
-                "assets/images/logo.png",
-              ),
-            )
-          : type == AppbarType.bookmarks
-              ? Text(
-                  "bookmarks".toTitleCase(),
-                  style: Theme.of(context).textTheme.headline1,
-                )
-              : type == AppbarType.artistCollection
-                  ? Text(
-                      "collection".toTitleCase(),
-                      style: Theme.of(context).textTheme.headline1,
-                    )
-                  : Text(
-                      "cart".toTitleCase(),
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-      leading: type == AppbarType.home
-          ? IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-            )
-          : null,
+      title: _getTitle(context, type: type),
       actions: [
         if (type == AppbarType.home)
           IconButton(
@@ -108,8 +81,59 @@ class MainAppBar extends ConsumerWidget {
               color: Colors.black,
             ),
           ),
+        if (type == AppbarType.top || type == AppbarType.trending)
+          IconButton(
+            onPressed: () {
+              //filter
+            },
+            icon: const Icon(
+              Icons.filter,
+              color: Colors.black,
+            ),
+          ),
+        // else
       ],
     );
+  }
+
+  Widget _getTitle(BuildContext context, {required AppbarType type}) {
+    final style = Theme.of(context).textTheme.headline1;
+
+    switch (type) {
+      case AppbarType.home:
+        return SizedBox(
+          width: 150,
+          height: 80,
+          child: Image.asset(
+            "assets/images/logo.png",
+          ),
+        );
+      case AppbarType.trending:
+        return Text(
+          "trending".toTitleCase(),
+          style: style,
+        );
+      case AppbarType.top:
+        return Text(
+          "top".toTitleCase(),
+          style: style,
+        );
+      case AppbarType.artistCollection:
+        return Text(
+          "collection".toTitleCase(),
+          style: style,
+        );
+      case AppbarType.bookmarks:
+        return Text(
+          "bookmarks".toTitleCase(),
+          style: style,
+        );
+      case AppbarType.cart:
+        return Text(
+          "cart".toTitleCase(),
+          style: style,
+        );
+    }
   }
 }
 
@@ -180,6 +204,22 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
             const ShopNowBtn(),
           ],
         );
+      case AppbarType.trending:
+        return Row(
+          children: [
+            col(),
+            kWidth30,
+            const ShopNowBtn(),
+          ],
+        );
+      case AppbarType.top:
+        return Row(
+          children: [
+            col(),
+            kWidth30,
+            const ShopNowBtn(),
+          ],
+        );
     }
   }
 
@@ -189,13 +229,17 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
   }) {
     switch (type) {
       case AppbarType.home:
-        return _getText(context, "monkey#338", "0.25");
+        return _getText(context, "home", "0.25");
       case AppbarType.artistCollection:
-        return _getText(context, "monkey#338", "0.25");
+        return _getText(context, "collection", "0.25");
       case AppbarType.bookmarks:
-        return _getText(context, "monkey#338", "0.25");
+        return _getText(context, "bookmarks", "0.25");
       case AppbarType.cart:
-        return _getText(context, "monkey#338", "0.25");
+        return _getText(context, "cart", "0.25");
+      case AppbarType.trending:
+        return _getText(context, "trending", "0.25");
+      case AppbarType.top:
+        return _getText(context, "top", "0.25");
     }
   }
 
@@ -276,7 +320,7 @@ class MainFloatingButton extends StatelessWidget with Widgets {
             child: Column(
               children: [
                 kHeight30,
-                Inputs(height: MediaQuery.of(context).size.height * .8),
+                MainInputs(height: MediaQuery.of(context).size.height * .8),
                 kHeight15,
                 ElevatedButton(
                   style: ButtonStyle(
@@ -405,6 +449,124 @@ class MainDrawer extends StatelessWidget with Widgets {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class MainInputs extends ConsumerStatefulWidget with Widgets {
+  const MainInputs({
+    super.key,
+    required this.height,
+  });
+  final double height;
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _InputsState();
+}
+
+class _InputsState extends ConsumerState<MainInputs> {
+  late TextEditingController _textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = getInstances(ref);
+
+    return SizedBox(
+      height: widget.height * .1,
+      child: Align(
+        alignment: Alignment.center,
+        child: Padding(
+          padding: widget.kHorizontal8.copyWith(left: 20, right: 20),
+          child: TextField(
+            onSubmitted: (value) {
+              (groups.first as ControllerBase).setStringEvt.setState =
+                  CatchStringEvent.setSearch;
+              (groups.last as Interactor).searchValue = value;
+            },
+            cursorColor: Colors.amber,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search, color: Colors.amber),
+              labelText: "search items, collections.. ".toTitleCase(),
+              labelStyle: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  ?.copyWith(fontWeight: FontWeight.bold),
+              enabledBorder: _border(),
+              focusedBorder: _border(),
+              border: _border(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  OutlineInputBorder _border() {
+    return OutlineInputBorder(
+      borderSide: const BorderSide(color: Colors.black),
+      borderRadius: widget.getBorderRadius(20),
+    );
+  }
+}
+
+class ShopNowBtn extends StatelessWidget {
+  const ShopNowBtn({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.green[500],
+        elevation: 10,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+      onPressed: () {},
+      child: Text(
+        "shop now".toUpperCase(),
+        style: Theme.of(context).textTheme.headline1?.copyWith(
+              fontSize: 22,
+              color: Colors.white,
+            ),
+      ),
+    );
+  }
+}
+
+class DarkenImage extends StatelessWidget {
+  const DarkenImage({super.key, required this.image});
+  final AssetImage image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: image,
+          fit: BoxFit.fill,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.5),
+            BlendMode.darken,
+          ),
+        ),
       ),
     );
   }

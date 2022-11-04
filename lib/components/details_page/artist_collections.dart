@@ -19,11 +19,8 @@ class AritstCollections extends StatelessWidget with Widgets {
           const MainAppBar(
             type: AppbarType.artistCollection,
             imagePath: "assets/images/collections.jpg",
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(40),
-              child: MainSliverAppBarBottom(
-                type: AppbarType.artistCollection,
-              ),
+            bottom: MainSliverAppBarBottom(
+              type: AppbarType.artistCollection,
             ),
           ),
           SliverToBoxAdapter(
