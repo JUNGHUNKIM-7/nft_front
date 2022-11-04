@@ -6,6 +6,7 @@ import '../../main.dart';
 import '../../utils/style.dart';
 import '../global.dart';
 import '../global_component.dart';
+import '../stream_component/stream_components.dart';
 
 class InfiniteView extends ConsumerWidget with Widgets {
   const InfiniteView({
@@ -46,7 +47,7 @@ class InfiniteView extends ConsumerWidget with Widgets {
                       : "",
             ),
           ),
-          InfiniteViewBar(
+          _InfiniteViewBar(
             height: height,
             defaultLetterspacing: kLetterSpacing,
           ),
@@ -59,8 +60,8 @@ class InfiniteView extends ConsumerWidget with Widgets {
   }
 }
 
-class InfiniteViewBar extends StatelessWidget {
-  const InfiniteViewBar({
+class _InfiniteViewBar extends StatelessWidget {
+  const _InfiniteViewBar({
     Key? key,
     required this.height,
     required this.defaultLetterspacing,
@@ -93,7 +94,7 @@ class InfiniteViewBar extends StatelessWidget {
   }
 }
 
-class InfiniteScroll extends ConsumerWidget with Widgets {
+class InfiniteScroll extends StatelessWidget with Widgets {
   const InfiniteScroll({
     Key? key,
     required this.type,
@@ -102,7 +103,7 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
   final InfinitePageType type;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SliverFixedExtentList(
       itemExtent: 100.0,
       delegate: SliverChildBuilderDelegate(
@@ -125,9 +126,11 @@ class InfiniteScroll extends ConsumerWidget with Widgets {
             child: CustomCard(
               child: Row(
                 children: [
-                  Image.asset(
-                    "assets/images/3.jpg",
-                    fit: BoxFit.contain,
+                  RoundedImage(
+                    child: Image.asset(
+                      "assets/images/3.jpg",
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   ToggleBookMark(index: index),
                   const SizedBox(

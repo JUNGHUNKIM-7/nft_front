@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -66,12 +65,24 @@ class MainAppBar extends ConsumerWidget {
         currentExtent: height * .45,
         maxExtent: height * .45,
         child: FlexibleSpaceBar(
-          background: DarkenImage(
-            image: AssetImage(imagePath),
+          background: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(25),
+              bottomRight: Radius.circular(25),
+            ),
+            child: DarkenImage(
+              image: AssetImage(imagePath),
+            ),
           ),
         ),
       ),
-      title: _getTitle(context, type: type),
+      title: SizedBox(
+        width: 150,
+        height: 40,
+        child: Image.asset(
+          "assets/images/logo.png",
+        ),
+      ),
       actions: [
         if (type == AppbarType.home)
           IconButton(
@@ -91,49 +102,8 @@ class MainAppBar extends ConsumerWidget {
               color: Colors.black,
             ),
           ),
-        // else
       ],
     );
-  }
-
-  Widget _getTitle(BuildContext context, {required AppbarType type}) {
-    final style = Theme.of(context).textTheme.headline1;
-
-    switch (type) {
-      case AppbarType.home:
-        return SizedBox(
-          width: 150,
-          height: 80,
-          child: Image.asset(
-            "assets/images/logo.png",
-          ),
-        );
-      case AppbarType.trending:
-        return Text(
-          "trending".toTitleCase(),
-          style: style,
-        );
-      case AppbarType.top:
-        return Text(
-          "top".toTitleCase(),
-          style: style,
-        );
-      case AppbarType.artistCollection:
-        return Text(
-          "collection".toTitleCase(),
-          style: style,
-        );
-      case AppbarType.bookmarks:
-        return Text(
-          "bookmarks".toTitleCase(),
-          style: style,
-        );
-      case AppbarType.cart:
-        return Text(
-          "cart".toTitleCase(),
-          style: style,
-        );
-    }
   }
 }
 
@@ -315,7 +285,7 @@ class MainFloatingButton extends StatelessWidget with Widgets {
       builder: ((context) {
         return Container(
           height: 600,
-          color: Colors.amber,
+          color: Colors.grey[400],
           child: Center(
             child: Column(
               children: [
@@ -496,9 +466,9 @@ class _InputsState extends ConsumerState<MainInputs> {
                   CatchStringEvent.setSearch;
               (groups.last as Interactor).searchValue = value;
             },
-            cursorColor: Colors.amber,
+            cursorColor: Colors.white,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search, color: Colors.amber),
+              prefixIcon: const Icon(Icons.search, color: Colors.white),
               labelText: "search items, collections.. ".toTitleCase(),
               labelStyle: Theme.of(context)
                   .textTheme
@@ -518,56 +488,6 @@ class _InputsState extends ConsumerState<MainInputs> {
     return OutlineInputBorder(
       borderSide: const BorderSide(color: Colors.black),
       borderRadius: widget.getBorderRadius(20),
-    );
-  }
-}
-
-class ShopNowBtn extends StatelessWidget {
-  const ShopNowBtn({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green[500],
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
-      ),
-      onPressed: () {},
-      child: Text(
-        "shop now".toUpperCase(),
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 22,
-              color: Colors.white,
-            ),
-      ),
-    );
-  }
-}
-
-class DarkenImage extends StatelessWidget {
-  const DarkenImage({super.key, required this.image});
-  final AssetImage image;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: image,
-          fit: BoxFit.fill,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.5),
-            BlendMode.darken,
-          ),
-        ),
-      ),
     );
   }
 }

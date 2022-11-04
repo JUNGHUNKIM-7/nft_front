@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../global.dart';
-import '../global_component.dart';
+import '../stream_component/stream_components.dart';
 
 class SinglePage extends StatelessWidget {
   const SinglePage({
@@ -82,16 +82,6 @@ class _SingleViewAppBar extends ConsumerWidget {
             index: int.parse(id),
           )
       ],
-      // bottom: const PreferredSize(
-      //   preferredSize: Size.fromHeight(60),
-      //   child: Padding(
-      //     padding: EdgeInsets.all(16.0),
-      //     child: Align(
-      //       alignment: Alignment.bottomRight,
-      //       child: ShopNowBtn(),
-      //     ),
-      //   ),
-      // ),
     );
   }
 }

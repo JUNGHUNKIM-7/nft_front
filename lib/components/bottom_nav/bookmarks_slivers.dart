@@ -9,8 +9,8 @@ import '../../utils/style.dart';
 import '../global.dart';
 import '../global_component.dart';
 
-class BookMarks extends ConsumerWidget with Widgets {
-  const BookMarks({super.key});
+class BookMarkMain extends ConsumerWidget with Widgets {
+  const BookMarkMain({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +26,14 @@ class BookMarks extends ConsumerWidget with Widgets {
         data: (Set<int> b$) => cart$.when(
           data: (Set<int> c$) => CustomScrollView(
             slivers: [
-              const _BookMarkAppBar(),
+              const MainAppBar(
+                imagePath: "assets/images/bookmarks.jpg",
+                type: AppbarType.bookmarks,
+                bottom: MainSliverAppBarBottom(type: AppbarType.bookmarks),
+              ),
+              const SliverPadding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+              ),
               _BookMarkBody(
                 b$: b$,
                 c$: c$,
@@ -80,7 +87,6 @@ class _BookMarkBody extends ConsumerWidget with Widgets {
                     (groups.last as Interactor).setCart = index;
                   }
                   break;
-
                 case DismissDirection.endToStart:
                   if (b$.contains(index)) {
                     (groups.first as ControllerBase).setSetEvent.setState =
@@ -95,21 +101,6 @@ class _BookMarkBody extends ConsumerWidget with Widgets {
           );
         },
       ),
-    );
-  }
-}
-
-class _BookMarkAppBar extends StatelessWidget with Widgets {
-  const _BookMarkAppBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MainAppBar(
-      imagePath: "assets/images/bookmarks.jpg",
-      type: AppbarType.bookmarks,
-      bottom: MainSliverAppBarBottom(type: AppbarType.bookmarks),
     );
   }
 }

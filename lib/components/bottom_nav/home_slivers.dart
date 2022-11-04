@@ -39,8 +39,17 @@ class Home extends ConsumerWidget with Widgets {
         data: (int $index) => CustomScrollView(
           slivers: [
             _HomeAppBar(height: height),
+            const SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+            ),
             _HomeCoins(height: height),
+            const SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+            ),
             _HomeCategories(height: height),
+            const SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 4.0),
+            ),
             categorieBodies.elementAt($index),
           ],
         ),
@@ -58,7 +67,8 @@ class _HomeCategories extends ConsumerWidget with Widgets {
   }) : super(key: key);
 
   final double height;
-  final List<String> menus = ["top", "trending", "collections"];
+
+  static const menus =  ["top", "trending", "collections"];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,54 +79,66 @@ class _HomeCategories extends ConsumerWidget with Widgets {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: height * .06,
-        child: Container(
-          color: Colors.amber,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              Padding(
-                padding: kHorizontal8.copyWith(left: 16),
-                child: categories$.when(
-                  data: (int index$) => Row(
-                    children: [
-                      for (var i = 0; i < menus.length; i++)
-                        GestureDetector(
-                          onTap: () {
-                            (groups.first as ControllerBase)
-                                .setIntEvt
-                                .setState = CatchIntEvent.setCategoreis;
-                            (groups.last as Interactor).setCategories = i;
-                          },
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: kHorizontal8.copyWith(left: 25),
-                                child: Text(
-                                  menus.elementAt(i).toTitleCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2!
-                                      .copyWith(
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: categories$.when(
+                data: (int index$) => Row(
+                  children: [
+                    for (var i = 0; i < menus.length; i++)
+                      GestureDetector(
+                        onTap: () {
+                          (groups.first as ControllerBase).setIntEvt.setState =
+                              CatchIntEvent.setCategoreis;
+                          (groups.last as Interactor).setCategories = i;
+                        },
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: kHorizontal8.copyWith(left: 25),
+                              child: Text(
+                                menus.elementAt(i).toTitleCase(),
+                                style: index$ == i
+                                    ? Theme.of(context)
+                                        .textTheme
+                                        .headline2!
+                                        .copyWith(
+                                        shadows: [
+                                          const Shadow(
+                                              color: Colors.black,
+                                              offset: Offset(0, -7))
+                                        ],
+                                        color: Colors.transparent,
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: Colors.amber,
+                                        decorationThickness: 3,
+                                        decorationStyle:
+                                            TextDecorationStyle.dashed,
                                         letterSpacing: kLetterSpacing,
                                         fontWeight: FontWeight.bold,
-                                        color: index$ == i
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                ),
+                                      )
+                                    : Theme.of(context)
+                                        .textTheme
+                                        .headline2!
+                                        .copyWith(
+                                          color: Colors.grey[600],
+                                          letterSpacing: kLetterSpacing,
+                                        ),
                               ),
-                              kWidth30,
-                            ],
-                          ),
-                        )
-                    ],
-                  ),
-                  error: (err, stk) => Text('$err: $stk'),
-                  loading: () => const CircularProgressIndicator(),
+                            ),
+                            kWidth30,
+                          ],
+                        ),
+                      )
+                  ],
                 ),
+                error: (err, stk) => Text('$err: $stk'),
+                loading: () => const CircularProgressIndicator(),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -137,8 +159,6 @@ class _HomeCoins extends ConsumerWidget with Widgets {
     [Icons.money, "pol"],
     [Icons.money, "sol"],
     [Icons.money, "arb"],
-    [Icons.money, "arb"],
-    [Icons.money, "arb"],
   ];
 
   @override
@@ -147,34 +167,30 @@ class _HomeCoins extends ConsumerWidget with Widgets {
 
     return SliverToBoxAdapter(
       child: coins$.when(
-        data: (int index$) => Container(
-          color: Colors.black,
-          height: height * .1,
-          child: Padding(
-            padding: kHorizontal8,
-            child: coins.length >= 6
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: coins.length,
-                      itemBuilder: (context, index) => SizedBox(
-                        height: height * .2,
-                        child: _widgets(context, index, index$, ref, kCoinsGap),
-                      ),
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        for (var index = 0; index < coins.length; index++)
-                          _widgets(context, index, index$, ref, kCoinsGap),
-                      ],
+        data: (int index$) => Padding(
+          padding: kHorizontal8,
+          child: coins.length >= 6
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: coins.length,
+                    itemBuilder: (context, index) => SizedBox(
+                      height: height * .2,
+                      child: _widgets(context, index, index$, ref, kCoinsGap),
                     ),
                   ),
-          ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (var index = 0; index < coins.length; index++)
+                        _widgets(context, index, index$, ref, kCoinsGap),
+                    ],
+                  ),
+                ),
         ),
         error: (err, stk) => Text('$err: $stk'),
         loading: () => const CircularProgressIndicator(),
@@ -202,13 +218,14 @@ class _HomeCoins extends ConsumerWidget with Widgets {
               Icon(
                 coins.elementAt(index).elementAt(0) as IconData,
                 size: 45,
-                color: index$ == index ? Colors.white : Colors.amber,
+                color: index$ == index ? Colors.black : Colors.grey[600],
               ),
               Text(
                 "${coins.elementAt(index).elementAt(1)}".toUpperCase(),
                 style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                    color: index$ == index ? Colors.white : Colors.amber,
-                    fontWeight: FontWeight.bold),
+                      color: index$ == index ? Colors.black : Colors.grey[600],
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ],
           ),
@@ -256,82 +273,86 @@ class _TopCategories extends ConsumerWidget with Widgets {
       delegate: SliverChildBuilderDelegate(
         childCount: 100,
         (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                (groups.first as ControllerBase).setIntEvt.setState =
-                    CatchIntEvent.setGridItem;
-                (groups.last as Interactor).setGridItem = index;
-                context.go("${PathVar.topDetails.caller}/$index");
-              },
-              child: ClipRRect(
-                borderRadius: getBorderRadius(20),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/top.jpg",
-                      fit: BoxFit.contain,
-                    ),
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: GlassCard(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "0.25",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "ETH",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
+          return GestureDetector(
+            onTap: () {
+              (groups.first as ControllerBase).setIntEvt.setState =
+                  CatchIntEvent.setGridItem;
+              (groups.last as Interactor).setGridItem = index;
+              context.go("${PathVar.topDetails.caller}/$index");
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ShaderBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ClipRRect(
+                    borderRadius: getBorderRadius(20),
+                    child: Stack(
+                      children: [
+                        Image.asset(
+                          "assets/images/top.jpg",
+                          fit: BoxFit.contain,
                         ),
-                      ),
+                        // Positioned(
+                        //   bottom: 5,
+                        //   right: 5,
+                        //   child: GlassCard(
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.all(8.0),
+                        //       child: Row(
+                        //         children: [
+                        //           Text(
+                        //             "0.25",
+                        //             style: Theme.of(context)
+                        //                 .textTheme
+                        //                 .bodyText2
+                        //                 ?.copyWith(fontWeight: FontWeight.bold),
+                        //           ),
+                        //           const SizedBox(width: 8),
+                        //           Text(
+                        //             "ETH",
+                        //             style: Theme.of(context)
+                        //                 .textTheme
+                        //                 .bodyText2
+                        //                 ?.copyWith(fontWeight: FontWeight.bold),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Positioned(
+                        //   bottom: 5,
+                        //   right: 5,
+                        //   child: GlassCard(
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.all(4.0),
+                        //       child: Row(
+                        //         children: [
+                        //           ToggleFavorite(
+                        //             index: index,
+                        //           ),
+                        //           Text(
+                        //             "${index + 100}",
+                        //             style: Theme.of(context)
+                        //                 .textTheme
+                        //                 .headline2
+                        //                 ?.copyWith(
+                        //                   fontSize: 16,
+                        //                   fontWeight: FontWeight.bold,
+                        //                 ),
+                        //           ),
+                        //           const Padding(
+                        //             padding: EdgeInsets.only(right: 12),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // )
+                      ],
                     ),
-                    Positioned(
-                      bottom: 5,
-                      right: 5,
-                      child: GlassCard(
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Row(
-                            children: [
-                              ToggleFavorite(
-                                index: index,
-                              ),
-                              Text(
-                                "${index + 100}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline2
-                                    ?.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.only(right: 12),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -359,9 +380,11 @@ class _TrendingCategories extends ConsumerWidget with Widgets {
                   const SizedBox(
                     height: 100,
                     width: 100,
-                    child: Image(
-                      image: AssetImage("assets/images/trending.jpg"),
-                      fit: BoxFit.contain,
+                    child: RoundedImage(
+                      child: Image(
+                        image: AssetImage("assets/images/trending.jpg"),
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -419,8 +442,8 @@ class _ColletionCategories extends ConsumerWidget with Widgets {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         SizedBox(
-                          height: 100,
-                          width: 100,
+                          height: 80,
+                          width: 80,
                           child: ClipRRect(
                             borderRadius: getBorderRadius(60),
                             child: Image.asset("assets/images/2.jpg"),

@@ -9,8 +9,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../utils/repository.dart';
 import '../global_component.dart';
 
-class Cart extends ConsumerWidget with Widgets {
-  const Cart({super.key});
+class CartMain extends ConsumerWidget with Widgets {
+  const CartMain({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +26,16 @@ class Cart extends ConsumerWidget with Widgets {
         data: (Set<int> b$) => cart$.when(
           data: (Set<int> c$) => CustomScrollView(
             slivers: [
-              const _CartAppBar(),
+              const MainAppBar(
+                imagePath: "assets/images/cart.jpg",
+                type: AppbarType.cart,
+                bottom: MainSliverAppBarBottom(
+                  type: AppbarType.cart,
+                ),
+              ),
+              const SliverPadding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+              ),
               _CartBody(
                 b$: b$,
                 c$: c$,
@@ -69,27 +78,21 @@ class _CartBody extends ConsumerWidget with Widgets {
               switch (direction) {
                 case DismissDirection.startToEnd:
                   if (c$.contains(index)) {
-                    log('before ${c$} ', name: 'cart');
                     (groups.first as ControllerBase).setSetEvent.setState =
                         CatchSetEvent.unsetCart;
                     (groups.last as Interactor).unsetCart = index;
-                    log('after ${c$} ', name: 'cart');
                   }
                   if (!(b$.contains(index))) {
-                    log('before ${b$} ', name: 'bookMark');
                     (groups.first as ControllerBase).setSetEvent.setState =
                         CatchSetEvent.setBookMark;
                     (groups.last as Interactor).setBookMark = index;
-                    log('before ${b$} ', name: 'bookMark');
                   }
                   break;
                 case DismissDirection.endToStart:
-                  log('before ${c$} ', name: 'cart');
                   if (c$.contains(index)) {
                     (groups.first as ControllerBase).setSetEvent.setState =
                         CatchSetEvent.unsetCart;
                     (groups.last as Interactor).unsetCart = index;
-                    log('before ${c$} ', name: 'cart');
                   }
                   break;
                 default:
@@ -98,23 +101,6 @@ class _CartBody extends ConsumerWidget with Widgets {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-class _CartAppBar extends StatelessWidget {
-  const _CartAppBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MainAppBar(
-      imagePath: "assets/images/cart.jpg",
-      type: AppbarType.cart,
-      bottom: MainSliverAppBarBottom(
-        type: AppbarType.cart,
       ),
     );
   }

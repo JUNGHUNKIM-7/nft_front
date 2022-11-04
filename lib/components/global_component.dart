@@ -1,13 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../utils/extensions.dart';
-import '../utils/providers.dart';
-import '../utils/repository.dart';
 import '../utils/style.dart';
-import 'global.dart';
 
 class GlassCard extends StatelessWidget with Widgets {
   const GlassCard({
@@ -38,131 +34,6 @@ class GlassCard extends StatelessWidget with Widgets {
           child: child,
         ),
       ),
-    );
-  }
-}
-
-class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.child});
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey[300],
-      margin: const EdgeInsets.all(0),
-      elevation: 0,
-      shape: const Border(
-        bottom: BorderSide(color: Colors.black),
-      ),
-      child: child,
-    );
-  }
-}
-
-class ToggleFavorite extends ConsumerWidget {
-  const ToggleFavorite({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
-
-  final int index;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final f$ = ref.watch(catchSetProvider(CatchSetEvent.setFavorite));
-    final groups = getInstances(ref);
-
-    return f$.when(
-      data: (Set<int> fav$) => IconButton(
-        onPressed: () {
-          if (fav$.contains(index)) {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.unsetFavorite;
-            (groups.last as Interactor).unsetFavorite = index;
-          } else {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.setFavorite;
-            (groups.last as Interactor).setFavorite = index;
-          }
-        },
-        icon: Icon(
-          Icons.favorite,
-          color: fav$.contains(index) ? Colors.redAccent : Colors.black,
-        ),
-      ),
-      error: (err, stk) => const Text(''),
-      loading: () => const CircularProgressIndicator(),
-    );
-  }
-}
-
-class ToggleCart extends ConsumerWidget {
-  const ToggleCart(this.index, {super.key});
-  final int index;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final cart$ = ref.watch(catchSetProvider(CatchSetEvent.setCart));
-    final groups = getInstances(ref);
-
-    return cart$.when(
-      data: (Set<int> c$) => IconButton(
-        onPressed: () {
-          if (c$.contains(index)) {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.unsetCart;
-            (groups.last as Interactor).unsetCart = index;
-          } else {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.setCart;
-            (groups.last as Interactor).setCart = index;
-          }
-        },
-        icon: Icon(
-          Icons.shopping_cart,
-          color: c$.contains(index) ? Colors.redAccent : Colors.black,
-        ),
-      ),
-      error: (err, stk) => Text('$err: $stk'),
-      loading: () => const CircularProgressIndicator(),
-    );
-  }
-}
-
-class ToggleBookMark extends ConsumerWidget {
-  const ToggleBookMark({
-    super.key,
-    required this.index,
-  });
-
-  final int index;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final b$ = ref.watch(catchSetProvider(CatchSetEvent.setBookMark));
-    final groups = getInstances(ref);
-
-    return b$.when(
-      data: (Set<int> bookMark$) => IconButton(
-        onPressed: () {
-          if (bookMark$.contains(index)) {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.unsetBookMark;
-            (groups.last as Interactor).unsetBookMark = index;
-          } else {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.setBookMark;
-            (groups.last as Interactor).setBookMark = index;
-          }
-        },
-        icon: Icon(
-          Icons.bookmark,
-          color: bookMark$.contains(index) ? Colors.redAccent : Colors.black,
-        ),
-      ),
-      error: (err, stk) => const Text(''),
-      loading: () => const CircularProgressIndicator(),
     );
   }
 }
@@ -252,10 +123,12 @@ class BodyTiles extends StatelessWidget {
     return CustomCard(
       child: Row(
         children: [
-          SizedBox(
-            width: 100,
-            height: 100,
-            child: Image.asset("assets/images/1.jpg"),
+          RoundedImage(
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset("assets/images/1.jpg"),
+            ),
           ),
           const Spacer(),
           const ItemNameWithTag(),
@@ -269,6 +142,117 @@ class BodyTiles extends StatelessWidget {
           Padding(padding: kHorizontal8),
         ],
       ),
+    );
+  }
+}
+
+class CustomCard extends StatelessWidget {
+  const CustomCard({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: ShaderBox(
+        child: Card(
+          margin: const EdgeInsets.all(0),
+          elevation: 0,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class ShopNowBtn extends StatelessWidget {
+  const ShopNowBtn({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.green[500],
+        elevation: 10,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+      ),
+      onPressed: () {},
+      child: Text(
+        "shop now".toUpperCase(),
+        style: Theme.of(context).textTheme.headline1?.copyWith(
+              fontSize: 22,
+              color: Colors.white,
+            ),
+      ),
+    );
+  }
+}
+
+class DarkenImage extends StatelessWidget {
+  const DarkenImage({super.key, required this.image});
+  final AssetImage image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: image,
+          fit: BoxFit.fill,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.1),
+            BlendMode.darken,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ShaderBox extends StatelessWidget with Widgets {
+  const ShaderBox({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: getBorderRadius(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade400,
+            blurRadius: 4,
+            offset: const Offset(2, 4), // Shadow position
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+}
+
+class RoundedImage extends StatelessWidget {
+  const RoundedImage({
+    super.key,
+    required this.child,
+  });
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        bottomLeft: Radius.circular(10),
+      ),
+      child: child,
     );
   }
 }

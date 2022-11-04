@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../utils/providers.dart';
 import '../utils/style.dart';
 import 'bottom_nav/bookmarks_slivers.dart';
-import 'global.dart';
 import 'bottom_nav/home_slivers.dart';
+import 'global.dart';
 
 class RoutingPage extends ConsumerWidget with Widgets {
   const RoutingPage({
@@ -15,8 +15,8 @@ class RoutingPage extends ConsumerWidget with Widgets {
 
   static final bodys = [
     const Home(),
-    const BookMarks(),
-    const Cart(),
+    const BookMarkMain(),
+    const CartMain(),
   ];
 
   @override
@@ -28,7 +28,6 @@ class RoutingPage extends ConsumerWidget with Widgets {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        backgroundColor: Colors.grey[300],
         drawer: const MainDrawer(),
         body: bottomNav$.when(
           data: (int index$) => bodys.elementAt(index$),
