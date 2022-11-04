@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/components/cart/cart.dart';
+import 'package:flutter_layout/components/bottom_nav/cart_slivers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../utils/providers.dart';
 import '../utils/style.dart';
-import 'bookmark/bookmarks_slivers.dart';
+import 'bottom_nav/bookmarks_slivers.dart';
 import 'global.dart';
-import 'home/home_slivers.dart';
+import 'bottom_nav/home_slivers.dart';
 
-class Home extends ConsumerWidget with Widgets {
-  const Home({
+class RoutingPage extends ConsumerWidget with Widgets {
+  const RoutingPage({
     Key? key,
   }) : super(key: key);
 
   static final bodys = [
-    const HomeBody(),
+    const Home(),
     const BookMarks(),
     const Cart(),
   ];
