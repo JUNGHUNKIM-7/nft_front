@@ -54,6 +54,12 @@ class MainAppBar extends ConsumerWidget {
     final height = MediaQuery.of(context).size.height;
 
     return SliverAppBar(
+      shape: const ContinuousRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(80),
+          bottomRight: Radius.circular(80),
+        ),
+      ),
       expandedHeight: height * .45,
       centerTitle: true,
       pinned: true,
@@ -120,131 +126,58 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
       alignment: Alignment.center,
       child: Padding(
         padding: kAll8,
-        child: GlassCard(
-          child: FittedBox(
-            child: Padding(
-              padding: kAll8,
-              child: _bottomGlass(context, type: type),
-            ),
+        child: FittedBox(
+          child: Padding(
+            padding: kAll8,
+            child: _bottomChild(context, type: type),
           ),
         ),
       ),
     );
   }
 
-  Row _bottomGlass(
-    BuildContext context, {
-    required AppbarType type,
-  }) {
-    Column col() => Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: _getChildren(context, type: type),
-        );
-    switch (type) {
-      case AppbarType.home:
-        return Row(
-          children: [
-            col(),
-            kWidth30,
-            const ShopNowBtn(),
-          ],
-        );
-      case AppbarType.artistCollection:
-        return Row(
-          children: [
-            col(),
-            kWidth30,
-            const ShopNowBtn(),
-          ],
-        );
-      case AppbarType.bookmarks:
-        return Row(
-          children: [
-            col(),
-            kWidth30,
-            const ShopNowBtn(),
-          ],
-        );
-      case AppbarType.cart:
-        return Row(
-          children: [
-            col(),
-            kWidth30,
-            const ShopNowBtn(),
-          ],
-        );
-      case AppbarType.trending:
-        return Row(
-          children: [
-            col(),
-            kWidth30,
-            const ShopNowBtn(),
-          ],
-        );
-      case AppbarType.top:
-        return Row(
-          children: [
-            col(),
-            kWidth30,
-            const ShopNowBtn(),
-          ],
-        );
-    }
-  }
-
-  List<Widget> _getChildren(
+  Row _bottomChild(
     BuildContext context, {
     required AppbarType type,
   }) {
     switch (type) {
       case AppbarType.home:
-        return _getText(context, "home", "0.25");
+        return Row(
+          children: [
+            MainSliverBottomBtn(type: type),
+          ],
+        );
       case AppbarType.artistCollection:
-        return _getText(context, "collection", "0.25");
+        return Row(
+          children: [
+            MainSliverBottomBtn(type: type),
+          ],
+        );
       case AppbarType.bookmarks:
-        return _getText(context, "bookmarks", "0.25");
+        return Row(
+          children: [
+            MainSliverBottomBtn(type: type),
+          ],
+        );
       case AppbarType.cart:
-        return _getText(context, "cart", "0.25");
+        return Row(
+          children: [
+            MainSliverBottomBtn(type: type),
+          ],
+        );
       case AppbarType.trending:
-        return _getText(context, "trending", "0.25");
+        return Row(
+          children: [
+            MainSliverBottomBtn(type: type),
+          ],
+        );
       case AppbarType.top:
-        return _getText(context, "top", "0.25");
+        return Row(
+          children: [
+            MainSliverBottomBtn(type: type),
+          ],
+        );
     }
-  }
-
-  List<Widget> _getText(BuildContext context, String header, String sub) {
-    return [
-      Text(
-        header.toUpperCase(),
-        style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
-      ),
-      const SizedBox(
-        height: 5,
-      ),
-      Row(
-        children: [
-          Text(
-            sub,
-            style: Theme.of(context)
-                .textTheme
-                .headline2
-                ?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          kWidth15,
-          Padding(
-            padding: const EdgeInsets.only(right: 4.0),
-            child: Text(
-              "ETH",
-              style: Theme.of(context).textTheme.headline2?.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ),
-        ],
-      ),
-    ];
   }
 }
 

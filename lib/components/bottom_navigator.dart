@@ -28,6 +28,7 @@ class RoutingPage extends ConsumerWidget with Widgets {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Colors.grey[200],
         drawer: const MainDrawer(),
         body: bottomNav$.when(
           data: (int index$) => bodys.elementAt(index$),

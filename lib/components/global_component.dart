@@ -1,26 +1,31 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_layout/components/global.dart';
 
 import '../utils/extensions.dart';
 import '../utils/style.dart';
+
+enum GlassCardPosition { gridLeft, gridRight, global }
 
 class GlassCard extends StatelessWidget with Widgets {
   const GlassCard({
     super.key,
     required this.child,
+    required this.type,
   });
   final Widget child;
+  final GlassCardPosition type;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: _getBorderRadius(type),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: getBorderRadius(20),
+            borderRadius: _getBorderRadius(type),
             border: Border.all(width: 2, color: Colors.white30),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
@@ -35,6 +40,21 @@ class GlassCard extends StatelessWidget with Widgets {
         ),
       ),
     );
+  }
+
+  BorderRadius _getBorderRadius(GlassCardPosition type) {
+    switch (type) {
+      case GlassCardPosition.gridLeft:
+        return const BorderRadius.only(
+          bottomRight: Radius.circular(10),
+        );
+      case GlassCardPosition.gridRight:
+        return const BorderRadius.only(
+          topLeft: Radius.circular(10),
+        );
+      case GlassCardPosition.global:
+        return BorderRadius.circular(10);
+    }
   }
 }
 
@@ -153,9 +173,15 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
       child: ShaderBox(
         child: Card(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              bottomLeft: Radius.circular(10),
+            ),
+          ),
           margin: const EdgeInsets.all(0),
           elevation: 0,
           child: child,
@@ -165,32 +191,49 @@ class CustomCard extends StatelessWidget {
   }
 }
 
-class ShopNowBtn extends StatelessWidget {
-  const ShopNowBtn({
+class MainSliverBottomBtn extends StatelessWidget {
+  const MainSliverBottomBtn({
     Key? key,
+    required this.type,
   }) : super(key: key);
+  final AppbarType type;
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.green[500],
-        elevation: 10,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+    return GlassCard(
+      type: GlassCardPosition.global,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(5),
+              ),
+            ),
           ),
+          child: Text(
+            _getText(type)?.toUpperCase() ?? "",
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+                  fontSize: 22,
+                  color: Colors.white,
+                ),
+          ),
+          onPressed: () {},
         ),
       ),
-      onPressed: () {},
-      child: Text(
-        "shop now".toUpperCase(),
-        style: Theme.of(context).textTheme.headline1?.copyWith(
-              fontSize: 22,
-              color: Colors.white,
-            ),
-      ),
     );
+  }
+
+  String? _getText(AppbarType type) {
+    switch (type) {
+      case AppbarType.home:
+        return "explore now";
+      default:
+        return null;
+    }
   }
 }
 
@@ -229,7 +272,7 @@ class ShaderBox extends StatelessWidget with Widgets {
           BoxShadow(
             color: Colors.grey.shade400,
             blurRadius: 4,
-            offset: const Offset(2, 4), // Shadow position
+            offset: const Offset(2, 2),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_layout/components/stream_component/stream_components.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -68,7 +69,7 @@ class _HomeCategories extends ConsumerWidget with Widgets {
 
   final double height;
 
-  static const menus =  ["top", "trending", "collections"];
+  static const menus = ["top", "trending", "collections"];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -100,32 +101,8 @@ class _HomeCategories extends ConsumerWidget with Widgets {
                               padding: kHorizontal8.copyWith(left: 25),
                               child: Text(
                                 menus.elementAt(i).toTitleCase(),
-                                style: index$ == i
-                                    ? Theme.of(context)
-                                        .textTheme
-                                        .headline2!
-                                        .copyWith(
-                                        shadows: [
-                                          const Shadow(
-                                              color: Colors.black,
-                                              offset: Offset(0, -7))
-                                        ],
-                                        color: Colors.transparent,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: Colors.amber,
-                                        decorationThickness: 3,
-                                        decorationStyle:
-                                            TextDecorationStyle.dashed,
-                                        letterSpacing: kLetterSpacing,
-                                        fontWeight: FontWeight.bold,
-                                      )
-                                    : Theme.of(context)
-                                        .textTheme
-                                        .headline2!
-                                        .copyWith(
-                                          color: Colors.grey[600],
-                                          letterSpacing: kLetterSpacing,
-                                        ),
+                                style: _getTextTheme(context,
+                                    index$: index$, index: i),
                               ),
                             ),
                             kWidth30,
@@ -142,6 +119,30 @@ class _HomeCategories extends ConsumerWidget with Widgets {
         ),
       ),
     );
+  }
+
+  TextStyle _getTextTheme(
+    BuildContext context, {
+    required int index$,
+    required int index,
+  }) {
+    if (index$ == index) {
+      return Theme.of(context).textTheme.headline2!.copyWith(
+        shadows: [const Shadow(color: Colors.black, offset: Offset(0, -8))],
+        color: Colors.transparent,
+        decoration: TextDecoration.underline,
+        decorationColor: Colors.redAccent,
+        decorationThickness: 3,
+        decorationStyle: TextDecorationStyle.dashed,
+        letterSpacing: kLetterSpacing,
+        fontWeight: FontWeight.bold,
+      );
+    } else {
+      return Theme.of(context).textTheme.headline2!.copyWith(
+            color: Colors.grey[600],
+            letterSpacing: kLetterSpacing,
+          );
+    }
   }
 }
 
@@ -222,10 +223,7 @@ class _HomeCoins extends ConsumerWidget with Widgets {
               ),
               Text(
                 "${coins.elementAt(index).elementAt(1)}".toUpperCase(),
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      color: index$ == index ? Colors.black : Colors.grey[600],
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: _getTextTheme(context, index$: index$, index: index),
               ),
             ],
           ),
@@ -233,6 +231,32 @@ class _HomeCoins extends ConsumerWidget with Widgets {
         sizedBox,
       ],
     );
+  }
+
+  TextStyle _getTextTheme(
+    BuildContext context, {
+    required int index$,
+    required int index,
+  }) {
+    if (index$ == index) {
+      return Theme.of(context).textTheme.bodyText1!.copyWith(
+        shadows: [const Shadow(color: Colors.black, offset: Offset(0, -5))],
+        color: Colors.transparent,
+        decoration: TextDecoration.underline,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        decorationColor: Colors.redAccent,
+        decorationThickness: 3,
+        decorationStyle: TextDecorationStyle.dashed,
+        letterSpacing: kLetterSpacing,
+      );
+    } else {
+      return Theme.of(context).textTheme.bodyText1!.copyWith(
+            fontSize: 16,
+            color: Colors.grey[600],
+            letterSpacing: kLetterSpacing,
+          );
+    }
   }
 }
 
@@ -286,70 +310,51 @@ class _TopCategories extends ConsumerWidget with Widgets {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: ClipRRect(
-                    borderRadius: getBorderRadius(20),
+                    borderRadius: getBorderRadius(10),
                     child: Stack(
                       children: [
                         Image.asset(
                           "assets/images/top.jpg",
                           fit: BoxFit.contain,
                         ),
-                        // Positioned(
-                        //   bottom: 5,
-                        //   right: 5,
-                        //   child: GlassCard(
-                        //     child: Padding(
-                        //       padding: const EdgeInsets.all(8.0),
-                        //       child: Row(
-                        //         children: [
-                        //           Text(
-                        //             "0.25",
-                        //             style: Theme.of(context)
-                        //                 .textTheme
-                        //                 .bodyText2
-                        //                 ?.copyWith(fontWeight: FontWeight.bold),
-                        //           ),
-                        //           const SizedBox(width: 8),
-                        //           Text(
-                        //             "ETH",
-                        //             style: Theme.of(context)
-                        //                 .textTheme
-                        //                 .bodyText2
-                        //                 ?.copyWith(fontWeight: FontWeight.bold),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Positioned(
-                        //   bottom: 5,
-                        //   right: 5,
-                        //   child: GlassCard(
-                        //     child: Padding(
-                        //       padding: const EdgeInsets.all(4.0),
-                        //       child: Row(
-                        //         children: [
-                        //           ToggleFavorite(
-                        //             index: index,
-                        //           ),
-                        //           Text(
-                        //             "${index + 100}",
-                        //             style: Theme.of(context)
-                        //                 .textTheme
-                        //                 .headline2
-                        //                 ?.copyWith(
-                        //                   fontSize: 16,
-                        //                   fontWeight: FontWeight.bold,
-                        //                 ),
-                        //           ),
-                        //           const Padding(
-                        //             padding: EdgeInsets.only(right: 12),
-                        //           )
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // )
+                        Positioned(
+                          child: GlassCard(
+                            type: GlassCardPosition.gridLeft,
+                            child: ToggleFavorite(index: index),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GlassCard(
+                            type: GlassCardPosition.gridRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.insights,
+                                    size: 30,
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Icon(
+                                    Icons.hotel_class,
+                                    size: 30,
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    size: 30,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
