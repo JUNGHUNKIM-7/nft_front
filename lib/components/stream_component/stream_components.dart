@@ -19,7 +19,7 @@ class ToggleFavorite extends ConsumerWidget {
     final groups = getInstances(ref);
 
     return fav$.when(
-      data: (Set<int> f$) => IconButton(
+      data: (Set<int> f$) => ElevatedButton(
         onPressed: () {
           if (f$.contains(index)) {
             (groups.first as ControllerBase).setSetEvent.setState =
@@ -31,9 +31,14 @@ class ToggleFavorite extends ConsumerWidget {
             (groups.last as Interactor).setFavorite = index;
           }
         },
-        icon: Icon(
-          Icons.favorite,
-          color: f$.contains(index) ? Colors.redAccent : Colors.black,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        child: SizedBox(
+          width: 30,
+          height: 30,
+          child: Image.asset("assets/images/positive-vote.png"),
         ),
       ),
       error: (err, stk) => const Text(''),

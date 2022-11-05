@@ -154,12 +154,12 @@ class _HomeCoins extends ConsumerWidget with Widgets {
 
   final double height;
 
-  static final coins = [
-    [Icons.money, "bit"],
-    [Icons.money, "eth"],
-    [Icons.money, "pol"],
-    [Icons.money, "sol"],
-    [Icons.money, "arb"],
+  static final List<List<String>> coins = [
+    ["assets/images/bitcoin.png", "bit"],
+    ["assets/images/bitcoin.png", "eth"],
+    ["assets/images/bitcoin.png", "pol"],
+    ["assets/images/bitcoin.png", "sol"],
+    ["assets/images/bitcoin.png", "arb"],
   ];
 
   @override
@@ -170,15 +170,18 @@ class _HomeCoins extends ConsumerWidget with Widgets {
       child: coins$.when(
         data: (int index$) => Padding(
           padding: kHorizontal8,
-          child: coins.length >= 6
+          child: coins.length >= 7
               ? Padding(
                   padding: const EdgeInsets.only(left: 20.0),
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: coins.length,
-                    itemBuilder: (context, index) => SizedBox(
-                      height: height * .2,
-                      child: _widgets(context, index, index$, ref, kCoinsGap),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.13,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: coins.length,
+                      itemBuilder: (context, index) => SizedBox(
+                        height: height * .2,
+                        child: _widgets(context, index, index$, ref, kCoinsGap),
+                      ),
                     ),
                   ),
                 )
@@ -216,13 +219,19 @@ class _HomeCoins extends ConsumerWidget with Widgets {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                coins.elementAt(index).elementAt(0) as IconData,
-                size: 45,
-                color: index$ == index ? Colors.black : Colors.grey[600],
+              SizedBox(
+                width: 35,
+                height: 35,
+                child: Image.asset(
+                  coins.elementAt(index).elementAt(0),
+                  fit: BoxFit.contain,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Text(
-                "${coins.elementAt(index).elementAt(1)}".toUpperCase(),
+                coins.elementAt(index).elementAt(1).toUpperCase(),
                 style: _getTextTheme(context, index$: index$, index: index),
               ),
             ],
@@ -283,6 +292,12 @@ class _TopCategories extends ConsumerWidget with Widgets {
     Key? key,
   }) : super(key: key);
 
+  static final icons = [
+    "assets/images/badge.png",
+    "assets/images/rating.png",
+    "assets/images/star.png"
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final groups = getInstances(ref);
@@ -318,10 +333,7 @@ class _TopCategories extends ConsumerWidget with Widgets {
                           fit: BoxFit.contain,
                         ),
                         Positioned(
-                          child: GlassCard(
-                            type: GlassCardPosition.gridLeft,
-                            child: ToggleFavorite(index: index),
-                          ),
+                          child: ToggleFavorite(index: index),
                         ),
                         Positioned(
                           bottom: 0,
@@ -331,25 +343,22 @@ class _TopCategories extends ConsumerWidget with Widgets {
                             child: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: Row(
-                                children: const [
-                                  Icon(
-                                    Icons.insights,
-                                    size: 30,
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(
-                                    Icons.hotel_class,
-                                    size: 30,
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 30,
-                                  ),
+                                children: [
+                                  for (var path in icons)
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: Image.asset(path),
+                                        ),
+                                        if (icons.indexOf(path) !=
+                                            icons.length - 1)
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                      ],
+                                    ),
                                 ],
                               ),
                             ),

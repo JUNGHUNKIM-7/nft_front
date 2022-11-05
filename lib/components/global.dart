@@ -100,9 +100,7 @@ class MainAppBar extends ConsumerWidget {
           ),
         if (type == AppbarType.top || type == AppbarType.trending)
           IconButton(
-            onPressed: () {
-              //filter
-            },
+            onPressed: () {},
             icon: const Icon(
               Icons.filter,
               color: Colors.black,
