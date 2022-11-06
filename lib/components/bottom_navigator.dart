@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_layout/components/bottom_nav/cart_slivers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../utils/enums.dart';
 import '../utils/providers.dart';
 import '../utils/style.dart';
 import 'bottom_nav/bookmarks_slivers.dart';
@@ -24,9 +25,7 @@ class RoutingPage extends ConsumerWidget with Widgets {
     final bottomNav$ = ref.watch(catchIntProvider(CatchIntEvent.setBottomNav));
 
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.grey[200],
         drawer: const MainDrawer(),

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../main.dart';
+import '../../utils/enums.dart';
 import '../../utils/extensions.dart';
 import '../../utils/providers.dart';
 import '../../utils/repository.dart';
@@ -32,10 +33,12 @@ class Home extends ConsumerWidget with Widgets {
         ref.watch(catchIntProvider(CatchIntEvent.setCategoreis));
 
     return RefreshIndicator(
-      onRefresh: () => Future.delayed(
-        const Duration(seconds: 1),
-        () => log('hi', name: 'Refresh:Home'),
-      ),
+      onRefresh: () {
+        return Future.delayed(
+          const Duration(seconds: 1),
+          () => log('hi', name: 'Refresh:Home'),
+        );
+      },
       child: categories$.when(
         data: (int $index) => CustomScrollView(
           slivers: [
@@ -91,9 +94,7 @@ class _HomeCategories extends ConsumerWidget with Widgets {
                     for (var i = 0; i < menus.length; i++)
                       GestureDetector(
                         onTap: () {
-                          (groups.first as ControllerBase).setIntEvt.setState =
-                              CatchIntEvent.setCategoreis;
-                          (groups.last as Interactor).setCategories = i;
+                          _setCategories(groups, i);
                         },
                         child: Row(
                           children: [
@@ -119,6 +120,12 @@ class _HomeCategories extends ConsumerWidget with Widgets {
         ),
       ),
     );
+  }
+
+  void _setCategories(List<dynamic> groups, int i) {
+    (groups.first as ControllerBase).setIntEvt.setState =
+        CatchIntEvent.setCategoreis;
+    (groups.last as Interactor).setCategories = i;
   }
 
   TextStyle _getTextTheme(
@@ -151,7 +158,6 @@ class _HomeCoins extends ConsumerWidget with Widgets {
     Key? key,
     required this.height,
   }) : super(key: key);
-
   final double height;
 
   static final List<List<String>> coins = [
@@ -180,7 +186,12 @@ class _HomeCoins extends ConsumerWidget with Widgets {
                       itemCount: coins.length,
                       itemBuilder: (context, index) => SizedBox(
                         height: height * .2,
-                        child: _widgets(context, index, index$, ref, kCoinsGap),
+                        child: _widgets(
+                          context,
+                          index,
+                          index$,
+                          ref,
+                        ),
                       ),
                     ),
                   ),
@@ -191,7 +202,12 @@ class _HomeCoins extends ConsumerWidget with Widgets {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       for (var index = 0; index < coins.length; index++)
-                        _widgets(context, index, index$, ref, kCoinsGap),
+                        _widgets(
+                          context,
+                          index,
+                          index$,
+                          ref,
+                        ),
                     ],
                   ),
                 ),
@@ -203,17 +219,19 @@ class _HomeCoins extends ConsumerWidget with Widgets {
   }
 
   //Row<Col(Icon + Text) + SizedBox>
-  Row _widgets(BuildContext context, int index, int index$, WidgetRef ref,
-      SizedBox sizedBox) {
+  Row _widgets(
+    BuildContext context,
+    int index,
+    int index$,
+    WidgetRef ref,
+  ) {
     final groups = getInstances(ref);
 
     return Row(
       children: [
         GestureDetector(
           onTap: () {
-            (groups.first as ControllerBase).setIntEvt.setState =
-                CatchIntEvent.setCoins;
-            (groups.last as Interactor).setCoin = index;
+            _setCoin(groups, index);
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -237,9 +255,15 @@ class _HomeCoins extends ConsumerWidget with Widgets {
             ],
           ),
         ),
-        sizedBox,
+        kCoinsGap
       ],
     );
+  }
+
+  void _setCoin(List<dynamic> groups, int index) {
+    (groups.first as ControllerBase).setIntEvt.setState =
+        CatchIntEvent.setCoins;
+    (groups.last as Interactor).setCoin = index;
   }
 
   TextStyle _getTextTheme(
@@ -314,10 +338,7 @@ class _TopCategories extends ConsumerWidget with Widgets {
         (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              (groups.first as ControllerBase).setIntEvt.setState =
-                  CatchIntEvent.setGridItem;
-              (groups.last as Interactor).setGridItem = index;
-              context.go("${PathVar.topDetails.caller}/$index");
+              _chooseGridItem(groups, index, context);
             },
             child: Padding(
               padding: const EdgeInsets.all(4.0),
@@ -374,6 +395,13 @@ class _TopCategories extends ConsumerWidget with Widgets {
         },
       ),
     );
+  }
+
+  void _chooseGridItem(List<dynamic> groups, int index, BuildContext context) {
+    (groups.first as ControllerBase).setIntEvt.setState =
+        CatchIntEvent.setGridItem;
+    (groups.last as Interactor).setGridItem = index;
+    context.go("${PathVar.topDetails.caller}/$index");
   }
 }
 

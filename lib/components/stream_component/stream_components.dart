@@ -10,7 +10,6 @@ class ToggleFavorite extends ConsumerWidget {
     Key? key,
     required this.index,
   }) : super(key: key);
-
   final int index;
 
   @override
@@ -21,15 +20,7 @@ class ToggleFavorite extends ConsumerWidget {
     return fav$.when(
       data: (Set<int> f$) => ElevatedButton(
         onPressed: () {
-          if (f$.contains(index)) {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.unsetFavorite;
-            (groups.last as Interactor).unsetFavorite = index;
-          } else {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.setFavorite;
-            (groups.last as Interactor).setFavorite = index;
-          }
+          _toggleFavorite(f$, groups);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
@@ -44,6 +35,18 @@ class ToggleFavorite extends ConsumerWidget {
       error: (err, stk) => const Text(''),
       loading: () => const CircularProgressIndicator(),
     );
+  }
+
+  void _toggleFavorite(Set<int> f$, List<dynamic> groups) {
+    if (f$.contains(index)) {
+      (groups.first as ControllerBase).setSetEvent.setState =
+          CatchSetEvent.unsetFavorite;
+      (groups.last as Interactor).unsetFavorite = index;
+    } else {
+      (groups.first as ControllerBase).setSetEvent.setState =
+          CatchSetEvent.setFavorite;
+      (groups.last as Interactor).setFavorite = index;
+    }
   }
 }
 
@@ -62,15 +65,7 @@ class ToggleCart extends ConsumerWidget {
     return cart$.when(
       data: (Set<int> c$) => IconButton(
         onPressed: () {
-          if (c$.contains(index)) {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.unsetCart;
-            (groups.last as Interactor).unsetCart = index;
-          } else {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.setCart;
-            (groups.last as Interactor).setCart = index;
-          }
+          _toggleCart(c$, groups);
         },
         icon: Icon(
           Icons.shopping_cart,
@@ -81,6 +76,18 @@ class ToggleCart extends ConsumerWidget {
       loading: () => const CircularProgressIndicator(),
     );
   }
+
+  void _toggleCart(Set<int> c$, List<dynamic> groups) {
+    if (c$.contains(index)) {
+      (groups.first as ControllerBase).setSetEvent.setState =
+          CatchSetEvent.unsetCart;
+      (groups.last as Interactor).unsetCart = index;
+    } else {
+      (groups.first as ControllerBase).setSetEvent.setState =
+          CatchSetEvent.setCart;
+      (groups.last as Interactor).setCart = index;
+    }
+  }
 }
 
 class ToggleBookMark extends ConsumerWidget {
@@ -88,7 +95,6 @@ class ToggleBookMark extends ConsumerWidget {
     super.key,
     required this.index,
   });
-
   final int index;
 
   @override
@@ -99,15 +105,8 @@ class ToggleBookMark extends ConsumerWidget {
     return bookMark$.when(
       data: (Set<int> b$) => IconButton(
         onPressed: () {
-          if (b$.contains(index)) {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.unsetBookMark;
-            (groups.last as Interactor).unsetBookMark = index;
-          } else {
-            (groups.first as ControllerBase).setSetEvent.setState =
-                CatchSetEvent.setBookMark;
-            (groups.last as Interactor).setBookMark = index;
-          }
+          _toggleBookMark(b$, groups);
+          _toggleBookMark(b$, groups);
         },
         icon: Icon(
           Icons.bookmark,
@@ -117,5 +116,17 @@ class ToggleBookMark extends ConsumerWidget {
       error: (err, stk) => const Text(''),
       loading: () => const CircularProgressIndicator(),
     );
+  }
+
+  void _toggleBookMark(Set<int> b$, List<dynamic> groups) {
+    if (b$.contains(index)) {
+      (groups.first as ControllerBase).setSetEvent.setState =
+          CatchSetEvent.unsetBookMark;
+      (groups.last as Interactor).unsetBookMark = index;
+    } else {
+      (groups.first as ControllerBase).setSetEvent.setState =
+          CatchSetEvent.setBookMark;
+      (groups.last as Interactor).setBookMark = index;
+    }
   }
 }

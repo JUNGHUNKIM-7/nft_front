@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_layout/utils/enums.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'components/bottom_navigator.dart';
 import 'components/nested_page/artist_collections.dart';
 import 'components/nested_page/infinite_view.dart';
 import 'components/nested_page/single_details.dart';
-import 'components/global.dart';
-import 'components/bottom_navigator.dart';
 import 'utils/style.dart';
 
 void main() {

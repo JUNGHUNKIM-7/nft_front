@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../global.dart';
+import '../../utils/enums.dart';
 import '../stream_component/stream_components.dart';
 
 class SinglePage extends StatelessWidget {

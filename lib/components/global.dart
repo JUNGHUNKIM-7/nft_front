@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../utils/extensions.dart';
 import '../../utils/repository.dart';
+import '../utils/enums.dart';
 import '../utils/providers.dart';
 import '../utils/style.dart';
 import 'global_component.dart';
@@ -12,30 +13,6 @@ List getInstances(WidgetRef ref) => [
       ref.watch(repositoryProvider),
       ref.watch(interactorProvider),
     ];
-
-enum AppbarType {
-  home,
-  trending,
-  top,
-  artistCollection,
-  bookmarks,
-  cart,
-}
-
-enum SinglePageType {
-  topSingle,
-  trendingSingle,
-  collection,
-  bookmark,
-}
-
-enum InfinitePageType {
-  top,
-  trending,
-  artistCollection,
-}
-
-enum FloatingButtonType { search, payment }
 
 class MainAppBar extends ConsumerWidget {
   const MainAppBar({
@@ -82,13 +59,11 @@ class MainAppBar extends ConsumerWidget {
           ),
         ),
       ),
-      title: SizedBox(
-        width: 150,
-        height: 40,
-        child: Image.asset(
-          "assets/images/logo.png",
-        ),
-      ),
+      // title: SizedBox(
+      //   width: 150,
+      //   height: 40,
+      //   child: Image.asset("assets/images/logo.png"),
+      // ),
       actions: [
         if (type == AppbarType.home)
           IconButton(
@@ -127,64 +102,20 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
         child: FittedBox(
           child: Padding(
             padding: kAll8,
-            child: _bottomChild(context, type: type),
+            child: MainSliverBottomBtn(type: type),
           ),
         ),
       ),
     );
-  }
-
-  Row _bottomChild(
-    BuildContext context, {
-    required AppbarType type,
-  }) {
-    switch (type) {
-      case AppbarType.home:
-        return Row(
-          children: [
-            MainSliverBottomBtn(type: type),
-          ],
-        );
-      case AppbarType.artistCollection:
-        return Row(
-          children: [
-            MainSliverBottomBtn(type: type),
-          ],
-        );
-      case AppbarType.bookmarks:
-        return Row(
-          children: [
-            MainSliverBottomBtn(type: type),
-          ],
-        );
-      case AppbarType.cart:
-        return Row(
-          children: [
-            MainSliverBottomBtn(type: type),
-          ],
-        );
-      case AppbarType.trending:
-        return Row(
-          children: [
-            MainSliverBottomBtn(type: type),
-          ],
-        );
-      case AppbarType.top:
-        return Row(
-          children: [
-            MainSliverBottomBtn(type: type),
-          ],
-        );
-    }
   }
 }
 
 class MainFloatingButton extends StatelessWidget with Widgets {
   const MainFloatingButton({
     super.key,
-    required FloatingButtonType type,
-  }) : _type = type;
-  final FloatingButtonType _type;
+    required this.type,
+  });
+  final FloatingButtonType type;
 
   @override
   Widget build(BuildContext context) {
@@ -194,9 +125,9 @@ class MainFloatingButton extends StatelessWidget with Widgets {
       ),
       elevation: 10,
       onPressed: () {
-        switch (_type) {
+        switch (type) {
           case FloatingButtonType.search:
-            _showInputs(context);
+            _showSearch(context);
             break;
           case FloatingButtonType.payment:
             break;
@@ -204,13 +135,13 @@ class MainFloatingButton extends StatelessWidget with Widgets {
       },
       backgroundColor: Colors.black54,
       child: Icon(
-        _type == FloatingButtonType.search ? Icons.search : Icons.payment,
+        type == FloatingButtonType.search ? Icons.search : Icons.payment,
         color: Colors.white,
       ),
     );
   }
 
-  void _showInputs(BuildContext context) {
+  void _showSearch(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
       builder: ((context) {
@@ -275,9 +206,7 @@ class MainBottomNav extends ConsumerWidget {
       currentIndex: index,
       showUnselectedLabels: false,
       onTap: (int val) {
-        (groups.first as ControllerBase).setIntEvt.setState =
-            CatchIntEvent.setBottomNav;
-        (groups.last as Interactor).setBottomNav = val;
+        _chooseBottomNav(groups, val);
       },
       selectedLabelStyle: GoogleFonts.orbitron(fontWeight: FontWeight.bold),
       selectedFontSize: 16,
@@ -291,6 +220,12 @@ class MainBottomNav extends ConsumerWidget {
             label: "cart".toTitleCase(), icon: const Icon(Icons.shopping_cart)),
       ],
     );
+  }
+
+  void _chooseBottomNav(List<dynamic> groups, int val) {
+    (groups.first as ControllerBase).setIntEvt.setState =
+        CatchIntEvent.setBottomNav;
+    (groups.last as Interactor).setBottomNav = val;
   }
 }
 
@@ -393,9 +328,7 @@ class _InputsState extends ConsumerState<MainInputs> {
           padding: widget.kHorizontal8.copyWith(left: 20, right: 20),
           child: TextField(
             onSubmitted: (value) {
-              (groups.first as ControllerBase).setStringEvt.setState =
-                  CatchStringEvent.setSearch;
-              (groups.last as Interactor).searchValue = value;
+              _onSubmit(groups, value);
             },
             cursorColor: Colors.white,
             decoration: InputDecoration(
@@ -413,6 +346,12 @@ class _InputsState extends ConsumerState<MainInputs> {
         ),
       ),
     );
+  }
+
+  void _onSubmit(List<dynamic> groups, String value) {
+    (groups.first as ControllerBase).setStringEvt.setState =
+        CatchStringEvent.setSearch;
+    (groups.last as Interactor).searchValue = value;
   }
 
   OutlineInputBorder _border() {

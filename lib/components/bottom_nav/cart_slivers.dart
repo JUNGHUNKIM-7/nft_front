@@ -6,6 +6,7 @@ import 'package:flutter_layout/utils/providers.dart';
 import 'package:flutter_layout/utils/style.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../utils/enums.dart';
 import '../../utils/repository.dart';
 import '../global_component.dart';
 

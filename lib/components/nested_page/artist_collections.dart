@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_layout/utils/style.dart';
 
 import '../../components/nested_page/infinite_view.dart';
+import '../../utils/enums.dart';
 import '../global.dart';
 
 class AritstCollections extends StatelessWidget with Widgets {

@@ -1,12 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_layout/components/global.dart';
 
+import '../utils/enums.dart';
 import '../utils/extensions.dart';
 import '../utils/style.dart';
-
-enum GlassCardPosition { gridLeft, gridRight, global }
 
 class GlassCard extends StatelessWidget with Widgets {
   const GlassCard({

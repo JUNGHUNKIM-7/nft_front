@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../main.dart';
+import '../../utils/enums.dart';
 import '../../utils/style.dart';
 import '../global.dart';
 import '../global_component.dart';
