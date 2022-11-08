@@ -19,10 +19,9 @@ class CartMain extends ConsumerWidget with Widgets {
     final cart$ = ref.watch(catchSetProvider(CatchSetEvent.setCart));
 
     return RefreshIndicator(
-      onRefresh: () => Future.delayed(
-        const Duration(seconds: 1),
-        () => log('cart', name: 'cart'),
-      ),
+      onRefresh: () => Future.delayed(const Duration(seconds: 1), () {
+        log('cart', name: 'cart');
+      }),
       child: bookMark$.when(
         data: (Set<int> b$) => cart$.when(
           data: (Set<int> c$) => CustomScrollView(

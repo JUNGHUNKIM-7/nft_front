@@ -146,7 +146,7 @@ class _HomeCategories extends ConsumerWidget with Widgets {
       );
     } else {
       return Theme.of(context).textTheme.headline2!.copyWith(
-            color: Colors.grey[600],
+            color: kGrey,
             letterSpacing: kLetterSpacing,
           );
     }
@@ -161,12 +161,14 @@ class _HomeCoins extends ConsumerWidget with Widgets {
   final double height;
 
   static final List<List<String>> coins = [
-    ["assets/images/bitcoin.png", "bit"],
-    ["assets/images/bitcoin.png", "eth"],
-    ["assets/images/bitcoin.png", "pol"],
-    ["assets/images/bitcoin.png", "sol"],
-    ["assets/images/bitcoin.png", "arb"],
+    ["assets/images/coin.png", "bit"],
+    ["assets/images/coin.png", "eth"],
+    ["assets/images/coin.png", "pol"],
+    ["assets/images/coin.png", "sol"],
+    ["assets/images/coin.png", "arb"],
   ];
+
+  static final bool over6 = coins.length >= 6;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -176,38 +178,31 @@ class _HomeCoins extends ConsumerWidget with Widgets {
       child: coins$.when(
         data: (int index$) => Padding(
           padding: kHorizontal8,
-          child: coins.length >= 7
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: SizedBox(
+          child: over6
+              ? _wrapper(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height * 0.13,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: coins.length,
-                      itemBuilder: (context, index) => SizedBox(
-                        height: height * .2,
-                        child: _widgets(
-                          context,
-                          index,
-                          index$,
-                          ref,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: coins.length,
+                        itemBuilder: (context, index) => SizedBox(
+                          height: height * .2,
+                          child: _widgets(context, ref,
+                              index$: index$, index: index, over6: over6),
                         ),
                       ),
                     ),
                   ),
                 )
-              : Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Row(
+              : _wrapper(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       for (var index = 0; index < coins.length; index++)
-                        _widgets(
-                          context,
-                          index,
-                          index$,
-                          ref,
-                        ),
+                        _widgets(context, ref,
+                            index$: index$, index: index, over6: over6),
                     ],
                   ),
                 ),
@@ -218,13 +213,26 @@ class _HomeCoins extends ConsumerWidget with Widgets {
     );
   }
 
-  //Row<Col(Icon + Text) + SizedBox>
-  Row _widgets(
+  Widget _wrapper(Widget child) {
+    return ClipRRect(
+      borderRadius: getBorderRadius(10),
+      child: Container(
+        color: Colors.grey.shade300,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  Widget _widgets(
     BuildContext context,
-    int index,
-    int index$,
-    WidgetRef ref,
-  ) {
+    WidgetRef ref, {
+    required int index,
+    required int index$,
+    required bool over6,
+  }) {
     final groups = getInstances(ref);
 
     return Row(
@@ -238,8 +246,8 @@ class _HomeCoins extends ConsumerWidget with Widgets {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: 35,
-                height: 35,
+                width: 45,
+                height: 45,
                 child: Image.asset(
                   coins.elementAt(index).elementAt(0),
                   fit: BoxFit.contain,
@@ -255,7 +263,7 @@ class _HomeCoins extends ConsumerWidget with Widgets {
             ],
           ),
         ),
-        kCoinsGap
+        if (over6) kCoinsGap
       ],
     );
   }
@@ -286,7 +294,7 @@ class _HomeCoins extends ConsumerWidget with Widgets {
     } else {
       return Theme.of(context).textTheme.bodyText1!.copyWith(
             fontSize: 16,
-            color: Colors.grey[600],
+            color: kGrey,
             letterSpacing: kLetterSpacing,
           );
     }

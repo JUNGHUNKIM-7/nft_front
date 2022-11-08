@@ -24,13 +24,13 @@ class GlassCard extends StatelessWidget with Widgets {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: _getBorderRadius(type),
-            border: Border.all(width: 2, color: Colors.white30),
+            border: Border.all(width: 2, color: Colors.white10),
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.white,
-                Colors.white10,
+                Colors.grey,
+                Colors.transparent,
               ],
             ),
           ),
@@ -151,8 +151,6 @@ class BodyTiles extends StatelessWidget {
           const Spacer(),
           const ItemNameWithTag(),
           const Spacer(),
-          //for debug
-          Text("$idx"),
           const SizedBox(
             width: 10,
           ),
@@ -174,6 +172,7 @@ class CustomCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
       child: ShaderBox(
         child: Card(
+          color: Colors.white54,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10),
@@ -189,52 +188,6 @@ class CustomCard extends StatelessWidget {
   }
 }
 
-class MainSliverBottomBtn extends StatelessWidget {
-  const MainSliverBottomBtn({
-    Key? key,
-    required this.type,
-  }) : super(key: key);
-  final AppbarType type;
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      type: GlassCardPosition.global,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(5),
-              ),
-            ),
-          ),
-          child: Text(
-            _getText(type)?.toUpperCase() ?? "",
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  fontSize: 22,
-                  color: Colors.white,
-                ),
-          ),
-          onPressed: () {},
-        ),
-      ),
-    );
-  }
-
-  String? _getText(AppbarType type) {
-    switch (type) {
-      case AppbarType.home:
-        return "explore now";
-      default:
-        return null;
-    }
-  }
-}
-
 class DarkenImage extends StatelessWidget {
   const DarkenImage({super.key, required this.image});
   final AssetImage image;
@@ -247,7 +200,7 @@ class DarkenImage extends StatelessWidget {
           image: image,
           fit: BoxFit.fill,
           colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.1),
+            Colors.black.withOpacity(0.5),
             BlendMode.darken,
           ),
         ),
@@ -268,9 +221,9 @@ class ShaderBox extends StatelessWidget with Widgets {
         borderRadius: getBorderRadius(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.shade400,
-            blurRadius: 4,
-            offset: const Offset(2, 2),
+            color: kShadow!,
+            blurRadius: 1,
+            offset: const Offset(2, 3),
           ),
         ],
       ),

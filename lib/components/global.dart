@@ -47,23 +47,27 @@ class MainAppBar extends ConsumerWidget {
       flexibleSpace: FlexibleSpaceBar.createSettings(
         currentExtent: height * .45,
         maxExtent: height * .45,
-        child: FlexibleSpaceBar(
-          background: ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(25),
-              bottomRight: Radius.circular(25),
-            ),
-            child: DarkenImage(
-              image: AssetImage(imagePath),
+        child: ShaderBox(
+          child: FlexibleSpaceBar(
+            background: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25),
+              ),
+              child: DarkenImage(
+                image: AssetImage(imagePath),
+              ),
             ),
           ),
         ),
       ),
-      // title: SizedBox(
-      //   width: 150,
-      //   height: 40,
-      //   child: Image.asset("assets/images/logo.png"),
-      // ),
+      title: const SizedBox(
+        width: 150,
+        height: 40,
+        child: FlutterLogo(
+          size: 20.0,
+        ),
+      ),
       actions: [
         if (type == AppbarType.home)
           IconButton(
@@ -96,13 +100,16 @@ class MainSliverAppBarBottom extends StatelessWidget with Widgets {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.center,
+      alignment: Alignment.bottomRight,
       child: Padding(
         padding: kAll8,
         child: FittedBox(
           child: Padding(
             padding: kAll8,
-            child: MainSliverBottomBtn(type: type),
+            //debug
+            child: type != AppbarType.home
+                ? MainSliverBottomBtn(type: type)
+                : null,
           ),
         ),
       ),
@@ -237,14 +244,14 @@ class MainDrawer extends StatelessWidget with Widgets {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.amber,
+      backgroundColor: kGrey,
       child: Column(
         children: [
           kHeight30,
-          SizedBox(
-            height: 100,
-            width: 100,
-            child: Image.asset("assets/images/logo.png"),
+          const SizedBox(
+            height: 80,
+            width: 80,
+            child: FlutterLogo(),
           ),
           const Spacer(),
           Column(
@@ -295,6 +302,7 @@ class MainInputs extends ConsumerStatefulWidget with Widgets {
     super.key,
     required this.height,
   });
+
   final double height;
 
   @override
@@ -330,9 +338,9 @@ class _InputsState extends ConsumerState<MainInputs> {
             onSubmitted: (value) {
               _onSubmit(groups, value);
             },
-            cursorColor: Colors.white,
+            cursorColor: Colors.amber,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search, color: Colors.white),
+              prefixIcon: const Icon(Icons.search, color: Colors.amber),
               labelText: "search items, collections.. ".toTitleCase(),
               labelStyle: Theme.of(context)
                   .textTheme
@@ -359,5 +367,49 @@ class _InputsState extends ConsumerState<MainInputs> {
       borderSide: const BorderSide(color: Colors.black),
       borderRadius: widget.getBorderRadius(20),
     );
+  }
+}
+
+class MainSliverBottomBtn extends StatelessWidget {
+  const MainSliverBottomBtn({
+    Key? key,
+    required this.type,
+  }) : super(key: key);
+  final AppbarType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      type: GlassCardPosition.global,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Text(
+          _getText(type)?.toUpperCase() ?? "",
+          style: Theme.of(context).textTheme.headline1?.copyWith(
+                fontSize: 22,
+                color: Colors.grey[300],
+              ),
+        ),
+      ),
+    );
+  }
+
+  String? _getText(AppbarType type) {
+    switch (type) {
+      case AppbarType.home:
+        return "explore now";
+      case AppbarType.trending:
+        return "trending";
+      case AppbarType.bookmarks:
+        return "bookmarks";
+      case AppbarType.cart:
+        return "cart";
+      case AppbarType.artistCollection:
+        return "artist collection";
+      case AppbarType.top:
+        return "top ratings";
+      default:
+        return null;
+    }
   }
 }

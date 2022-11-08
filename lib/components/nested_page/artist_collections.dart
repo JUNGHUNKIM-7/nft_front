@@ -14,20 +14,18 @@ class AritstCollections extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: CustomScrollView(
         slivers: [
-          const MainAppBar(
+          MainAppBar(
             type: AppbarType.artistCollection,
             imagePath: "assets/images/collections.jpg",
             bottom: MainSliverAppBarBottom(
               type: AppbarType.artistCollection,
             ),
           ),
-          SliverToBoxAdapter(
-            child: Text("artistName: $name"),
-          ),
-          const InfiniteScroll(type: InfinitePageType.artistCollection)
+          SliverPadding(padding: EdgeInsets.symmetric(vertical: 8.0)),
+          InfiniteScroll(type: InfiniteViewType.artistCollection)
         ],
       ),
     );

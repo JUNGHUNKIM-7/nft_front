@@ -25,7 +25,7 @@ class SinglePage extends StatelessWidget {
             id: id,
             type: type,
           ),
-          //for debug
+          //debug
           SliverToBoxAdapter(
             child: Text(
               type == SinglePageType.bookmark

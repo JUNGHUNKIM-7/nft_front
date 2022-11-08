@@ -7,14 +7,16 @@ mixin Widgets {
   SizedBox get kWidth30 => const SizedBox(width: 30);
   SizedBox get kHeight15 => const SizedBox(height: 15);
   SizedBox get kWidth15 => const SizedBox(width: 15);
-  SizedBox get kCoinsGap => const SizedBox(width: 25);
+  SizedBox get kCoinsGap => const SizedBox(width: 40);
 
   double get kLetterSpacing => 0.2;
   Color get kBoxColor => Colors.white70;
+  Color? get kGrey => Colors.grey[500];
+  Color? get kShadow => Colors.grey.shade300;
 
   EdgeInsets get kAll8 => const EdgeInsets.all(8);
   EdgeInsets get kHorizontal8 => const EdgeInsets.symmetric(horizontal: 8.0);
-  EdgeInsets get kertical8 => const EdgeInsets.symmetric(vertical: 8.0);
+  EdgeInsets get kVertical8 => const EdgeInsets.symmetric(vertical: 8.0);
 
   BorderRadius getBorderRadius(double size) =>
       BorderRadius.all(Radius.circular(size));

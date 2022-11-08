@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             builder: (BuildContext context, GoRouterState state) =>
                 InfiniteView(
               id: state.params['id']!,
-              type: InfinitePageType.top,
+              type: InfiniteViewType.top,
             ),
             routes: [
               GoRoute(
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
             builder: (BuildContext context, GoRouterState state) =>
                 InfiniteView(
               id: state.params['id']!,
-              type: InfinitePageType.trending,
+              type: InfiniteViewType.trending,
             ),
           ),
           GoRoute(
@@ -134,6 +134,7 @@ enum PathVar {
 
   final String path;
   final String caller;
+
   const PathVar({
     required this.path,
     required this.caller,

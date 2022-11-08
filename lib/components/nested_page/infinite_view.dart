@@ -16,7 +16,7 @@ class InfiniteView extends ConsumerWidget with Widgets {
     required this.type,
   });
   final String id;
-  final InfinitePageType type;
+  final InfiniteViewType type;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,30 +27,26 @@ class InfiniteView extends ConsumerWidget with Widgets {
         slivers: [
           MainAppBar(
             bottom: MainSliverAppBarBottom(
-              type: type == InfinitePageType.top
+              type: type == InfiniteViewType.top
                   ? AppbarType.top
                   : AppbarType.trending,
             ),
-            imagePath: type == InfinitePageType.top
+            imagePath: type == InfiniteViewType.top
                 ? 'assets/images/top.jpg'
                 : 'assets/images/trending.jpg',
-            type: type == InfinitePageType.top
+            type: type == InfiniteViewType.top
                 ? AppbarType.top
                 : AppbarType.trending,
           ),
-          //for debug
-          SliverToBoxAdapter(
-            child: Text(
-              type == InfinitePageType.top
-                  ? "top $id"
-                  : type == InfinitePageType.trending
-                      ? "trending $id"
-                      : "",
-            ),
+          const SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: 8),
           ),
           _InfiniteViewBar(
             height: height,
             defaultLetterspacing: kLetterSpacing,
+          ),
+          const SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: 8),
           ),
           InfiniteScroll(
             type: type,
@@ -74,21 +70,22 @@ class _InfiniteViewBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        height: height * .08,
-        color: Colors.black,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'related Item'.toUpperCase(),
-              style: Theme.of(context).textTheme.headline2?.copyWith(
-                    letterSpacing: defaultLetterspacing,
-                    color: Colors.amber,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ],
+      child: ShaderBox(
+        child: Container(
+          height: height * .08,
+          color: Colors.white30,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'more items'.toUpperCase(),
+                style: Theme.of(context).textTheme.headline2?.copyWith(
+                      letterSpacing: defaultLetterspacing,
+                      // fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -101,7 +98,7 @@ class InfiniteScroll extends StatelessWidget with Widgets {
     required this.type,
   }) : super(key: key);
 
-  final InfinitePageType type;
+  final InfiniteViewType type;
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +109,13 @@ class InfiniteScroll extends StatelessWidget with Widgets {
           return GestureDetector(
             onTap: () {
               switch (type) {
-                case InfinitePageType.top:
+                case InfiniteViewType.top:
                   context.go("${PathVar.topSingle.caller}/$index/single");
                   break;
-                case InfinitePageType.trending:
+                case InfiniteViewType.trending:
                   context.go("${PathVar.trendingSingle.caller}/$index/single");
                   break;
-                case InfinitePageType.artistCollection:
+                case InfiniteViewType.artistCollection:
                   context.go(
                       "${PathVar.collectionArtistDetails.caller}/artistName/$index");
                   break;

@@ -14,7 +14,7 @@ enum SinglePageType {
   bookmark,
 }
 
-enum InfinitePageType {
+enum InfiniteViewType {
   top,
   trending,
   artistCollection,
