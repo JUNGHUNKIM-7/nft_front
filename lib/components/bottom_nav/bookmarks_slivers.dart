@@ -74,7 +74,7 @@ class _BookMarkBody extends ConsumerWidget with Widgets {
             groups: groups,
             idx: index,
             kHorizontal8: kHorizontal8,
-            onDissmissed: (direction) {
+            onDismissed: (direction) {
               switch (direction) {
                 case DismissDirection.startToEnd:
                   if (b$.contains(index)) {

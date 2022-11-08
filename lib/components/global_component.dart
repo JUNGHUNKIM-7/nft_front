@@ -92,8 +92,8 @@ class SliderBtnBody extends StatelessWidget {
     required this.c$,
     required this.kHorizontal8,
     required this.idx,
-    required Function(DismissDirection direction) onDissmissed,
-  })  : _onDissmissed = onDissmissed,
+    required Function(DismissDirection direction) onDismissed,
+  })  : _onDismissed = onDismissed,
         super(key: key);
 
   final Set<int> b$;
@@ -101,7 +101,7 @@ class SliderBtnBody extends StatelessWidget {
   final Set<int> c$;
   final EdgeInsets kHorizontal8;
   final int idx;
-  final Function(DismissDirection direction) _onDissmissed;
+  final Function(DismissDirection direction) _onDismissed;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class SliderBtnBody extends StatelessWidget {
         child: const Icon(Icons.shopping_cart),
       ),
       key: UniqueKey(),
-      onDismissed: _onDissmissed,
+      onDismissed: _onDismissed,
       child: BodyTiles(
         idx: idx,
         kHorizontal8: kHorizontal8,
