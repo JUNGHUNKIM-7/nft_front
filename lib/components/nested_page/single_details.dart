@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_layout/components/global_component.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../utils/enums.dart';
@@ -39,8 +40,27 @@ class SinglePage extends StatelessWidget {
                               : "",
             ),
           ),
-          const SliverFillRemaining()
+          const _SingleViewBody()
         ],
+      ),
+    );
+  }
+}
+
+class _SingleViewBody extends StatelessWidget {
+  const _SingleViewBody({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: Container(
+        color: Colors.black54,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [],
+        ),
       ),
     );
   }
@@ -61,17 +81,40 @@ class _SingleViewAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SliverAppBar(
+      shape: const ContinuousRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(80),
+          bottomRight: Radius.circular(80),
+        ),
+      ),
       pinned: true,
-      expandedHeight: height * .4,
+      expandedHeight: height * .45,
       flexibleSpace: FlexibleSpaceBar.createSettings(
-        currentExtent: height * .3,
-        minExtent: 0,
-        maxExtent: height * .6,
-        child: FlexibleSpaceBar(
-          background: Image.asset(
-            "assets/images/2.jpg",
-            fit: BoxFit.fitHeight,
+        currentExtent: height * .45,
+        maxExtent: height * .45,
+        child: const ShaderBox(
+          child: FlexibleSpaceBar(
+            background: ClipRRect(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              child: DarkenImage(
+                image: AssetImage(
+                  "assets/images/2.jpg",
+                ),
+              ),
+            ),
           ),
+        ),
+      ),
+      leading: IconButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        icon: const Icon(
+          Icons.arrow_back,
+          color: Colors.black,
         ),
       ),
       actions: [

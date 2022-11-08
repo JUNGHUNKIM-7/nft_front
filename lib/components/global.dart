@@ -38,6 +38,29 @@ class MainAppBar extends ConsumerWidget {
         ),
       ),
       expandedHeight: height * .45,
+      leading: type == AppbarType.home ||
+              type == AppbarType.cart ||
+              type == AppbarType.bookmarks
+          ? Builder(builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: const Icon(
+                  Icons.menu,
+                  color: Colors.black,
+                ),
+              );
+            })
+          : IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
+            ),
       centerTitle: true,
       pinned: true,
       bottom: PreferredSize(
@@ -51,8 +74,8 @@ class MainAppBar extends ConsumerWidget {
           child: FlexibleSpaceBar(
             background: ClipRRect(
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(25),
-                bottomRight: Radius.circular(25),
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
               ),
               child: DarkenImage(
                 image: AssetImage(imagePath),
@@ -143,7 +166,7 @@ class MainFloatingButton extends StatelessWidget with Widgets {
       backgroundColor: Colors.black54,
       child: Icon(
         type == FloatingButtonType.search ? Icons.search : Icons.payment,
-        color: Colors.white,
+        color: Colors.black,
       ),
     );
   }
@@ -207,7 +230,8 @@ class MainBottomNav extends ConsumerWidget {
     final groups = getInstances(ref);
 
     return BottomNavigationBar(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.black54,
+      elevation: 0,
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.grey,
       currentIndex: index,

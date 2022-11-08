@@ -20,7 +20,7 @@ class Home extends ConsumerWidget with Widgets {
     Key? key,
   }) : super(key: key);
 
-  static final categorieBodies = [
+  static final categoryBodies = [
     const _TopCategories(),
     const _TrendingCategories(),
     const _ColletionCategories()
@@ -54,7 +54,7 @@ class Home extends ConsumerWidget with Widgets {
             const SliverPadding(
               padding: EdgeInsets.symmetric(vertical: 4.0),
             ),
-            categorieBodies.elementAt($index),
+            categoryBodies.elementAt($index),
           ],
         ),
         error: (err, stk) => Text('$err: $stk'),
@@ -217,7 +217,7 @@ class _HomeCoins extends ConsumerWidget with Widgets {
     return ClipRRect(
       borderRadius: getBorderRadius(10),
       child: Container(
-        color: Colors.grey.shade300,
+        color: Colors.grey[300],
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: child,
@@ -246,8 +246,8 @@ class _HomeCoins extends ConsumerWidget with Widgets {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: 45,
-                height: 45,
+                width: 30,
+                height: 30,
                 child: Image.asset(
                   coins.elementAt(index).elementAt(0),
                   fit: BoxFit.contain,

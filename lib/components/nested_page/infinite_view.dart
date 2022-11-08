@@ -81,7 +81,7 @@ class _InfiniteViewBar extends StatelessWidget {
                 'more items'.toUpperCase(),
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                       letterSpacing: defaultLetterspacing,
-                      // fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                     ),
               ),
             ],

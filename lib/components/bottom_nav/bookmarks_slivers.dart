@@ -68,7 +68,7 @@ class _BookMarkBody extends ConsumerWidget with Widgets {
       delegate: SliverChildBuilderDelegate(
         childCount: b$.length,
         (context, index) {
-          return DismissableBody(
+          return SliderBtnBody(
             b$: b$,
             c$: c$,
             groups: groups,

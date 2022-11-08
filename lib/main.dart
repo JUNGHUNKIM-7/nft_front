@@ -61,33 +61,37 @@ class MyApp extends StatelessWidget {
               id: state.params['id']!,
               type: InfiniteViewType.trending,
             ),
+            routes: [
+              GoRoute(
+                path: PathVar.trendingSingle.path,
+                builder: (BuildContext context, GoRouterState state) =>
+                    SinglePage(
+                  id: state.params['id']!,
+                  type: SinglePageType.trendingSingle,
+                ),
+              ),
+            ],
           ),
           GoRoute(
-            path: PathVar.trendingSingle.path,
-            builder: (BuildContext context, GoRouterState state) => SinglePage(
-              id: state.params['id']!,
-              type: SinglePageType.trendingSingle,
-            ),
-          ),
-          GoRoute(
-            path: PathVar.collectionArtist.path,
-            builder: (BuildContext context, GoRouterState state) =>
-                AritstCollections(
-              name: state.params['name']!,
-            ),
-          ),
-          GoRoute(
-            path: PathVar.collectionArtistDetails.path,
-            builder: (BuildContext context, GoRouterState state) {
-              final id = state.params['id'];
-              final name = state.params['name'];
-              return SinglePage(
-                id: id!,
-                name: name,
-                type: SinglePageType.collection,
-              );
-            },
-          ),
+              path: PathVar.collectionArtist.path,
+              builder: (BuildContext context, GoRouterState state) =>
+                  AritstCollections(
+                    name: state.params['name']!,
+                  ),
+              routes: [
+                GoRoute(
+                  path: PathVar.collectionArtistDetails.path,
+                  builder: (BuildContext context, GoRouterState state) {
+                    final id = state.params['id'];
+                    final name = state.params['name'];
+                    return SinglePage(
+                      id: id!,
+                      name: name,
+                      type: SinglePageType.collection,
+                    );
+                  },
+                ),
+              ]),
           GoRoute(
             path: PathVar.bookmark.path,
             builder: (BuildContext context, GoRouterState state) => SinglePage(
@@ -116,7 +120,7 @@ enum PathVar {
     caller: "/trending",
   ),
   trendingSingle(
-    path: "trending/:id/single",
+    path: "single",
     caller: "/trending",
   ),
   collectionArtist(
@@ -124,7 +128,7 @@ enum PathVar {
     caller: "/collections/artist",
   ),
   collectionArtistDetails(
-    path: "collections/artist/:name/:id",
+    path: ":id",
     caller: "/collections/artist",
   ),
   bookmark(

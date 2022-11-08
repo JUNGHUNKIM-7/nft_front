@@ -68,7 +68,7 @@ class _CartBody extends ConsumerWidget with Widgets {
       delegate: SliverChildBuilderDelegate(
         childCount: c$.length,
         (context, index) {
-          return DismissableBody(
+          return SliderBtnBody(
             b$: b$,
             c$: c$,
             groups: groups,

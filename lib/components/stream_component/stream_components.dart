@@ -106,10 +106,9 @@ class ToggleBookMark extends ConsumerWidget {
       data: (Set<int> b$) => IconButton(
         onPressed: () {
           _toggleBookMark(b$, groups);
-          _toggleBookMark(b$, groups);
         },
         icon: Icon(
-          Icons.bookmark,
+          Icons.bookmarks,
           color: b$.contains(index) ? Colors.redAccent : Colors.black,
         ),
       ),

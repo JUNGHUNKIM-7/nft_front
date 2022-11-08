@@ -14,7 +14,7 @@ class RoutingPage extends ConsumerWidget with Widgets {
     Key? key,
   }) : super(key: key);
 
-  static final bodys = [
+  static final bodies = [
     const Home(),
     const BookMarkMain(),
     const CartMain(),
@@ -27,10 +27,11 @@ class RoutingPage extends ConsumerWidget with Widgets {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: const Color(0xFFF1F1F1),
         drawer: const MainDrawer(),
+        extendBody: true,
         body: bottomNav$.when(
-          data: (int index$) => bodys.elementAt(index$),
+          data: (int index$) => bodies.elementAt(index$),
           error: (err, stk) => Text('$err: $stk'),
           loading: () => const CircularProgressIndicator(),
         ),

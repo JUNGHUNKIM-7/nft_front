@@ -84,8 +84,8 @@ class ItemNameWithTag extends StatelessWidget {
   }
 }
 
-class DismissableBody extends StatelessWidget {
-  const DismissableBody({
+class SliderBtnBody extends StatelessWidget {
+  const SliderBtnBody({
     Key? key,
     required this.b$,
     required this.groups,
@@ -200,7 +200,7 @@ class DarkenImage extends StatelessWidget {
           image: image,
           fit: BoxFit.fill,
           colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.5),
+            Colors.black.withOpacity(0.1),
             BlendMode.darken,
           ),
         ),
@@ -217,13 +217,12 @@ class ShaderBox extends StatelessWidget with Widgets {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.transparent,
         borderRadius: getBorderRadius(20),
         boxShadow: [
           BoxShadow(
-            color: kShadow!,
-            blurRadius: 1,
-            offset: const Offset(2, 3),
+            color: Colors.grey.shade300,
+            blurRadius: 4,
+            offset: const Offset(2, 5),
           ),
         ],
       ),
