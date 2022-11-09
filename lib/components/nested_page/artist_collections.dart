@@ -5,8 +5,8 @@ import '../../components/nested_page/infinite_view.dart';
 import '../../utils/enums.dart';
 import '../global.dart';
 
-class AritstCollections extends StatelessWidget with Widgets {
-  const AritstCollections({
+class ArtistCollections extends StatelessWidget with Widgets {
+  const ArtistCollections({
     super.key,
     required this.name,
   });
@@ -14,18 +14,18 @@ class AritstCollections extends StatelessWidget with Widgets {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: CustomScrollView(
         slivers: [
-          MainAppBar(
+          const MainAppBar(
             type: AppbarType.artistCollection,
             imagePath: "assets/images/collections.jpg",
             bottom: MainSliverAppBarBottom(
               type: AppbarType.artistCollection,
             ),
           ),
-          SliverPadding(padding: EdgeInsets.symmetric(vertical: 8.0)),
-          InfiniteScroll(type: InfiniteViewType.artistCollection)
+          SliverPadding(padding: kVertical8),
+          const InfiniteScroll(type: InfiniteViewType.artistCollection)
         ],
       ),
     );

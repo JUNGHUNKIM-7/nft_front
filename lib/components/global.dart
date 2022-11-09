@@ -201,7 +201,7 @@ class MainFloatingButton extends StatelessWidget with Widgets {
                         "back".toTitleCase(),
                         style: Theme.of(context).textTheme.headline2?.copyWith(
                               fontSize: 16,
-                              letterSpacing: kLetterSpacing,
+                              letterSpacing: kLs,
                               fontWeight: FontWeight.bold,
                             ),
                       )

@@ -107,14 +107,27 @@ class SliderBtnBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       secondaryBackground: Container(
-        alignment: Alignment.centerRight,
-        color: Colors.red,
-        child: const Icon(Icons.delete),
+        color: Colors.red[500],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            Icon(Icons.delete),
+            SizedBox(
+              width: 30,
+            ),
+          ],
+        ),
       ),
       background: Container(
-        alignment: Alignment.centerLeft,
-        color: Colors.green,
-        child: const Icon(Icons.shopping_cart),
+        color: Colors.green[500],
+        child: Row(
+          children: const [
+            SizedBox(
+              width: 30,
+            ),
+            Icon(Icons.shopping_cart),
+          ],
+        ),
       ),
       key: UniqueKey(),
       onDismissed: _onDismissed,

@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
           GoRoute(
               path: PathVar.collectionArtist.path,
               builder: (BuildContext context, GoRouterState state) =>
-                  AritstCollections(
+                  ArtistCollections(
                     name: state.params['name']!,
                   ),
               routes: [

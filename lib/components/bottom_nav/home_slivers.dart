@@ -43,12 +43,12 @@ class Home extends ConsumerWidget with Widgets {
         data: (int $index) => CustomScrollView(
           slivers: [
             _HomeAppBar(height: height),
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
+            SliverPadding(
+              padding: kVertical8,
             ),
             _HomeCoins(height: height),
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
+            SliverPadding(
+              padding: kVertical8,
             ),
             _HomeCategories(height: height),
             const SliverPadding(
@@ -141,13 +141,13 @@ class _HomeCategories extends ConsumerWidget with Widgets {
         decorationColor: Colors.redAccent,
         decorationThickness: 3,
         decorationStyle: TextDecorationStyle.dashed,
-        letterSpacing: kLetterSpacing,
+        letterSpacing: kLs,
         fontWeight: FontWeight.bold,
       );
     } else {
       return Theme.of(context).textTheme.headline2!.copyWith(
             color: kGrey,
-            letterSpacing: kLetterSpacing,
+            letterSpacing: kLs,
           );
     }
   }
@@ -219,7 +219,7 @@ class _HomeCoins extends ConsumerWidget with Widgets {
       child: Container(
         color: Colors.grey[300],
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: kAll8,
           child: child,
         ),
       ),
@@ -289,13 +289,13 @@ class _HomeCoins extends ConsumerWidget with Widgets {
         decorationColor: Colors.redAccent,
         decorationThickness: 3,
         decorationStyle: TextDecorationStyle.dashed,
-        letterSpacing: kLetterSpacing,
+        letterSpacing: kLs,
       );
     } else {
       return Theme.of(context).textTheme.bodyText1!.copyWith(
             fontSize: 16,
             color: kGrey,
-            letterSpacing: kLetterSpacing,
+            letterSpacing: kLs,
           );
     }
   }
@@ -349,10 +349,10 @@ class _TopCategories extends ConsumerWidget with Widgets {
               _chooseGridItem(groups, index, context);
             },
             child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: kAll4,
               child: ShaderBox(
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: kAll4,
                   child: ClipRRect(
                     borderRadius: getBorderRadius(10),
                     child: Stack(
@@ -370,7 +370,7 @@ class _TopCategories extends ConsumerWidget with Widgets {
                           child: GlassCard(
                             type: GlassCardPosition.gridRight,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: kAll4,
                               child: Row(
                                 children: [
                                   for (var path in icons)

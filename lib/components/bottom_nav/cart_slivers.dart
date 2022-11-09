@@ -33,8 +33,8 @@ class CartMain extends ConsumerWidget with Widgets {
                   type: AppbarType.cart,
                 ),
               ),
-              const SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+              SliverPadding(
+                padding: kVertical8,
               ),
               _CartBody(
                 b$: b$,

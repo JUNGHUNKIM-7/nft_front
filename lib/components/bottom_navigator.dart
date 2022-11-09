@@ -27,7 +27,7 @@ class RoutingPage extends ConsumerWidget with Widgets {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF1F1F1),
+        backgroundColor: kBgColor,
         drawer: const MainDrawer(),
         extendBody: true,
         body: bottomNav$.when(

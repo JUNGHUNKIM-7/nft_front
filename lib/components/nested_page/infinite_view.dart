@@ -23,6 +23,7 @@ class InfiniteView extends ConsumerWidget with Widgets {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: kBgColor,
       body: CustomScrollView(
         slivers: [
           MainAppBar(
@@ -38,15 +39,15 @@ class InfiniteView extends ConsumerWidget with Widgets {
                 ? AppbarType.top
                 : AppbarType.trending,
           ),
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+          SliverPadding(
+            padding: kVertical8,
           ),
           _InfiniteViewBar(
             height: height,
-            defaultLetterspacing: kLetterSpacing,
+            defaultLetterspacing: kLs,
           ),
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+          SliverPadding(
+            padding: kVertical8,
           ),
           InfiniteScroll(
             type: type,

@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../utils/enums.dart';
 import '../stream_component/stream_components.dart';
 
-class SinglePage extends StatelessWidget {
+class SinglePage extends StatelessWidget with Widgets {
   const SinglePage({
     super.key,
     required this.id,
@@ -21,6 +21,7 @@ class SinglePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBgColor,
       body: CustomScrollView(
         slivers: [
           _SingleViewAppBar(
@@ -42,8 +43,8 @@ class SinglePage extends StatelessWidget {
           //                     : "",
           //   ),
           // ),
-          const SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+          SliverPadding(
+            padding: kVertical8,
           ),
           const _SingleViewBody()
         ],

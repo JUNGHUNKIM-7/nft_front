@@ -32,8 +32,8 @@ class BookMarkMain extends ConsumerWidget with Widgets {
                 type: AppbarType.bookmarks,
                 bottom: MainSliverAppBarBottom(type: AppbarType.bookmarks),
               ),
-              const SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+              SliverPadding(
+                padding: kVertical8,
               ),
               _BookMarkBody(
                 b$: b$,
